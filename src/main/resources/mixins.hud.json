@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "dev.px.hud.Mixin",
+  "refmap": "mixins.hud.refmap.json",
+  "mixins": [
+    "MixinEntityRenderer"
+  ]
+}
