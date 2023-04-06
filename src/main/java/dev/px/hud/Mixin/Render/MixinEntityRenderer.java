@@ -1,4 +1,4 @@
-package dev.px.hud.Mixin;
+package dev.px.hud.Mixin.Render;
 
 import dev.px.hud.Util.Event.Render2dEvent;
 import net.minecraft.client.gui.GuiIngame;

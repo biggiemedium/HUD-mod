@@ -1,4 +1,4 @@
-package dev.px.hud.MCGUI;
+package dev.px.hud.Rendering.MCGUI;
 
 import net.minecraft.client.gui.Gui;
 

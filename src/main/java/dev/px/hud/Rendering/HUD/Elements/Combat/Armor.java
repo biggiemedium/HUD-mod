@@ -1,14 +1,14 @@
-package dev.px.hud.HUD.Elements.Combat;
+package dev.px.hud.Rendering.HUD.Elements.Combat;
 
-import dev.px.hud.HUD.Element;
-import dev.px.hud.Util.Settings.Setting;
+import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Util.API.Util;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 
 public class Armor extends Element {
 
     public Armor() {
-        super("Armor", 200, 200, Category.COMBAT);
+        super("Armor", 200, 200, HUDType.COMBAT);
     }
 
     @Override

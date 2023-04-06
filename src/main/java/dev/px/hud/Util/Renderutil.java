@@ -12,25 +12,25 @@ import java.awt.*;
 
 public class Renderutil extends Util {
 
-    public static void drawRect(double d0, double d1, double d2, double d3, int i) {
+    public static void drawRect(double x, double y, double width, double height, int color) {
         double d4;
 
-        if (d0 < d2) {
-            d4 = d0;
-            d0 = d2;
-            d2 = d4;
+        if (x < width) {
+            d4 = x;
+            x = width;
+            width = d4;
         }
 
-        if (d1 < d3) {
-            d4 = d1;
-            d1 = d3;
-            d3 = d4;
+        if (y < height) {
+            d4 = y;
+            y = height;
+            height = d4;
         }
 
-        float f = (float) (i >> 24 & 255) / 255.0F;
-        float f1 = (float) (i >> 16 & 255) / 255.0F;
-        float f2 = (float) (i >> 8 & 255) / 255.0F;
-        float f3 = (float) (i & 255) / 255.0F;
+        float f = (float) (color >> 24 & 255) / 255.0F;
+        float f1 = (float) (color >> 16 & 255) / 255.0F;
+        float f2 = (float) (color >> 8 & 255) / 255.0F;
+        float f3 = (float) (color & 255) / 255.0F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
@@ -39,13 +39,257 @@ public class Renderutil extends Util {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(f1, f2, f3, f);
         worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(d0, d3, 0.0D).endVertex();
-        worldrenderer.pos(d2, d3, 0.0D).endVertex();
-        worldrenderer.pos(d2, d1, 0.0D).endVertex();
-        worldrenderer.pos(d0, d1, 0.0D).endVertex();
+        worldrenderer.pos(x, height, 0.0D).endVertex();
+        worldrenderer.pos(width, height, 0.0D).endVertex();
+        worldrenderer.pos(width, y, 0.0D).endVertex();
+        worldrenderer.pos(x, y, 0.0D).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+    }
+
+    public static void rect(final double x, final double y, final double width, final double height, final boolean filled, final Color color) {
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        if (color != null)
+            color(color);
+        GL11.glBegin(filled ? GL11.GL_TRIANGLE_FAN : GL11.GL_LINES);
+
+        {
+            GL11.glVertex2d(x, y);
+            GL11.glVertex2d(x + width, y);
+            GL11.glVertex2d(x + width, y + height);
+            GL11.glVertex2d(x, y + height);
+            if (!filled) {
+                GL11.glVertex2d(x, y);
+                GL11.glVertex2d(x, y + height);
+                GL11.glVertex2d(x + width, y);
+                GL11.glVertex2d(x + width, y + height);
+            }
+        }
+        GL11.glEnd();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+    }
+
+
+    public static void gradient(final double x, final double y, final double width, final double height, final boolean filled, final Color color1, final Color color2) {
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableAlpha();
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0);
+        if (color1 != null)
+            color(color1);
+        GL11.glBegin(filled ? GL11.GL_QUADS : GL11.GL_LINES);
+        {
+            GL11.glVertex2d(x, y);
+            GL11.glVertex2d(x + width, y);
+            if (color2 != null)
+                color(color2);
+            GL11.glVertex2d(x + width, y + height);
+            GL11.glVertex2d(x, y + height);
+            if (!filled) {
+                GL11.glVertex2d(x, y);
+                GL11.glVertex2d(x, y + height);
+                GL11.glVertex2d(x + width, y);
+                GL11.glVertex2d(x + width, y + height);
+            }
+        }
+        GL11.glEnd();
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
+        GlStateManager.disableAlpha();
+        GL11.glShadeModel(GL11.GL_FLAT);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+    }
+
+    public static void gradient(final double x, final double y, final double width, final double height, final Color color1, final Color color2) {
+        gradient(x, y, width, height, true, color1, color2);
+    }
+
+    public static void rect(final double x, final double y, final double width, final double height, final boolean filled) {
+        rect(x, y, width, height, filled, null);
+    }
+
+    public static void rect(final double x, final double y, final double width, final double height, final Color color) {
+        rect(x, y, width, height, true, color);
+    }
+
+    public static void rect(final double x, final double y, final double width, final double height) {
+        rect(x, y, width, height, true, null);
+    }
+
+
+    public static void roundedRect(final double x, final double y, double width, double height, final double edgeRadius, final Color color) {
+        final double halfRadius = edgeRadius / 2;
+        width -= halfRadius;
+        height -= halfRadius;
+
+        float sideLength = (float) edgeRadius;
+        sideLength /= 2;
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        if (color != null)
+            color(color);
+        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+
+        {
+            for (double i = 180; i <= 270; i++) {
+                final double angle = i * (Math.PI * 2) / 360;
+                GL11.glVertex2d(x + (sideLength * Math.cos(angle)) + sideLength, y + (sideLength * Math.sin(angle)) + sideLength);
+            }
+            GL11.glVertex2d(x + sideLength, y + sideLength);
+        }
+
+        GL11.glEnd();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+
+        sideLength = (float) edgeRadius;
+        sideLength /= 2;
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        if (color != null)
+            color(color);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+
+        {
+            for (double i = 0; i <= 90; i++) {
+                final double angle = i * (Math.PI * 2) / 360;
+                GL11.glVertex2d(x + width + (sideLength * Math.cos(angle)), y + height + (sideLength * Math.sin(angle)));
+            }
+            GL11.glVertex2d(x + width, y + height);
+        }
+
+        GL11.glEnd();
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+
+        sideLength = (float) edgeRadius;
+        sideLength /= 2;
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        if (color != null)
+            color(color);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+
+        {
+            for (double i = 270; i <= 360; i++) {
+                final double angle = i * (Math.PI * 2) / 360;
+                GL11.glVertex2d(x + width + (sideLength * Math.cos(angle)), y + (sideLength * Math.sin(angle)) + sideLength);
+            }
+            GL11.glVertex2d(x + width, y + sideLength);
+        }
+
+        GL11.glEnd();
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+
+        sideLength = (float) edgeRadius;
+        sideLength /= 2;
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        if (color != null)
+            color(color);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+
+        {
+            for (double i = 90; i <= 180; i++) {
+                final double angle = i * (Math.PI * 2) / 360;
+                GL11.glVertex2d(x + (sideLength * Math.cos(angle)) + sideLength, y + height + (sideLength * Math.sin(angle)));
+            }
+            GL11.glVertex2d(x + sideLength, y + height);
+        }
+
+        GL11.glEnd();
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+
+        // Main block
+        rect(x + halfRadius, y + halfRadius, width - halfRadius, height - halfRadius, color);
+
+        // Horizontal bars
+        rect(x, y + halfRadius, edgeRadius / 2, height - halfRadius, color);
+        rect(x + width, y + halfRadius, edgeRadius / 2, height - halfRadius, color);
+
+        // Vertical bars
+        rect(x + halfRadius, y, width - halfRadius, halfRadius, color);
+        rect(x + halfRadius, y + height, width - halfRadius, halfRadius, color);
+    }
+
+    public static void color(final double red, final double green, final double blue, final double alpha) {
+        GL11.glColor4d(red, green, blue, alpha);
+    }
+
+    public static void color(final double red, final double green, final double blue) {
+        color(red, green, blue, 1);
+    }
+
+    public static void color(Color color) {
+        if (color == null)
+            color = Color.white;
+        color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, color.getAlpha() / 255F);
+    }
+
+    public static void color(Color color, final int alpha) {
+        if (color == null)
+            color = Color.white;
+        color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 0.5);
     }
 
     public static void drawBorderedRect(float f, float f1, float f2, float f3, float f4, int i, int j) {
