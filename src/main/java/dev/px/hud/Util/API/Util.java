@@ -10,4 +10,8 @@ public class Util implements Wrapper {
             mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(text));
         }
     }
+
+    public static boolean isNull() {
+        return mc.thePlayer == null || mc.theWorld == null;
+    }
 }

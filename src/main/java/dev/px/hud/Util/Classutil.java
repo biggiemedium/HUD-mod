@@ -1,13 +1,16 @@
 package dev.px.hud.Util;
 
 import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Chatutil;
 import dev.px.hud.Util.API.Util;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
@@ -19,16 +22,12 @@ public class Classutil extends Util {
     }
 
     @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent event) {
-        if(world == null || player == null) return;
-
-        if(event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-            for(Element e : HUDMod.elementInitalizer.getElements()) {
-                if(e.isVisible()) {
+    public void onRender(RenderGameOverlayEvent.Text event) {
+            for (Element e : HUDMod.elementInitalizer.getElements()) {
+                if (e.isVisible()) {
                     e.render(event.partialTicks);
                 }
             }
-        }
     }
 
     @SubscribeEvent
@@ -40,10 +39,17 @@ public class Classutil extends Util {
                     if(keyCode <= 0)
                         return;
 
-                    if(keyCode == Keyboard.KEY_RCONTROL) {
+                    if(keyCode == Keyboard.KEY_RSHIFT) {
                         mc.displayGuiScreen(new PanelGUIScreen());
                     }
 
+                    HUDMod.elementInitalizer.getElements().forEach(element -> {
+                        if(element instanceof ToggleableElement) {
+                            if(keyCode == ((ToggleableElement) element).keybind) {
+                                element.setVisible(!element.isVisible());
+                            }
+                        }
+                    });
                 }
             }
         } catch (Exception q) { q.printStackTrace(); }

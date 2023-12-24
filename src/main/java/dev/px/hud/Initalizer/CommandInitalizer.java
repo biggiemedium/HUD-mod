@@ -35,7 +35,6 @@ public class CommandInitalizer extends HashMapManager<String, Command> {
 
     public void dispatch(NetworkManager handler) {
         Wrapper.mc.getNetHandler().handleChat(new S02PacketChat());
-        
     }
 
     @SubscribeEvent

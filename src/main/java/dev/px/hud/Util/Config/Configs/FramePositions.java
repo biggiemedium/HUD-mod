@@ -4,13 +4,14 @@ import dev.px.hud.Util.Config.Config;
 
 public class FramePositions extends Config {
 
+    private int x, y, width, height;
+
     public FramePositions() {
         super("frame");
     }
 
     @Override
     public void saves() {
-
     }
 
     @Override

@@ -6,6 +6,7 @@ public class TESTElement extends Element {
 
     public TESTElement() {
         super("Test Element", 20, 20, HUDType.INFO);
+        setVisible(true);
     }
 
     @Override

@@ -161,10 +161,15 @@ public class Element implements Wrapper {
         return this.settings.size() > 0;
     }
 
+    public ArrayList<Setting<?>> getSettings() {
+        return settings;
+    }
+
     public enum HUDType {
         COMBAT("Combat"),
         INFO("Info"),
-        RENDER("Render");
+        RENDER("Render"),
+        EXPLOIT("EXPLOIT");
 
         HUDType(String name) {
             this.name = name;

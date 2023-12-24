@@ -16,7 +16,7 @@ public class Panel {
         this.name = "";
     }
 
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
 
     }
 
