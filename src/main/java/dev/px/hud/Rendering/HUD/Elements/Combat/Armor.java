@@ -2,6 +2,7 @@ package dev.px.hud.Rendering.HUD.Elements.Combat;
 
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 
@@ -11,8 +12,11 @@ public class Armor extends Element {
         super("Armor", 200, 200, HUDType.COMBAT);
     }
 
+    Setting<Boolean> vertical = create(new Setting<Boolean>("Vertical", true));
+
     @Override
     public void render(float partialTicks) {
+        GlStateManager.pushMatrix();
         GlStateManager.enableTexture2D();
         int x = 0;
         for(ItemStack i : mc.thePlayer.inventory.armorInventory) {
@@ -38,6 +42,7 @@ public class Armor extends Element {
 
             GlStateManager.enableDepth();
             GlStateManager.disableLighting();
+            GlStateManager.popMatrix();
         }
     }
 }

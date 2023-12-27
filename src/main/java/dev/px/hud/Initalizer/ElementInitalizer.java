@@ -2,11 +2,13 @@ package dev.px.hud.Initalizer;
 
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
+import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
 import dev.px.hud.HUDMod;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ElementInitalizer {
 
@@ -18,10 +20,13 @@ public class ElementInitalizer {
 
         // Combat
         Add(new Armor());
+        Add(new TargetHUD());
 
         // Info
 
         // Render
+
+        // Exploit
     }
 
     private void Add(Element element) {

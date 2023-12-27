@@ -2,10 +2,11 @@ package dev.px.hud.Rendering.Panel.ClickGUI;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Util.API.Animation.Animation;
+import dev.px.hud.Util.API.Animation.Easing;
+import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.util.MathHelper;
 
 import java.awt.*;
@@ -21,10 +22,14 @@ public class Frame {
     private float scroll;
     private double featureOffset;
     protected Minecraft mc = Minecraft.getMinecraft();
+    private float fullheight;
 
     private ArrayList<Button> buttons;
+    private Animation openAnimation = new Animation(300, false, Easing.LINEAR);
+    private ClickGUI clickGUI;
+    private boolean expanding;
 
-    public Frame(Element.HUDType type, int x, int y) {
+    public Frame(Element.HUDType type, int x, int y, ClickGUI clickGUI) {
             this.name = type.getName();
             this.x = x;
             this.y = y;
@@ -34,6 +39,8 @@ public class Frame {
             this.open = true;
             this.dragging = false;
             this.scroll = 0;
+            this.fullheight = 196;
+            this.clickGUI = clickGUI;
             this.buttons = new ArrayList<>();
 
             int offset = this.height;
@@ -43,29 +50,81 @@ public class Frame {
                     offset += 15;
                 }
             }
+            //for(int i = 0; i < 50; i++) {
+            //    this.buttons.add(new Button(this.x, this.y + offset, this, null));
+            //    offset += 15;
+            //}
     }
 
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         if(dragging){
             this.x = mouseX - dragXPos;
             this.y = mouseY - dragYPos;
         }
+        this.openAnimation.setState(open);
+        if (open) {
+            long interactingWindows = getClickGUI().getFrames()
+                    .stream()
+                    .filter(categoryFrameComponent -> !categoryFrameComponent.equals(this))
+                    .filter(categoryFrameComponent -> categoryFrameComponent.isExpanding() || categoryFrameComponent.isDragging())
+                    .count();
 
-        Renderutil.drawRect(this.x, this.y,this.x + this.width,this.y + (int)this.height, new Color(0xff181A17).getRGB());
-        Renderutil.drawRect(this.x, this.y + height, this.x + width, this.y + height - 2, new Color(39, 179, 206).getRGB());
+            if(interactingWindows <= 0) {
+                if (expanding) {
+       //             fullheight = MathHelper.clamp_float((mouseY - getY()) - height, 0, 350);
+                }
+            }
+        }
+
+    //    Renderutil.drawRect(this.x, this.y,this.x + this.width,this.y + (int)this.height, new Color(0xff181A17).getRGB());
+       // Renderutil.drawRect(this.x, this.y + height, this.x + width, this.y + height - 2, new Color(39, 179, 206).getRGB());
+        Renderutil.drawRoundedRect(this.x, this.y + 1, this.x + this.width, this.y + (int) this.fullheight * (float) openAnimation.getLinearFactor(), 1, new Color(0xff181A17).getRGB());
+
+        Renderutil.drawRoundedRect(this.x, this.y,this.x + this.width,this.y + (int)this.height, 1, new Color(0xff181A17).getRGB());
+        // Horizontal line across title bar
+        Renderutil.drawRoundedRect(this.x - 0.8f, this.y + height, this.x + this.width, this.y + this.height - 2, 1, new Color(39, 179, 206).getRGB());
+        // Line going down entire bar
+
+        //Fontutil.drawTextShadow(type.getName(), getX(), (int) getY() + (int) (width / 2) - (int) Fontutil.getWidth(type.getName()), -1);
         mc.fontRendererObj.drawStringWithShadow(type.getName(), this.getX() + (getWidth() / 2.0F) - mc.fontRendererObj.getStringWidth(type.getName()), this.getY() + this.getHeight() / 2 - (mc.fontRendererObj.FONT_HEIGHT / 2.0F), 0xffffffff);
+        double scaledComponentOffset = getComponentOffset() - 1400;
+        scroll = (float) MathHelper.clamp_double(scroll, -Math.max(0, scaledComponentOffset - height), 0);
 
+        if(open) {
+            this.featureOffset = 0;
+        }
 
+        if(openAnimation.getAnimationFactor() > 0) {
+            this.getClickGUI().getScissorStack().pushScissor(x, getY() + height, width, (int) (fullheight * getOpenAnimation().getAnimationFactor()));
+            this.featureOffset = 0;
+
+            double count = 0;
+            double offset = 0;
+                for(Button b : this.buttons) {
+                    if(b.getX() != this.x) {
+                        b.setX(this.x);
+                    }
+                    if(b.getY() != this.y + getHeight() + featureOffset) {
+                        b.setY(this.y + getHeight() + featureOffset);
+                    }
+
+                    b.draw(mouseX, mouseY, partialTicks);
+                    offset += b.getHeight();
+                    count += b.getHeight();
+                }
+            this.getClickGUI().getScissorStack().popScissor();
+        }
+
+        /*
         if(!open) return;
 
         this.featureOffset = 0;
 
         // make sure the scroll doesn't go farther than our bounds
-        double scaledComponentOffset = getComponentOffset() - 1400;
-        scroll = (float) MathHelper.clamp_double(scroll, -Math.max(0, scaledComponentOffset - height), 0);
 
         int count = 0;
         int offset = 0;
+        if(openAnimation.getState())
         for(Button b : this.buttons) {
             if(b.getX() != this.x) {
                 b.setX(this.x);
@@ -82,6 +141,8 @@ public class Frame {
 
         Color color = new Color(25, 163, 191);
 
+         */
+        /*
         // Vertical
         Renderutil.gradient(this.getX() - 1, this.getY(), 1, this.getHeight() + count + 2, color.brighter().brighter(), color.darker());
         Renderutil.gradient(this.getX() + this.getWidth() - 1, this.getY(), 1, this.getHeight() + count + 2, color.brighter().brighter(), color.darker());
@@ -92,40 +153,55 @@ public class Frame {
 
         //Black bar at the bottom
         Renderutil.rect(this.getX(), this.getY() + 1 + this.getHeight() + count - 1, this.getWidth() - 1, 1, new Color(0xff232623));
+     */
     }
 
+
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(isHovered(mouseX, mouseY)) {
-            if(button == 0) {
-                this.dragging = true;
-                this.dragXPos = mouseX - this.x;
-                this.dragYPos = mouseY - this.y;
-            }
-            if(button == 1) {
-                this.open = !this.open;
-            }
+            if (isHovered(mouseX, mouseY)) {
+                if (button == 0) {
+                    this.dragging = true;
+                    this.dragXPos = mouseX - this.x;
+                    this.dragYPos = mouseY - this.y;
+                }
+                if (button == 1) {
+                    this.open = !this.open;
+                    this.openAnimation.setState(open);
+                }
+
         }
 
-        for(Button b : this.buttons) {
-            b.mouseClick(mouseX, mouseY, button);
+            if(isHovered2(mouseX, mouseY)) {
+                if(button == 0) {
+                    expanding = true;
+                }
+            }
+
+        if(open) {
+            for (Button b : this.buttons) {
+                b.mouseClick(mouseX, mouseY, button);
+            }
         }
     }
 
     public void mouseReleased(int mouseX, int mouseY) {
         this.dragging = false;
+        this.expanding = false;
     }
 
-    public void handleScroll(int in) {
+    public void handleScroll(float in) {
         if (open) {
             scroll += in * 0.05;
-            //moduleComponents.forEach(moduleComponent -> {
-            //    moduleComponent.onScroll(in);
-            //});
+            buttons.forEach(button -> button.scroll(in));
         }
     }
 
-    private boolean isHovered(int mouseX, int mouseY) {
+    public boolean isHovered(int mouseX, int mouseY) {
         return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+    }
+
+    public boolean isHovered2(int mouseX, int mouseY) {
+        return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.fullheight;
     }
 
     public double getComponentOffset() {
@@ -228,15 +304,58 @@ public class Frame {
         return featureOffset;
     }
 
-    public void setFeatureOffset(double featureOffset) {
-        this.featureOffset = featureOffset;
+    public void addFeatureOffset(double featureOffset) {
+        this.featureOffset += featureOffset;
     }
-
     public Minecraft getMc() {
         return mc;
     }
 
     public void setMc(Minecraft mc) {
         this.mc = mc;
+    }
+
+    public float getFullheight() {
+        return fullheight;
+    }
+
+    public ArrayList<Button> getButtons() {
+        return buttons;
+    }
+
+    public Animation getOpenAnimation() {
+        return openAnimation;
+    }
+
+    public ClickGUI getClickGUI() {
+        return clickGUI;
+    }
+
+    public void setFeatureOffset(double featureOffset) {
+        this.featureOffset = featureOffset;
+    }
+
+    public void setFullheight(float fullheight) {
+        this.fullheight = fullheight;
+    }
+
+    public void setButtons(ArrayList<Button> buttons) {
+        this.buttons = buttons;
+    }
+
+    public void setOpenAnimation(Animation openAnimation) {
+        this.openAnimation = openAnimation;
+    }
+
+    public void setClickGUI(ClickGUI clickGUI) {
+        this.clickGUI = clickGUI;
+    }
+
+    public boolean isExpanding() {
+        return expanding;
+    }
+
+    public void setExpanding(boolean expanding) {
+        this.expanding = expanding;
     }
 }

@@ -83,6 +83,10 @@ public class Element implements Wrapper {
         }
     }
 
+    public void mouseRelease(int mouseX, int mouseY, int state) {
+        this.dragging = false;
+    }
+
     private boolean isHovered(int mouseX, int mouseY) {
         return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
     }
@@ -161,10 +165,15 @@ public class Element implements Wrapper {
         return this.settings.size() > 0;
     }
 
+    public ArrayList<Setting<?>> getSettings() {
+        return settings;
+    }
+
     public enum HUDType {
         COMBAT("Combat"),
         INFO("Info"),
-        RENDER("Render");
+        RENDER("Render"),
+        EXPLOIT("Exploit");
 
         HUDType(String name) {
             this.name = name;

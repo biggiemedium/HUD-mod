@@ -3,6 +3,7 @@ package dev.px.hud;
 import dev.px.hud.Initalizer.CommandInitalizer;
 import dev.px.hud.Initalizer.ConfigInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
+import dev.px.hud.Initalizer.SoundInitalizer;
 import dev.px.hud.Util.Classutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.Minecraft;
@@ -21,6 +22,7 @@ public class HUDMod {
     public static Classutil clazz;
     public static ConfigInitalizer configInitalizer;
     public static CommandInitalizer commandInitalizer;
+    public static SoundInitalizer soundInitalizer;
 
     private static Minecraft mc = Wrapper.mc;
     
@@ -30,6 +32,7 @@ public class HUDMod {
         elementInitalizer = new ElementInitalizer();
         configInitalizer = new ConfigInitalizer();
         commandInitalizer = new CommandInitalizer();
+        soundInitalizer = new SoundInitalizer();
 
         configInitalizer.loads();
     }

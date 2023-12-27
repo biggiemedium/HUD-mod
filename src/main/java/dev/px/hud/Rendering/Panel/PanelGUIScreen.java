@@ -1,6 +1,7 @@
 package dev.px.hud.Rendering.Panel;
 
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
+import dev.px.hud.Rendering.Panel.Commands.CommandGUI;
 import dev.px.hud.Rendering.Panel.Profiles.PlayerProfiles;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Wrapper;
@@ -16,11 +17,12 @@ public class PanelGUIScreen extends GuiScreen {
     public PanelGUIScreen() {
         this.panels.add(this.currentPanel = new ClickGUI());
         this.panels.add(new PlayerProfiles());
+        this.panels.add(new CommandGUI());
     }
 
     private ArrayList<Panel> panels = new ArrayList<>();
     private Panel currentPanel;
-    private Color baseColor = new Color(69, 68, 68);
+    private Color baseColor = new Color(57, 56, 56);
 
     /*
     We must make visuals for panels
@@ -34,17 +36,19 @@ public class PanelGUIScreen extends GuiScreen {
             int renderX = (new ScaledResolution(Wrapper.mc).getScaledWidth() / 2) + x - (panels.size() * mc.fontRendererObj.FONT_HEIGHT);
             if(p == this.currentPanel) {
                 // highlight current selected panel
-                Renderutil.drawRect(renderX - 2, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15, baseColor.darker().getRGB());
+                //Renderutil.drawRect(renderX - 2, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15, baseColor.darker().getRGB());
+                Renderutil.drawRoundedRect(renderX - 3, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15,1, baseColor.darker().getRGB());
             }
 
             if(p != this.currentPanel) {
-                Renderutil.drawRect(renderX - 2, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15, baseColor.getRGB());
+             //   Renderutil.drawRect(renderX - 2, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15, baseColor.getRGB());
+                Renderutil.drawRoundedRect(renderX - 3, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15,1, baseColor.getRGB());
             }
             mc.fontRendererObj.drawStringWithShadow(p.getName(), renderX, 5, -1);
-            x += mc.fontRendererObj.getStringWidth(p.getName()) + 10;
+            x += mc.fontRendererObj.getStringWidth(p.getName()) + 20;
         }
 
-        this.currentPanel.draw(mouseX, mouseY);
+        this.currentPanel.draw(mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -97,5 +101,7 @@ public class PanelGUIScreen extends GuiScreen {
     public void setCurrentPanel(Panel currentPanel) {
         this.currentPanel = currentPanel;
     }
+
+    public static PanelGUIScreen INSTANCE = new PanelGUIScreen();
 
 }

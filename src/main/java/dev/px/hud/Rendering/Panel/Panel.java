@@ -1,6 +1,7 @@
 package dev.px.hud.Rendering.Panel;
 
 import net.minecraft.client.Minecraft;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
@@ -16,7 +17,7 @@ public class Panel {
         this.name = "";
     }
 
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
 
     }
 
@@ -30,6 +31,12 @@ public class Panel {
 
     public void keyTyped(char typedChar, int keyCode) throws IOException {
 
+    }
+
+    public void scroll(int in) {
+        if(Mouse.hasWheel()) {
+
+        }
     }
 
     public String getName() {

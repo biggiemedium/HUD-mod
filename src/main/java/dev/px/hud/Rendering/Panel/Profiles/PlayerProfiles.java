@@ -19,7 +19,7 @@ public class PlayerProfiles extends Panel {
     private ProfileRenderer player = new ProfileRenderer(sc.getScaledWidth() / 2 - (200), 25, 200, 200);
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         player.render(mouseX, mouseY);
         player.scroll(mouseX, mouseY);
     }

@@ -4,6 +4,11 @@
   "package": "dev.px.hud.Mixin",
   "refmap": "mixins.hud.refmap.json",
   "mixins": [
-    "Render.MixinEntityRenderer"
+    "Render.MixinEntityRenderer",
+    "Network.MixinNetworkManager",
+    "Render.Gui",
+    "Render.MixinMainScreen",
+    "Render.MixinGUIIngame",
+    "Render.IEntityRenderer"
   ]
 }
