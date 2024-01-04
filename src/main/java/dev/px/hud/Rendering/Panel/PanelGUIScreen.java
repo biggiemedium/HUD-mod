@@ -48,6 +48,10 @@ public class PanelGUIScreen extends GuiScreen {
             x += mc.fontRendererObj.getStringWidth(p.getName()) + 20;
         }
 
+        if(this.currentPanel.isDefaultBackground()) {
+            this.drawDefaultBackground();
+        }
+
         this.currentPanel.draw(mouseX, mouseY, partialTicks);
     }
 

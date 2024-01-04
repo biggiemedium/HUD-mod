@@ -1,5 +1,6 @@
 package dev.px.hud.Rendering.HUD;
 
+import dev.px.hud.Util.Event.SettingUpdateEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import dev.px.hud.Util.Wrapper;
@@ -25,6 +26,7 @@ public class Element implements Wrapper {
 
     private boolean visible;
     private boolean dragging;
+    private boolean renderElement;
     private HUDType hudType;
 
     protected Minecraft mc = Minecraft.getMinecraft();
@@ -39,6 +41,8 @@ public class Element implements Wrapper {
         this.hudType = hudType;
         this.visible = false;
         this.dragging = false;
+        this.renderElement = true;
+
         this.settings = new ArrayList<>();
     }
 
@@ -51,6 +55,34 @@ public class Element implements Wrapper {
         this.hudType = hudType;
         this.visible = false;
         this.dragging = false;
+        this.renderElement = true;
+        this.settings = new ArrayList<>();
+    }
+
+    public Element(String name, int x, int y, int width, int height, HUDType hudType, boolean renderElement) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.hudType = hudType;
+        this.visible = false;
+        this.dragging = false;
+        this.renderElement = renderElement;
+
+        this.settings = new ArrayList<>();
+    }
+
+    public Element(String name, int x, int y, HUDType hudType, boolean renderElement) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.width = mc.fontRendererObj.getStringWidth(name);
+        this.height = mc.fontRendererObj.FONT_HEIGHT;
+        this.hudType = hudType;
+        this.visible = false;
+        this.dragging = false;
+        this.renderElement = renderElement;
         this.settings = new ArrayList<>();
     }
 
@@ -169,11 +201,35 @@ public class Element implements Wrapper {
         return settings;
     }
 
+    public int getDragX() {
+        return dragX;
+    }
+
+    public void setDragX(int dragX) {
+        this.dragX = dragX;
+    }
+
+    public int getDragY() {
+        return dragY;
+    }
+
+    public void setDragY(int dragY) {
+        this.dragY = dragY;
+    }
+
+    public boolean isRenderElement() {
+        return renderElement;
+    }
+
+    public void setRenderElement(boolean renderElement) {
+        this.renderElement = renderElement;
+    }
+
     public enum HUDType {
         COMBAT("Combat"),
         INFO("Info"),
         RENDER("Render"),
-        EXPLOIT("Exploit");
+        MOD("Mods");
 
         HUDType(String name) {
             this.name = name;

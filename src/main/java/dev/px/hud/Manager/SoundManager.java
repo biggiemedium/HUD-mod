@@ -1,16 +1,18 @@
-package dev.px.hud.Initalizer;
+package dev.px.hud.Manager;
 
 import dev.px.hud.Util.API.Util;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * @author LinusTouchTips
+ */
 @SideOnly(Side.CLIENT)
-public class SoundInitalizer extends Util {
+public class SoundManager extends Util {
 
-    public SoundInitalizer() {
+    public SoundManager() {
 
     }
 

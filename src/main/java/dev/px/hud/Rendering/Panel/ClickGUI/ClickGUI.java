@@ -1,12 +1,10 @@
 package dev.px.hud.Rendering.Panel.ClickGUI;
 
 import dev.px.hud.HUDMod;
-import dev.px.hud.Initalizer.SoundInitalizer;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Renderutil;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -61,7 +59,6 @@ public class ClickGUI extends Panel {
         }
 
         HUDMod.soundInitalizer.playSound("click");
-        Util.sendClientSideMessage("Found? " + (new ResourceLocation("/Sounds/" + "click" + ".ogg").getResourcePath()) + " " + (new ResourceLocation("/Sounds/" + "click" + ".ogg").getResourceDomain()), true);
     }
 
     @Override

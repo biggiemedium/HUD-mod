@@ -5,6 +5,7 @@ import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import scala.Int;
 
 public class Armor extends Element {
 
@@ -13,6 +14,9 @@ public class Armor extends Element {
     }
 
     Setting<Boolean> vertical = create(new Setting<Boolean>("Vertical", true));
+    Setting<Mode> mode = create(new Setting<Mode>("Mode", Mode.UP));
+    Setting<Boolean> glint = create(new Setting<Boolean>("Glint", false, v -> vertical.getValue()));
+    Setting<Integer> scale = create(new Setting<Integer>("Scale", 1, 0, 5));
 
     @Override
     public void render(float partialTicks) {
@@ -44,5 +48,10 @@ public class Armor extends Element {
             GlStateManager.disableLighting();
             GlStateManager.popMatrix();
         }
+    }
+
+    private enum Mode {
+        UP,
+        SIDE
     }
 }

@@ -42,7 +42,7 @@ public class SettingButton<T> {
 
     }
 
-    public void mouseReleased(int mouseX, int mouseY, int state) {
+    public void mouseReleased(int mouseX, int mouseY) {
 
     }
 

@@ -1,24 +1,13 @@
 package dev.px.hud.Util;
 
-import dev.px.hud.Initalizer.SoundInitalizer;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
-import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.HUDMod;
-import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.Chatutil;
 import dev.px.hud.Util.API.Util;
-import net.minecraft.client.audio.SoundCategory;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundRegistry;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.sound.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
@@ -30,12 +19,14 @@ public class Classutil extends Util {
     }
 
     @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent.Text event) {
+    public void onRender(RenderGameOverlayEvent event) {
+        if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
             for (Element e : HUDMod.elementInitalizer.getElements()) {
                 if (e.isVisible()) {
                     e.render(event.partialTicks);
                 }
             }
+        }
     }
 
     @SubscribeEvent
@@ -69,4 +60,6 @@ public class Classutil extends Util {
             Util.sendClientSideMessage("To open the GUI press RSHIFT!", true);
         }
     }
+
+
 }

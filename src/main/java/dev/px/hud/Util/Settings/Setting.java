@@ -1,5 +1,9 @@
 package dev.px.hud.Util.Settings;
 
+import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.SettingUpdateEvent;
+import net.minecraftforge.common.MinecraftForge;
+
 import java.util.function.Predicate;
 
 public class Setting<T> {
@@ -52,6 +56,10 @@ public class Setting<T> {
 
     public void setValue(T value) {
         this.value = value;
+        if(!Util.isNull()) {
+            SettingUpdateEvent setting = new SettingUpdateEvent(this);
+            MinecraftForge.EVENT_BUS.post(setting);
+        }
     }
 
     public T getMin() {

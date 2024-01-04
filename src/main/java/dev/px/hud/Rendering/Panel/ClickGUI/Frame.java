@@ -86,7 +86,8 @@ public class Frame {
         // Line going down entire bar
 
         //Fontutil.drawTextShadow(type.getName(), getX(), (int) getY() + (int) (width / 2) - (int) Fontutil.getWidth(type.getName()), -1);
-        mc.fontRendererObj.drawStringWithShadow(type.getName(), this.getX() + (getWidth() / 2.0F) - mc.fontRendererObj.getStringWidth(type.getName()), this.getY() + this.getHeight() / 2 - (mc.fontRendererObj.FONT_HEIGHT / 2.0F), 0xffffffff);
+      //  mc.fontRendererObj.drawStringWithShadow(type.getName(), this.getX() + (getWidth() / 2.0F) - mc.fontRendererObj.getStringWidth(type.getName()), this.getY() + this.getHeight() / 2 - (mc.fontRendererObj.FONT_HEIGHT / 2.0F), 0xffffffff);
+        Fontutil.drawTextShadow(type.getName(), (getX() + getWidth() / 2), getY() + 5, -1);
         double scaledComponentOffset = getComponentOffset() - 1400;
         scroll = (float) MathHelper.clamp_double(scroll, -Math.max(0, scaledComponentOffset - height), 0);
 
@@ -114,46 +115,6 @@ public class Frame {
                 }
             this.getClickGUI().getScissorStack().popScissor();
         }
-
-        /*
-        if(!open) return;
-
-        this.featureOffset = 0;
-
-        // make sure the scroll doesn't go farther than our bounds
-
-        int count = 0;
-        int offset = 0;
-        if(openAnimation.getState())
-        for(Button b : this.buttons) {
-            if(b.getX() != this.x) {
-                b.setX(this.x);
-            }
-
-            if(b.getY() != y + height + offset) {
-                b.setY(y + height + offset);
-            }
-
-            b.draw(mouseX, mouseY);
-            offset += b.getHeight();
-            count += b.getHeight();
-        }
-
-        Color color = new Color(25, 163, 191);
-
-         */
-        /*
-        // Vertical
-        Renderutil.gradient(this.getX() - 1, this.getY(), 1, this.getHeight() + count + 2, color.brighter().brighter(), color.darker());
-        Renderutil.gradient(this.getX() + this.getWidth() - 1, this.getY(), 1, this.getHeight() + count + 2, color.brighter().brighter(), color.darker());
-
-        // Horizontal
-        Renderutil.gradient(this.getX() - 1, this.getY() - 1, this.getWidth() + 1, 1, color.darker(), color.brighter().brighter());
-        Renderutil.gradient(this.getX() - 1, this.getY() + this.getHeight() + count + 1, this.getWidth(), 1, color.darker(), color.brighter().brighter());
-
-        //Black bar at the bottom
-        Renderutil.rect(this.getX(), this.getY() + 1 + this.getHeight() + count - 1, this.getWidth() - 1, 1, new Color(0xff232623));
-     */
     }
 
 
@@ -187,6 +148,11 @@ public class Frame {
     public void mouseReleased(int mouseX, int mouseY) {
         this.dragging = false;
         this.expanding = false;
+        if(open) {
+            this.buttons.forEach(button -> {
+                button.mouseReleased(mouseX, mouseY);
+            });
+        }
     }
 
     public void handleScroll(float in) {

@@ -7,7 +7,7 @@ public class FramePositions extends Config {
     private int x, y, width, height;
 
     public FramePositions() {
-        super("frame");
+        super("GUI", "Frame");
     }
 
     @Override

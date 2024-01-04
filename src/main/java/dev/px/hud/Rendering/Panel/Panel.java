@@ -8,9 +8,16 @@ import java.io.IOException;
 public class Panel {
 
     private String name;
+    private boolean defaultBackground;
 
     public Panel(String name) {
         this.name = name;
+        this.defaultBackground = false;
+    }
+
+    public Panel(String name, boolean defaultBackground) {
+        this.name = name;
+        this.defaultBackground = defaultBackground;
     }
 
     public Panel() {
@@ -37,6 +44,18 @@ public class Panel {
         if(Mouse.hasWheel()) {
 
         }
+    }
+
+    public boolean isDefaultBackground() {
+        return defaultBackground;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDefaultBackground(boolean defaultBackground) {
+        this.defaultBackground = defaultBackground;
     }
 
     public String getName() {

@@ -1,16 +1,17 @@
 package dev.px.hud.Rendering.Panel.ClickGUI;
 
 import dev.px.hud.Rendering.HUD.Element;
-import dev.px.hud.Rendering.Panel.ClickGUI.Settings.BooleanButton;
-import dev.px.hud.Rendering.Panel.ClickGUI.Settings.SettingButton;
+import dev.px.hud.Rendering.Panel.ClickGUI.Settings.*;
 import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;
-import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Button {
@@ -45,6 +46,16 @@ public class Button {
             if(setting.getValue() instanceof Boolean) {
                 settingButtons.add(new BooleanButton(this, getX(), getY(), (Setting<Boolean>) setting));
             }
+            if(setting.getValue() instanceof Enum) {
+                settingButtons.add(new EnumButton(this, getX(), getY(), (Setting<Enum>) setting));
+            }
+            if(setting.getValue() instanceof Float) {
+            }
+            if(setting.getValue() instanceof Integer) {
+                settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Integer>) setting));
+            }
+            if(setting.getValue() instanceof Double) {
+            }
         });
     }
 
@@ -67,9 +78,23 @@ public class Button {
 
         Renderutil.rect(x, y, width, height, true, new Color(0x181A18));
         Renderutil.drawGradientRect(x, featureHeight, x + (width * toggleAnimation.getAnimationFactor()), y + height, new Color(0x181A18).brighter().brighter().getRGB(), new Color(0x181A18).getRGB());
-        mc.fontRendererObj.drawStringWithShadow(this.element.getName(), (float) this.x + 2, (int) featureHeight + (3), -1);
-        mc.fontRendererObj.drawStringWithShadow(this.open ? "-" : "+", ((float) this.x) + (float) (width - mc.fontRendererObj.getStringWidth(this.open ? "-" : "+")) - 3, (int) featureHeight + 3, -1);
+        //mc.fontRendererObj.drawStringWithShadow(this.element.getName(), (float) this.x + 2, (int) featureHeight + (3), -1);
+        //mc.fontRendererObj.drawStringWithShadow(this.open ? "-" : "+", ((float) this.x) + (float) (width - mc.fontRendererObj.getStringWidth(this.open ? "-" : "+")) - 3, (int) featureHeight + 3, -1);
+        
+        GL11.glScaled(0.8, 0.8, 0.8); {
 
+            // scaled position
+            float scaledX = ((float) getX() + 4) * 1.25F;
+            float scaledY = ((float) featureHeight + 4.5F) * 1.25F;
+            float scaledWidth = ((float) (getX() + getWidth()) - (Fontutil.getWidth("...") * 0.8F) - 3) * 1.25F;
+
+            Fontutil.drawTextShadow(getElement().getName(), scaledX, scaledY, Color.WHITE.getRGB());
+            if(this.settingButtons.size() > 0) {
+                Fontutil.drawTextShadow("...", scaledWidth, scaledY - 3, new Color(255, 255, 255).getRGB());
+            }
+        }
+
+        GL11.glScaled(1.25, 1.25, 1.25);
     }
 
     public void mouseClick(int mouseX, int mouseY, int button) {
@@ -82,6 +107,24 @@ public class Button {
                 this.openAnimation.setState(open);
             }
            // Util.sendClientSideMessage("Element: " + element.getName() + " Visible " + element.isVisible());
+        }
+
+        if(open) {
+            for(SettingButton<?> s : this.settingButtons) {
+                try {
+                    s.mouseClicked(mouseX, mouseY, button);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void mouseReleased(int mouseX, int mouseY) {
+        if(open) {
+            settingButtons.forEach(settingButton -> {
+                settingButton.mouseReleased(mouseX, mouseY);
+            });
         }
     }
 
@@ -168,6 +211,12 @@ public class Button {
     public double getSettingOffset() {
         return settingOffset;
     }
+
+    public void addSettingOffset(double settingOffset) {
+        this.settingOffset += settingOffset;
+    }
+
+
 
     public ArrayList<SettingButton<?>> getSettingButtons() {
         return settingButtons;
