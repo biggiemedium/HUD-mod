@@ -7,7 +7,7 @@ import dev.px.hud.Manager.ColorManager;
 import dev.px.hud.Manager.FontManager;
 import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Manager.SoundManager;
-import dev.px.hud.Util.Classutil;
+import dev.px.hud.Util.EventProcessor;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.lwjgl.opengl.Display;
 
 @Mod(modid = HUDMod.MODID, version = HUDMod.VERSION)
 public class HUDMod {
@@ -26,7 +25,7 @@ public class HUDMod {
 
     // Initalizers
     public static ElementInitalizer elementInitalizer;
-    public static Classutil clazz;
+    public static EventProcessor clazz;
     public static ConfigInitalizer configInitalizer;
     public static CommandInitalizer commandInitalizer;
 
@@ -47,14 +46,14 @@ public class HUDMod {
     public void init(FMLInitializationEvent event) {
         colorManager = new ColorManager();
         colorManager.resetColor();
-        clazz = new Classutil();
+        clazz = new EventProcessor();
+        notificationManager = new NotificationManager();
         elementInitalizer = new ElementInitalizer();
         configInitalizer = new ConfigInitalizer();
         commandInitalizer = new CommandInitalizer();
 
         soundInitalizer = new SoundManager();
         fontManager = new FontManager();
-        notificationManager = new NotificationManager();
 
 
         configInitalizer.loads();

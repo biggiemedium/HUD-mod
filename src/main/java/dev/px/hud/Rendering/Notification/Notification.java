@@ -5,6 +5,8 @@ import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Math.Timer;
+import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -29,26 +31,42 @@ public class Notification implements Wrapper {
     private ScaledResolution sr;
 
     public Notification(String name, String message, NotificationType type, int time) {
+
         this.name = name;
         this.message = message;
         this.type = type;
         this.removeTime = time;
+
         this.timer = new Timer();
         timer.reset();
+
         this.sr = new ScaledResolution(mc);
+
         this.height = 28;
         this.y = sr.getScaledHeight() - height;
-        this.width = Fontutil.getWidth(name) + 34;
+        this.width = Fontutil.getWidth(message) + 40;
         this.xAnimation = width;
     }
 
-    public void render() {
+    public void render(float getY) {
+        GL11.glPushMatrix();
         Color scolor = new Color(0xFF171717);
         Color icolor = new Color(scolor.getRed(), scolor.getGreen(), scolor.getBlue(), (int) Mathutil.clamp(255 * (1 - animation.getAnimationFactor()), 0, 255));
         Color icolor2 = new Color(255, 255, 255, (int) Mathutil.clamp((1 - animation.getAnimationFactor()), 0, 255));
 
+        animation.setState(timerFinished());
         xAnimation = (float) (width * animation.getAnimationFactor());
+        y = animate(y, getY);
 
+        int x1 = (int) ((sr.getScaledWidth() - 6) - width + xAnimation);
+        int y1 = (int) y;
+
+        Renderutil.drawBlurredShadow(x1, y1, width, height, 20, icolor);
+        RoundedShader.drawRound(x1, y1, width, height, 6f, icolor);
+
+        Fontutil.drawText(name, (x1 + 6), y1 + 4, -1);
+        Fontutil.drawText(message, x1 + 6, (int) (y1 + 4 + (height - Fontutil.getHeight()) / 2f), icolor2.getRGB());
+        GL11.glPopMatrix();
     }
 
     public Timer getTimer() {
@@ -56,7 +74,31 @@ public class Notification implements Wrapper {
     }
 
     public boolean isRemoveable() {
-        return timer.passed(this.removeTime) && xAnimation >= width - 5;
+        return (timerFinished()) && xAnimation >= width - 5;
+    }
+
+    public boolean timerFinished() {
+        return timer.passed(removeTime);
+    }
+
+    public float animate(float value, float target) {
+        return value + (target - value) / 8f;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public float getxAnimation() {
+        return xAnimation;
     }
 
     public enum NotificationType {

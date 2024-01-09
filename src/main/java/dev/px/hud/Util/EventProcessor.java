@@ -3,6 +3,7 @@ package dev.px.hud.Util;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
+import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Util;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -12,9 +13,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
-public class Classutil extends Util {
+public class EventProcessor extends Util {
 
-    public Classutil() {
+    public EventProcessor() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -26,6 +27,8 @@ public class Classutil extends Util {
                     e.render(event.partialTicks);
                 }
             }
+
+            HUDMod.notificationManager.render2D();
         }
     }
 
@@ -49,6 +52,10 @@ public class Classutil extends Util {
                             }
                         }
                     });
+
+                    if(keyCode == Keyboard.KEY_U) {
+                        HUDMod.notificationManager.Add(new Notification("test", "yes", Notification.NotificationType.INFO, 2000));
+                    }
                 }
             }
         } catch (Exception q) { q.printStackTrace(); }
