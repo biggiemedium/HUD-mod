@@ -5,6 +5,7 @@ import dev.px.hud.Initalizer.ConfigInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
 import dev.px.hud.Manager.ColorManager;
 import dev.px.hud.Manager.FontManager;
+import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Manager.SoundManager;
 import dev.px.hud.Util.Classutil;
 import dev.px.hud.Util.Wrapper;
@@ -33,6 +34,7 @@ public class HUDMod {
     public static SoundManager soundInitalizer;
     public static ColorManager colorManager;
     public static FontManager fontManager;
+    public static NotificationManager notificationManager;
 
     private static Minecraft mc = Wrapper.mc;
 
@@ -52,6 +54,7 @@ public class HUDMod {
 
         soundInitalizer = new SoundManager();
         fontManager = new FontManager();
+        notificationManager = new NotificationManager();
 
 
         configInitalizer.loads();

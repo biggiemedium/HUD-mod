@@ -19,12 +19,12 @@ public class IntegerButton extends SettingButton<Integer> {
 
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
-
+        
     }
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
-
+        
     }
 
     @Override

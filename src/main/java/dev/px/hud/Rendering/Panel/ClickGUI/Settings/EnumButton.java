@@ -90,8 +90,8 @@ public class EnumButton extends SettingButton<Enum> {
             } else if(button == 1) {
                 this.expanded = !this.expanded;
                 this.expandAnimation.setState(expanded);
-                Util.sendClientSideMessage("Value: " + setting.getValue(), true);
-                Util.sendClientSideMessage("animation: " + expandAnimation.getState() + " factor " + expandAnimation.getAnimationFactor(), false);
+              //  Util.sendClientSideMessage("Value: " + setting.getValue(), true);
+              //  Util.sendClientSideMessage("animation: " + expandAnimation.getState() + " factor " + expandAnimation.getAnimationFactor(), false);
             }
         }
 
