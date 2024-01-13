@@ -32,7 +32,7 @@ public class NotificationManager {
         if (notifications.size() > 8) { // overflow precautions
             notifications.remove(0);
         }
-        float startY = (float) (sr.getScaledHeight() * 1 - 24);
+        float startY = (float) (sr.getScaledHeight() - 28);
         for (int i = 0; i < notifications.size(); i++) {
             Notification notification = notifications.get(i);
             notifications.removeIf(Notification::isRemoveable);

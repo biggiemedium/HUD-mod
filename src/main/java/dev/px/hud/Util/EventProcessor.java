@@ -1,6 +1,7 @@
 package dev.px.hud.Util;
 
 import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Notification.Notification;
@@ -23,8 +24,8 @@ public class EventProcessor extends Util {
     public void onRender(RenderGameOverlayEvent event) {
         if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
             for (Element e : HUDMod.elementInitalizer.getElements()) {
-                if (e.isVisible()) {
-                    e.render(event.partialTicks);
+                if (e.isToggled() && e instanceof RenderElement) {
+                    ((RenderElement) e).render(event.partialTicks);
                 }
             }
 
@@ -45,16 +46,11 @@ public class EventProcessor extends Util {
                         mc.displayGuiScreen(new PanelGUIScreen());
                     }
 
-                    HUDMod.elementInitalizer.getElements().forEach(element -> {
-                        if(element instanceof ToggleableElement) {
-                            if(keyCode == ((ToggleableElement) element).keybind) {
-                                element.setVisible(!element.isVisible());
-                            }
-                        }
-                    });
-
                     if(keyCode == Keyboard.KEY_U) {
                         HUDMod.notificationManager.Add(new Notification("test", "yes", Notification.NotificationType.INFO, 2000));
+                        HUDMod.elementInitalizer.getElements().forEach(e -> {
+                            Util.sendClientSideMessage(e.getName(), true);
+                        });
                     }
                 }
             }
@@ -67,6 +63,5 @@ public class EventProcessor extends Util {
             Util.sendClientSideMessage("To open the GUI press RSHIFT!", true);
         }
     }
-
 
 }

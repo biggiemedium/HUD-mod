@@ -4,6 +4,8 @@ import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.SettingUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class Setting<T> {
@@ -15,6 +17,9 @@ public class Setting<T> {
     private T max;
 
     private Predicate<T> visibility;
+
+    // Taken from cosmos client
+    private List<T> exclusions;
 
     public Setting(String name, T value) {
         this.name = name;
@@ -91,5 +96,15 @@ public class Setting<T> {
             return true;
         }
         return this.visibility.test(this.getValue());
+    }
+
+    public boolean isExclusion(T in) {
+        return exclusions.contains(in);
+    }
+
+    @SafeVarargs
+    public final Setting<T> setExclusion(T... in) {
+        exclusions.addAll(Arrays.asList(in));
+        return this;
     }
 }

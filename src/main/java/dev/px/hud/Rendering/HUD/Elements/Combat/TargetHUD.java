@@ -1,8 +1,9 @@
 package dev.px.hud.Rendering.HUD.Elements.Combat;
 
 import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Rendering.HUD.RenderElement;
 
-public class TargetHUD extends Element {
+public class TargetHUD extends RenderElement {
 
     public TargetHUD() {
         super("TargetHUDD", 200, 200, HUDType.COMBAT);

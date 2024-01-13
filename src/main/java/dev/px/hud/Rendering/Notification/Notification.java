@@ -5,6 +5,7 @@ import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Math.Timer;
+import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Wrapper;
@@ -50,9 +51,10 @@ public class Notification implements Wrapper {
 
     public void render(float getY) {
         GL11.glPushMatrix();
-        Color scolor = new Color(0xFF171717);
+        Color scolor = new Color(0x181A18);
         Color icolor = new Color(scolor.getRed(), scolor.getGreen(), scolor.getBlue(), (int) Mathutil.clamp(255 * (1 - animation.getAnimationFactor()), 0, 255));
         Color icolor2 = new Color(255, 255, 255, (int) Mathutil.clamp((1 - animation.getAnimationFactor()), 0, 255));
+        Color c = new Color(39, 179, 206, (int) Mathutil.clamp(255 * (1 - animation.getAnimationFactor()), 0, 255));
 
         animation.setState(timerFinished());
         xAnimation = (float) (width * animation.getAnimationFactor());
@@ -61,8 +63,9 @@ public class Notification implements Wrapper {
         int x1 = (int) ((sr.getScaledWidth() - 6) - width + xAnimation);
         int y1 = (int) y;
 
-        Renderutil.drawBlurredShadow(x1, y1, width, height, 20, icolor);
+        Renderutil.drawBlurredShadow(x1, y1, width, height, 12, icolor);
         RoundedShader.drawRound(x1, y1, width, height, 6f, icolor);
+     //   Renderutil.drawRoundedRect(x1, y1 + (height - 2), width, 2, 1, c);
 
         Fontutil.drawText(name, (x1 + 6), y1 + 4, -1);
         Fontutil.drawText(message, x1 + 6, (int) (y1 + 4 + (height - Fontutil.getHeight()) / 2f), icolor2.getRGB());

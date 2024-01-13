@@ -1,6 +1,9 @@
 package dev.px.hud.Rendering.Panel.ClickGUI;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.ClickGUI.Settings.*;
 import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;
@@ -39,101 +42,110 @@ public class Button {
         this.width = parent.getWidth();
         this.height = 15; // why was this 2 smaller than the frame?
         this.element = element;
-        this.name = element.getName();
+        this.name = element == null ? "" : element.getName();
         this.open = false;
         this.settingButtons = new ArrayList<>();
-        this.element.getSettings().forEach(setting -> {
-            if(setting.getValue() instanceof Boolean) {
-                settingButtons.add(new BooleanButton(this, getX(), getY(), (Setting<Boolean>) setting));
-            }
-            if(setting.getValue() instanceof Enum) {
-                settingButtons.add(new EnumButton(this, getX(), getY(), (Setting<Enum>) setting));
-            }
-            if(setting.getValue() instanceof Float) {
-            }
-            if(setting.getValue() instanceof Integer) {
-                settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Integer>) setting));
-            }
-            if(setting.getValue() instanceof Double) {
-            }
-        });
+        if(this.element != null && this.element.getSettings() != null) {
+            this.element.getSettings().forEach(setting -> {
+                if (setting.getValue() instanceof Boolean) {
+                    settingButtons.add(new BooleanButton(this, getX(), getY(), (Setting<Boolean>) setting));
+                }
+                if (setting.getValue() instanceof Enum) {
+                    settingButtons.add(new EnumButton(this, getX(), getY(), (Setting<Enum>) setting));
+                }
+                if (setting.getValue() instanceof Float) {
+                }
+                if (setting.getValue() instanceof Integer) {
+                    settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Number>) setting));
+                }
+                if (setting.getValue() instanceof Double) {
+                }
+            });
+        }
     }
 
     public void draw(int mouseX, int mouseY, float partialTicks) {
         this.featureHeight = (this.parent.getY() + this.parent.getHeight() + this.parent.getComponentOffset() + this.parent.getScroll() + 2);
         this.parent.addFeatureOffset(height);
-        this.toggleAnimation.setState(this.element.isVisible());
+        this.toggleAnimation.setState(this.element.isToggled());
         this.openAnimation.setState(this.isOpen());
 
-        if(openAnimation.getAnimationFactor() > 0) {
-            this.settingOffset = getParent().getComponentOffset();
-            this.settingButtons.forEach(settingButton -> {
-                if(settingButton.getSetting().isVisible()) {
-                    settingButton.draw(mouseX, mouseY, partialTicks);
-                    this.settingOffset += settingButton.getHeight();
-                    this.parent.addComponentOffset(settingButton.getHeight() * openAnimation.getAnimationFactor());
-                }
-            });
-        }
+            if (openAnimation.getAnimationFactor() > 0) {
+                this.settingOffset = getParent().getComponentOffset();
+                this.settingButtons.forEach(settingButton -> {
+                    if(settingButton.getX() != this.getX()) {
+                        settingButton.setX(getX());
+                    }
+                    if (settingButton.getSetting().isVisible()) {
+                        settingButton.draw(mouseX, mouseY, partialTicks);
+                        this.settingOffset += settingButton.getHeight();
+                        this.parent.addComponentOffset(settingButton.getHeight() * openAnimation.getAnimationFactor());
+                    }
+                });
+            }
+
 
         Renderutil.rect(x, y, width, height, true, new Color(0x181A18));
         Renderutil.drawGradientRect(x, featureHeight, x + (width * toggleAnimation.getAnimationFactor()), y + height, new Color(0x181A18).brighter().brighter().getRGB(), new Color(0x181A18).getRGB());
         //mc.fontRendererObj.drawStringWithShadow(this.element.getName(), (float) this.x + 2, (int) featureHeight + (3), -1);
         //mc.fontRendererObj.drawStringWithShadow(this.open ? "-" : "+", ((float) this.x) + (float) (width - mc.fontRendererObj.getStringWidth(this.open ? "-" : "+")) - 3, (int) featureHeight + 3, -1);
-        
-        GL11.glScaled(0.8, 0.8, 0.8); {
 
-            // scaled position
-            float scaledX = ((float) getX() + 4) * 1.25F;
-            float scaledY = ((float) featureHeight + 4.5F) * 1.25F;
-            float scaledWidth = ((float) (getX() + getWidth()) - (Fontutil.getWidth("...") * 0.8F) - 3) * 1.25F;
 
-            Fontutil.drawTextShadow(getElement().getName(), scaledX, scaledY, Color.WHITE.getRGB());
-            if(this.settingButtons.size() > 0) {
-                Fontutil.drawTextShadow("...", scaledWidth, scaledY - 3, new Color(255, 255, 255).getRGB());
+            GL11.glScaled(0.8, 0.8, 0.8); {
+
+                // scaled position
+                float scaledX = ((float) getX() + 4) * 1.25F;
+                float scaledY = ((float) featureHeight + 4.5F) * 1.25F;
+                float scaledWidth = ((float) (getX() + getWidth()) - (Fontutil.getWidth("...") * 0.8F) - 3) * 1.25F;
+
+                Fontutil.drawTextShadow(getElement().getName(), scaledX, scaledY, Color.WHITE.getRGB());
+                if (this.settingButtons.size() > 0) {
+                    Fontutil.drawTextShadow("...", scaledWidth, scaledY - 3, new Color(255, 255, 255).getRGB());
+                }
             }
-        }
 
-        GL11.glScaled(1.25, 1.25, 1.25);
+            GL11.glScaled(1.25, 1.25, 1.25);
+
+
     }
 
     public void mouseClick(int mouseX, int mouseY, int button) {
-        if(isHovered(mouseX, mouseY)) {
-            if(button == 0) {
-                element.setVisible(!element.isVisible());
-                this.toggleAnimation.setState(element.isVisible());
-            } else if(button == 1) {
-                this.open = !this.open;
-                this.openAnimation.setState(open);
+            if (isHovered(mouseX, mouseY)) {
+                if (button == 0) {
+                    element.setToggled(!element.isToggled());
+                    this.toggleAnimation.setState(element.isToggled());
+                } else if (button == 1) {
+                    this.open = !this.open;
+                    this.openAnimation.setState(open);
+                }
+                // Util.sendClientSideMessage("Element: " + element.getName() + " Visible " + element.isVisible());
             }
-           // Util.sendClientSideMessage("Element: " + element.getName() + " Visible " + element.isVisible());
-        }
 
-        if(open) {
-            for(SettingButton<?> s : this.settingButtons) {
-                try {
-                    s.mouseClicked(mouseX, mouseY, button);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            if (open) {
+                for (SettingButton<?> s : this.settingButtons) {
+                    try {
+                        s.mouseClicked(mouseX, mouseY, button);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
     }
 
     public void mouseReleased(int mouseX, int mouseY) {
-        if(open) {
-            settingButtons.forEach(settingButton -> {
-                settingButton.mouseReleased(mouseX, mouseY);
-            });
-        }
+            if (open) {
+                settingButtons.forEach(settingButton -> {
+                    settingButton.mouseReleased(mouseX, mouseY);
+                });
+            }
     }
 
     public void scroll(float in) {
-        if(open) {
-            settingButtons.forEach(settingButton -> {
-                settingButton.scroll(in);
-            });
-        }
+            if (open) {
+                settingButtons.forEach(settingButton -> {
+                    settingButton.scroll(in);
+                });
+            }
     }
 
     private boolean isHovered(int mouseX, int mouseY) {

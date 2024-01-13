@@ -5,6 +5,7 @@ import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
 import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
 import dev.px.hud.HUDMod;
+import dev.px.hud.Rendering.HUD.Mods.AutoSprint;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class ElementInitalizer {
 
         // Render
 
-        // Exploit
+        // Mod
+        Add(new AutoSprint()); // ???
     }
 
     private void Add(Element element) {

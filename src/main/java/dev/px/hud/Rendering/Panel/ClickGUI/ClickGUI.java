@@ -2,6 +2,7 @@ package dev.px.hud.Rendering.Panel.ClickGUI;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Renderutil;
@@ -44,7 +45,10 @@ public class ClickGUI extends Panel {
             f.draw(mouseX, mouseY, partialTicks);
         }
         for(Element e : HUDMod.elementInitalizer.getElements()) {
-            e.render(partialTicks);
+            if(e instanceof RenderElement) {
+                ((RenderElement) e).render(partialTicks);
+                ((RenderElement) e).dragging(mouseX, mouseY);
+            }
         }
     }
 
@@ -55,7 +59,9 @@ public class ClickGUI extends Panel {
         }
 
         for(Element e : HUDMod.elementInitalizer.getElements()) {
-            e.mouseClicked(mouseX, mouseY, button);
+            if(e instanceof RenderElement) {
+                ((RenderElement) e).mouseClicked(mouseX, mouseY, button);
+            }
         }
 
         HUDMod.soundInitalizer.playSound("click");
@@ -66,8 +72,11 @@ public class ClickGUI extends Panel {
         for(Frame f : this.frames) {
             f.mouseReleased(mouseX, mouseY);
         }
+
         for(Element e : HUDMod.elementInitalizer.getElements()) {
-            e.mouseRelease(mouseX, mouseY, state);
+            if(e instanceof RenderElement) {
+                ((RenderElement) e).mouseRelease(mouseX, mouseY, state);
+            }
         }
     }
 

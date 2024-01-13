@@ -1,5 +1,6 @@
 package dev.px.hud.Util.API.Render;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Util.API.Math.Mathutil;
 
 import java.awt.*;
@@ -9,6 +10,9 @@ import java.awt.image.BufferedImage;
 Tenacity client color util
  */
 public class Colorutil {
+
+    public static int colorManagerInt = new Color(HUDMod.colorManager.getRed(), HUDMod.colorManager.getGreen(), HUDMod.colorManager.getBlue()).getRGB();
+
 
     public static Color[] getAnalogousColor(Color color) {
         Color[] colors = new Color[2];
