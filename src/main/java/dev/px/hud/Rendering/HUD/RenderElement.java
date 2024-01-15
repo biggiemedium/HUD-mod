@@ -4,6 +4,7 @@ import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
+import net.minecraft.client.gui.GuiChat;
 
 import java.awt.*;
 
@@ -132,6 +133,7 @@ public class RenderElement extends Element {
     }
 
     public void render(float partialTicks) {
+
     }
 
     public void mouseRelease(int mouseX, int mouseY, int state) {

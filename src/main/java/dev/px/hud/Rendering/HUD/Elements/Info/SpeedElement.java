@@ -4,11 +4,14 @@ import dev.px.hud.Mixin.Game.IMixinMinecraft;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
+import dev.px.hud.Util.API.Math.Timer;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.MathHelper;
 
 import java.awt.*;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpeedElement extends RenderElement {
 
@@ -21,7 +24,8 @@ public class SpeedElement extends RenderElement {
 
     @Override
     public void render(float partialTicks) {
-        String s = mode.getValue() == Mode.KMH ? "Speed: " + getSpeedInKM() : "Speed: " + Mathutil.round(getSpeedInBPS(), 2);
+
+        String s = mode.getValue() == Mode.KMH ? "KMH: " + getSpeedInKM() : "B/PS: " + Mathutil.round(getSpeedInBPS(), 2);
         renderText(s, getX(), getY(), fontColor.getValue().getRGB());
         setWidth(getFontWidth(s));
         setHeight(getFontHeight());

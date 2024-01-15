@@ -24,13 +24,13 @@ public class ToggleableElement extends Element {
     public void enable() {
         MinecraftForge.EVENT_BUS.register(this);
         HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
-        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent(this));
+        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementEnableEvent(this));
     }
 
     public void disable() {
         MinecraftForge.EVENT_BUS.unregister(this);
         HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
-        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent(this));
+        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementDisableEvent(this));
     }
 
     public void setEnabled(boolean toggled) {

@@ -14,4 +14,18 @@ public class ElementToggleEvent extends Event {
     public Element getElement() {
         return element;
     }
+
+    public static class ElementEnableEvent extends ElementToggleEvent {
+
+        public ElementEnableEvent(Element element) {
+            super(element);
+        }
+    }
+
+    public static class ElementDisableEvent extends ElementToggleEvent {
+
+        public ElementDisableEvent(Element element) {
+            super(element);
+        }
+    }
 }
