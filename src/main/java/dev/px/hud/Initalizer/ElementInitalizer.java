@@ -3,13 +3,16 @@ package dev.px.hud.Initalizer;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
 import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
+import dev.px.hud.Rendering.HUD.Elements.Info.CoordinateElement;
+import dev.px.hud.Rendering.HUD.Elements.Info.FPSElement;
+import dev.px.hud.Rendering.HUD.Elements.Info.SpeedElement;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
-import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Mods.AutoSprint;
+import dev.px.hud.Rendering.HUD.Mods.CritParticles;
+import dev.px.hud.Rendering.HUD.ToggleableElement;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ElementInitalizer {
 
@@ -24,11 +27,15 @@ public class ElementInitalizer {
         Add(new TargetHUD());
 
         // Info
+        Add(new CoordinateElement());
+        Add(new FPSElement());
+        Add(new SpeedElement());
 
         // Render
 
         // Mod
-        Add(new AutoSprint()); // ???
+        this.elements.add(new AutoSprint()); // WHY WONT THIS ADD
+        Add(new CritParticles());
     }
 
     private void Add(Element element) {
@@ -53,6 +60,29 @@ public class ElementInitalizer {
             }
         }
         return null;
+    }
+
+    public boolean isElementToggled(Element element) {
+        Element el =  this.elements.stream()
+                .filter(e -> e == element)
+                .filter(e -> e != null)
+                .findFirst()
+                .orElse(null);
+        assert el != null;
+        return el.isToggled();
+    }
+
+    public ArrayList<Element> toggledElements() {
+        ArrayList<Element> e = new ArrayList<>();
+        this.elements.forEach(element -> {
+            if(element instanceof ToggleableElement) {
+                if(((ToggleableElement) element).isEnabled()) {
+                    e.add(element);
+                }
+            }
+        });
+
+        return e;
     }
 
     public ArrayList<Element> getElements() {

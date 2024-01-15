@@ -1,13 +1,11 @@
 package dev.px.hud.Rendering.HUD;
 
-import dev.px.hud.HUDMod;
-import dev.px.hud.Rendering.Notification.Notification;
-import dev.px.hud.Util.Wrapper;
-import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.opengl.GL11;
+import dev.px.hud.Util.API.Font.Fontutil;
+import dev.px.hud.Util.API.Render.Colorutil;
+import dev.px.hud.Util.Renderutil;
+import dev.px.hud.Util.Settings.Setting;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class RenderElement extends Element {
 
@@ -23,7 +21,11 @@ public class RenderElement extends Element {
 
     private boolean dragging;
     private Element.HUDType hudType;
-    private boolean visible;
+    private boolean textElement;
+
+    protected Setting<Boolean> customFont;
+    protected Setting<Boolean> rainbowText;
+    protected Setting<Color> fontColor;
 
     public RenderElement(String name, int x, int y, int width, int height, Element.HUDType hudType) {
         super(name, hudType);
@@ -33,8 +35,9 @@ public class RenderElement extends Element {
         this.width = width;
         this.height = height;
         this.hudType = hudType;
-        this.visible = false;
+        this.textElement = false;
         this.dragging = false;
+        settingDefaults();
     }
 
     public RenderElement(String name, int x, int y, Element.HUDType hudType) {
@@ -45,18 +48,70 @@ public class RenderElement extends Element {
         this.width = mc.fontRendererObj.getStringWidth(name);
         this.height = mc.fontRendererObj.FONT_HEIGHT;
         this.hudType = hudType;
-        this.visible = false;
+        this.textElement = false;
         this.dragging = false;
+        settingDefaults();
+    }
+
+    public RenderElement(String name, int x, int y, int width, int height, Element.HUDType hudType, boolean textElement) {
+        super(name, hudType);
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.hudType = hudType;
+        this.textElement = textElement;
+        this.dragging = false;
+        settingDefaults();
+    }
+
+    public RenderElement(String name, int x, int y, Element.HUDType hudType, boolean textElement) {
+        super(name, hudType);
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.width = mc.fontRendererObj.getStringWidth(name);
+        this.height = mc.fontRendererObj.FONT_HEIGHT;
+        this.hudType = hudType;
+        this.textElement = textElement;
+        this.dragging = false;
+        settingDefaults();
     }
 
     public void dragging(int mouseX, int mouseY) {
         if (dragging) {
             x = dragX + mouseX;
             y = dragY + mouseY;
-            GL11.glPushMatrix();
-            GuiScreen.drawRect(x - 1, y - 1, x + width + 5, y + height + 5, new Color(10, 10, 10, 100).getRGB());
-            GL11.glPopMatrix();
         }
+
+        Renderutil.drawRect(getX() - 1, getY() - 1, getWidth() + 2, getHeight() + 2, new Color(54, 54, 54, dragging ? 150 : 100));
+    }
+
+    public void settingDefaults() {
+        customFont = new Setting<Boolean>("CustomFont", false, v -> isTextElement());
+        this.rainbowText = new Setting<>("Rainbow Text", false, v -> isTextElement());
+        fontColor = new Setting<Color>("Color", new Color(255, 255, 255), v -> isTextElement() && rainbowText.getValue());
+            getSettings().add(customFont);
+            getSettings().add(rainbowText);
+            getSettings().add(fontColor);
+    }
+
+    protected void renderText(String text, int x, int y, int color) {
+        int c = rainbowText.getValue() ? Colorutil.rainbow(8, 1, 0.7f, 0.8f, 0.8f).getRGB() : color;
+        if(customFont.getValue()) {
+            Fontutil.drawTextShadow(text, x, y, c);
+        } else {
+            mc.fontRendererObj.drawStringWithShadow(text, x, y, c);
+        }
+    }
+
+    protected int getFontWidth(String text) {
+        return customFont.getValue() ? (int) Fontutil.getWidth(text) : mc.fontRendererObj.getStringWidth(text);
+    }
+
+    protected int getFontHeight() {
+        return customFont.getValue() ? (int) Fontutil.getHeight() : mc.fontRendererObj.FONT_HEIGHT;
     }
 
 
@@ -71,13 +126,12 @@ public class RenderElement extends Element {
 
         if(button == 2 || button == 1) {
             if(isHovered(mouseX, mouseY)) {
-                this.setVisible(!this.isVisible());
+                this.setTextElement(!this.isTextElement());
             }
         }
     }
 
     public void render(float partialTicks) {
-
     }
 
     public void mouseRelease(int mouseX, int mouseY, int state) {
@@ -88,12 +142,12 @@ public class RenderElement extends Element {
         return mouseX > x && mouseY > y && mouseX < x + width && mouseY < y + height;
     }
 
-    public boolean isVisible() {
-        return visible;
+    public boolean isTextElement() {
+        return textElement;
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
+    public void setTextElement(boolean textElement) {
+        this.textElement = textElement;
     }
 
     @Override

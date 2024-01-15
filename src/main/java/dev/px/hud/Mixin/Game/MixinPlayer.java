@@ -18,7 +18,6 @@ public class MixinPlayer {
         if(packet.isCanceled()) {
             ci.cancel();
         }
-
     }
 
 }

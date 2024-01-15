@@ -12,4 +12,6 @@ public interface IMixinMinecraft {
     @Accessor("timer")
     Timer timer();
 
+    @Accessor("fpsCounter")
+    int currentFPS();
 }

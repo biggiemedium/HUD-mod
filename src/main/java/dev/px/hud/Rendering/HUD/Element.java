@@ -16,7 +16,7 @@ public class Element implements Wrapper {
 
     private String name;
     private HUDType hudType;
-    private boolean toggled;
+    protected boolean toggled;
 
     protected Minecraft mc = Minecraft.getMinecraft();
     protected ArrayList<Setting<?>> settings;
@@ -26,13 +26,6 @@ public class Element implements Wrapper {
         this.hudType = hudType;
         this.settings = new ArrayList<>();
         this.toggled = false;
-    }
-
-    public Element(String name, HUDType hudType, boolean toggled) {
-        this.name = name;
-        this.hudType = hudType;
-        this.settings = new ArrayList<>();
-        this.toggled = toggled;
     }
 
     protected <T> Setting<T> create(Setting<T> hudSetting) {
@@ -77,7 +70,7 @@ public class Element implements Wrapper {
     public enum HUDType {
         COMBAT("Combat"),
         INFO("Info"),
-        RENDER("Render"),
+        RENDER("Render Mod"),
         MOD("Mods");
 
         HUDType(String name) {

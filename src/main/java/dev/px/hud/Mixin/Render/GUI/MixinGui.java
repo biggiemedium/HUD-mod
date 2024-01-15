@@ -1,4 +1,4 @@
-package dev.px.hud.Mixin.Render;
+package dev.px.hud.Mixin.Render.GUI;
 
 import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;

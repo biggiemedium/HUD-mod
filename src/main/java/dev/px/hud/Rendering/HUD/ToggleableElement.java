@@ -2,6 +2,7 @@ package dev.px.hud.Rendering.HUD;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Notification.Notification;
+import dev.px.hud.Util.Event.ElementToggleEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ToggleableElement extends Element {
@@ -14,20 +15,26 @@ public class ToggleableElement extends Element {
 
     public ToggleableElement(String name, String description, HUDType hudType) {
         super(name, hudType);
+        this.name = name;
+        this.hudType = hudType;
         this.key = -1;
+        this.enabled = toggled;
     }
 
     public void enable() {
         MinecraftForge.EVENT_BUS.register(this);
         HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
+        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent(this));
     }
 
     public void disable() {
         MinecraftForge.EVENT_BUS.unregister(this);
         HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
+        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent(this));
     }
 
-    public void setToggled(boolean toggled) {
+    public void setEnabled(boolean toggled) {
+        this.enabled = toggled;
         setToggled(toggled);
 
         if(isToggled()) {
@@ -35,6 +42,21 @@ public class ToggleableElement extends Element {
         } else {
             this.disable();
         }
+    }
+
+    public void toggle() {
+        this.enabled = !enabled;
+        setToggled(enabled);
+
+        if(isToggled()) {
+            this.enable();
+        } else {
+            this.disable();
+        }
+    }
+
+    public void onUpdate() {
+
     }
 
     @Override
@@ -59,10 +81,6 @@ public class ToggleableElement extends Element {
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public int getKey() {

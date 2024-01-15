@@ -46,8 +46,8 @@ public class ClickGUI extends Panel {
         }
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
-                ((RenderElement) e).render(partialTicks);
                 ((RenderElement) e).dragging(mouseX, mouseY);
+                ((RenderElement) e).render(partialTicks);
             }
         }
     }

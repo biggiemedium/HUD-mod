@@ -3,6 +3,7 @@ package dev.px.hud.Rendering.Panel.ClickGUI;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.ClickGUI.Settings.*;
 import dev.px.hud.Util.API.Animation.Animation;
@@ -42,10 +43,10 @@ public class Button {
         this.width = parent.getWidth();
         this.height = 15; // why was this 2 smaller than the frame?
         this.element = element;
-        this.name = element == null ? "" : element.getName();
+        this.name = element.getName(); // WHY IS IT NULLLLLL
         this.open = false;
         this.settingButtons = new ArrayList<>();
-        if(this.element != null && this.element.getSettings() != null) {
+        if(this.element.getSettings() != null) {
             this.element.getSettings().forEach(setting -> {
                 if (setting.getValue() instanceof Boolean) {
                     settingButtons.add(new BooleanButton(this, getX(), getY(), (Setting<Boolean>) setting));
@@ -99,7 +100,7 @@ public class Button {
                 float scaledWidth = ((float) (getX() + getWidth()) - (Fontutil.getWidth("...") * 0.8F) - 3) * 1.25F;
 
                 Fontutil.drawTextShadow(getElement().getName(), scaledX, scaledY, Color.WHITE.getRGB());
-                if (this.settingButtons.size() > 0) {
+                if (this.settingButtons.size() > 2) { // Text element
                     Fontutil.drawTextShadow("...", scaledWidth, scaledY - 3, new Color(255, 255, 255).getRGB());
                 }
             }
@@ -114,6 +115,9 @@ public class Button {
                 if (button == 0) {
                     element.setToggled(!element.isToggled());
                     this.toggleAnimation.setState(element.isToggled());
+                    if(element instanceof ToggleableElement) {
+                        ((ToggleableElement) element).setEnabled(((ToggleableElement) element).isToggled());
+                    }
                 } else if (button == 1) {
                     this.open = !this.open;
                     this.openAnimation.setState(open);

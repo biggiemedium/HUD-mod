@@ -5,13 +5,16 @@ import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Util.API.Shader.GaussianBlur.GaussianFilter;
 import dev.px.hud.Util.API.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -416,6 +419,43 @@ public class Renderutil extends Util {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glPopMatrix();
         GL11.glColor3f(255, 255, 255);
+    }
+
+    public static void drawStack(FontRenderer font, boolean renderOverlay, ItemStack stack, int x, int y) {
+        GL11.glPushMatrix();
+
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (mc.theWorld != null) {
+            RenderHelper.enableGUIStandardItemLighting();
+        }
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableAlpha();
+        GlStateManager.clear(256);
+        GlStateManager.enableBlend();
+
+        mc.getRenderItem().zLevel = -150.0F;
+        mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
+
+        if (renderOverlay) {
+            mc.getRenderItem().renderItemOverlayIntoGUI(font, stack, x, y, String.valueOf(stack.stackSize));
+        }
+
+        mc.getRenderItem().zLevel = 0.0F;
+
+        GlStateManager.enableBlend();
+        final float z = 0.5F;
+
+        GlStateManager.scale(z, z, z);
+        GlStateManager.disableDepth();
+        GlStateManager.disableLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.scale(2.0f, 2.0f, 2.0f);
+        GlStateManager.enableAlpha();
+        GlStateManager.popMatrix();
+
+        GL11.glPopMatrix();
     }
 
     public static void drawGradient(double x, double y, double x2, double y2, int col1, int col2) {

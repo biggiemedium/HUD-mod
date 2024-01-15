@@ -18,7 +18,7 @@ import java.util.List;
 public class EnumButton extends SettingButton<Enum> {
 
     private Setting<Enum> setting;
-    private boolean expanded = true; // why the hell does it start closed while expanded ??
+    private boolean expanded = false; // why the hell does it start closed while expanded ??
     private double featureHeight;
     private Animation expandAnimation = new Animation(200, false, Easing.LINEAR);
 
@@ -35,7 +35,7 @@ public class EnumButton extends SettingButton<Enum> {
         this.expandAnimation.setState(expanded);
 
         Renderutil.drawRect((float) getX(), (float)  featureHeight, (float) getWidth(), (float) getHeight() + (float) ((expandHeight + getHeight()) * expandAnimation.getAnimationFactor()), new Color(0x181A18).darker());
-        Renderutil.drawRect(getX(), featureHeight, 2, getHeight() + expandHeight, new Color(39, 179, 206).getRGB());
+      //  Renderutil.drawRect(getX(), featureHeight, 2, getHeight() + expandHeight, new Color(39, 179, 206).getRGB());
 
         GL11.glScaled(0.55, 0.55, 0.55); {
             float scaledX = ((float) getX() + 7) * 1.81818181F;

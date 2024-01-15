@@ -22,6 +22,7 @@ public class Armor extends RenderElement {
     @Override
     public void render(float partialTicks) {
         GlStateManager.pushMatrix();
+
         GlStateManager.enableTexture2D();
         int offset = 0;
         for (ItemStack itemStack : mc.thePlayer.inventory.armorInventory) {
@@ -51,7 +52,8 @@ public class Armor extends RenderElement {
 
         GlStateManager.enableDepth();
         GlStateManager.disableLighting();
-            GlStateManager.popMatrix();
+
+        GlStateManager.popMatrix();
     }
 
     private enum Mode {

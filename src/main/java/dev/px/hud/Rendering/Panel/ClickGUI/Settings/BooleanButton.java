@@ -54,7 +54,7 @@ public class BooleanButton extends SettingButton<Boolean> {
 
         GL11.glScaled(1.81818181, 1.81818181, 1.81818181);
 
-        Renderutil.drawRect(getX() + 1, featureHeight, 4, getHeight(), new Color(39, 179, 206, 255).getRGB());
+     //   Renderutil.drawRect(getX() + 1, featureHeight, 4, getHeight(), new Color(39, 179, 206, 255).getRGB());
     }
 
     @Override
