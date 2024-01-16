@@ -26,6 +26,5 @@ public class FakePlayer extends ToggleableElement {
     @Override
     public void disable() {
         mc.theWorld.removeEntity(fakePlayer);
-
     }
 }

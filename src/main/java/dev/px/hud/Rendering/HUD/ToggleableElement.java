@@ -2,10 +2,13 @@ package dev.px.hud.Rendering.HUD;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Notification.Notification;
+import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Bus.Listener.Listenable;
 import dev.px.hud.Util.Event.ElementToggleEvent;
+import dev.px.hud.Util.Event.Render3dEvent;
 import net.minecraftforge.common.MinecraftForge;
 
-public class ToggleableElement extends Element {
+public class ToggleableElement extends Element implements Listenable {
 
     private String name;
     private HUDType hudType;
@@ -23,24 +26,35 @@ public class ToggleableElement extends Element {
 
     public void enable() {
         MinecraftForge.EVENT_BUS.register(this);
-        HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
+     //   HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
         MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementEnableEvent(this));
+        HUDMod.EVENT_BUS.subscribe(this);
     }
 
     public void disable() {
         MinecraftForge.EVENT_BUS.unregister(this);
-        HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
+       // HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
         MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementDisableEvent(this));
+        HUDMod.EVENT_BUS.unsubscribe(this);
     }
 
     public void setEnabled(boolean toggled) {
-        this.enabled = toggled;
         setToggled(toggled);
+        this.enabled = toggled;
 
-        if(isToggled()) {
-            this.enable();
+
+        if(isEnabled()) {
+            enable();
+            MinecraftForge.EVENT_BUS.register(this);
+               HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
+            MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementEnableEvent(this));
+            HUDMod.EVENT_BUS.subscribe(this);
         } else {
-            this.disable();
+            disable();
+            MinecraftForge.EVENT_BUS.unregister(this);
+             HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
+            MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementDisableEvent(this));
+            HUDMod.EVENT_BUS.unsubscribe(this);
         }
     }
 
@@ -48,14 +62,18 @@ public class ToggleableElement extends Element {
         this.enabled = !enabled;
         setToggled(enabled);
 
-        if(isToggled()) {
-            this.enable();
+        if(isEnabled()) {
+            enable();
         } else {
-            this.disable();
+            disable();
         }
     }
 
     public void onUpdate() {
+
+    }
+
+    public void onRender(Render3dEvent event) {
 
     }
 

@@ -5,6 +5,7 @@ import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
 import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
 import dev.px.hud.Rendering.HUD.Elements.Info.*;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
+import dev.px.hud.Rendering.HUD.Mods.AdditionalInfo;
 import dev.px.hud.Rendering.HUD.Mods.AutoSprint;
 import dev.px.hud.Rendering.HUD.Mods.CritParticles;
 import dev.px.hud.Rendering.HUD.Mods.FakePlayer;
@@ -37,6 +38,7 @@ public class ElementInitalizer {
         // Render
 
         // Mod
+        Add(new AdditionalInfo());
         this.elements.add(new AutoSprint()); // WHY WONT THIS ADD
         Add(new CritParticles());
         Add(new FakePlayer());

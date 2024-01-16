@@ -7,6 +7,8 @@ import dev.px.hud.Manager.ColorManager;
 import dev.px.hud.Manager.FontManager;
 import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Manager.SoundManager;
+import dev.px.hud.Util.Event.Bus.EventBus;
+import dev.px.hud.Util.Event.Bus.EventManager;
 import dev.px.hud.Util.EventProcessor;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.Minecraft;
@@ -36,6 +38,7 @@ public class HUDMod {
     public static NotificationManager notificationManager;
 
     private static Minecraft mc = Wrapper.mc;
+    public static EventBus EVENT_BUS = new EventManager();
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {

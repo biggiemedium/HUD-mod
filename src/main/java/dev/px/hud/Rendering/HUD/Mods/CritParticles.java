@@ -2,6 +2,8 @@ package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Bus.Listener.EventHandler;
+import dev.px.hud.Util.Event.Bus.Listener.Listener;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumParticleTypes;
@@ -24,14 +26,13 @@ public class CritParticles extends ToggleableElement {
     public void disable() {
     }
 
-    @SubscribeEvent
-    public void onAttack(AttackEntityEvent event) {
+    @EventHandler
+    public Listener<AttackEntityEvent> entityEventListener = new Listener<>(event -> {
         if(event.target instanceof EntityLivingBase) {
-            if(event.target != mc.thePlayer) {
-                for (int i = 0; i < amount.getValue(); i++) {
-                    mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT);
-                }
-            }
+            Util.sendClientSideMessage("HIT", true);
         }
+    });
+    public void onAttack(AttackEntityEvent event) {
+
     }
 }

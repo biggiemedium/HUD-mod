@@ -1,13 +1,22 @@
 package dev.px.hud.Util;
 
+import com.sun.javafx.geom.Vec3d;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Entity.Entityutil;
+import dev.px.hud.Util.API.Entity.Playerutil;
+import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.ElementToggleEvent;
+import dev.px.hud.Util.Event.Render3dEvent;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -15,6 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 public class EventProcessor extends Util {
 
@@ -83,4 +93,40 @@ public class EventProcessor extends Util {
             });
         }
     }
+
+    @SubscribeEvent
+    public void onRender3D(RenderWorldLastEvent event) {
+        if(Util.isNull()) {
+            return;
+        }
+
+
+        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glLineWidth(1.0F);
+        Render3dEvent render3dEvent = new Render3dEvent(event.partialTicks);
+        for(Element e : HUDMod.elementInitalizer.getElements()) {
+            if(e instanceof ToggleableElement) {
+                if(((ToggleableElement) e).isToggled()) {
+                    ((ToggleableElement) e).onRender(render3dEvent);
+                }
+            }
+        }
+        GL11.glLineWidth(1.0F);
+        GL11.glPopAttrib();
+    }
+
+    @SubscribeEvent
+    public void onEntityHit(AttackEntityEvent event) {
+        HUDMod.EVENT_BUS.post(event);
+    }
+
+    @SubscribeEvent
+    public void onEnableMod(ElementToggleEvent.ElementEnableEvent event) {
+
+    }
+
 }
