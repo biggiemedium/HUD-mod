@@ -5,10 +5,7 @@ import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
 import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
 import dev.px.hud.Rendering.HUD.Elements.Info.*;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
-import dev.px.hud.Rendering.HUD.Mods.AdditionalInfo;
-import dev.px.hud.Rendering.HUD.Mods.AutoSprint;
-import dev.px.hud.Rendering.HUD.Mods.CritParticles;
-import dev.px.hud.Rendering.HUD.Mods.FakePlayer;
+import dev.px.hud.Rendering.HUD.Mods.*;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import net.minecraft.client.Minecraft;
 
@@ -41,6 +38,7 @@ public class ElementInitalizer {
         Add(new AdditionalInfo());
         this.elements.add(new AutoSprint()); // WHY WONT THIS ADD
         Add(new CritParticles());
+        Add(new ESPMod());
         Add(new FakePlayer());
     }
 
@@ -71,6 +69,16 @@ public class ElementInitalizer {
     public boolean isElementToggled(Element element) {
         Element el =  this.elements.stream()
                 .filter(e -> e == element)
+                .filter(e -> e != null)
+                .findFirst()
+                .orElse(null);
+        assert el != null;
+        return el.isToggled();
+    }
+
+    public boolean isElementToggled(Class clazz) {
+        Element el =  this.elements.stream()
+                .filter(e -> e.getClass() == clazz)
                 .filter(e -> e != null)
                 .findFirst()
                 .orElse(null);

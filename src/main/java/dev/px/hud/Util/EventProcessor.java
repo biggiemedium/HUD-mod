@@ -100,23 +100,54 @@ public class EventProcessor extends Util {
             return;
         }
 
+        mc.mcProfiler.startSection("hudmod");
+        /*
+        mc.mcProfiler.startSection("setup");
 
-        GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
-        GL11.glDisable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        GL11.glLineWidth(1.0F);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.disableDepth();
+        GL11.glLineWidth(1f);
+  */
         Render3dEvent render3dEvent = new Render3dEvent(event.partialTicks);
+       // renderEvent.resetTranslation();
+      //  mc.mcProfiler.endSection();
+
+
+
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof ToggleableElement) {
                 if(((ToggleableElement) e).isToggled()) {
+                  //  mc.mcProfiler.startSection(e.getName());
                     ((ToggleableElement) e).onRender(render3dEvent);
+                 //   mc.mcProfiler.endSection();
                 }
             }
         }
-        GL11.glLineWidth(1.0F);
-        GL11.glPopAttrib();
+        /*
+        mc.mcProfiler.startSection("release");
+
+        GL11.glLineWidth(1f);
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableDepth();
+        GlStateManager.enableCull();
+
+        GlStateManager.enableCull();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.enableDepth();
+
+        mc.mcProfiler.endSection();
+
+         */
+        mc.mcProfiler.endSection();
     }
 
     @SubscribeEvent

@@ -356,7 +356,7 @@ public class Renderutil extends Util {
         GL11.glScalef(2.0f, 2.0f, 2.0f);
     }
 
-    private static void drawCircle(Entity entity, final double rad, final int color, final boolean shade) {
+    public static void drawCircle(Entity entity, final double rad, final int color, final boolean shade) {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
