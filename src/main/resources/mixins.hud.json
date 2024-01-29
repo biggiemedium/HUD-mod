@@ -15,6 +15,8 @@
     "Game.IMixinMinecraft",
     "Game.MixinPlayer",
     "Render.MixinFontRenderer",
-    "Render.MixinRenderPlayer"
+    "Render.MixinRenderPlayer",
+    "Render.IMixinItemRenderer",
+    "Render.MixinRenderEntityItem",
   ]
 }

@@ -6,54 +6,31 @@ import java.awt.*;
 
 public class ColorManager extends Util {
 
-    private int r, g, b;
-    private Color deafultColor = new Color(39, 179, 206);
+    private Color mainColor = new Color(39, 179, 206);
+    private Color alternativeColor = new Color(236, 133, 209);
 
     public ColorManager() {
-        this.r = 39;
-        this.g = 179;
-        this.b = 206;
+
     }
 
     public void resetColor() {
-        this.r = deafultColor.getRed();
-        this.g = deafultColor.getGreen();
-        this.b = deafultColor.getBlue();
+        this.mainColor = new Color(39, 179, 206);
+        this.alternativeColor = new Color(236, 133, 209);
     }
 
-    public Color getCurrentColor() {
-        return new Color(r, g, b);
+    public Color getAlternativeColor() {
+        return alternativeColor;
     }
 
-    public int getRed() {
-        return r;
+    public void setAlternativeColor(Color alternativeColor) {
+        this.alternativeColor = alternativeColor;
     }
 
-    public void setRed(int r) {
-        this.r = r;
+    public Color getMainColor() {
+        return mainColor;
     }
 
-    public int getGreen() {
-        return g;
-    }
-
-    public void setGreen(int g) {
-        this.g = g;
-    }
-
-    public int getBlue() {
-        return b;
-    }
-
-    public void setBlue(int b) {
-        this.b = b;
-    }
-
-    public Color getDeafultColor() {
-        return deafultColor;
-    }
-
-    public void setDeafultColor(Color deafultColor) {
-        this.deafultColor = deafultColor;
+    public void setMainColor(Color mainColor) {
+        this.mainColor = mainColor;
     }
 }

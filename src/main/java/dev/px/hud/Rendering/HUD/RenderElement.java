@@ -5,6 +5,8 @@ import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -84,6 +86,10 @@ public class RenderElement extends Element {
         if (dragging) {
             x = dragX + mouseX;
             y = dragY + mouseY;
+        }
+
+        if(dragging) {
+            mc.fontRendererObj.drawStringWithShadow(getName() + "X: " + getX() + " Y: " + getY(), new ScaledResolution(mc).getScaledWidth() - (mc.fontRendererObj.getStringWidth(getName() + "X: " + getX() + " Y: " + getY())), new ScaledResolution(mc).getScaledHeight() - mc.fontRendererObj.FONT_HEIGHT, -1);
         }
 
         Renderutil.drawRect(getX() - 1, getY() - 1, getWidth() + 2, getHeight() + 2, new Color(54, 54, 54, dragging ? 150 : 100));

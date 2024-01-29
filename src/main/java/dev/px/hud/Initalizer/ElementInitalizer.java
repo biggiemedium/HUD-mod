@@ -2,12 +2,14 @@ package dev.px.hud.Initalizer;
 
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
+import dev.px.hud.Rendering.HUD.Elements.Combat.HitInfoElement;
 import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
 import dev.px.hud.Rendering.HUD.Elements.Info.*;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
 import dev.px.hud.Rendering.HUD.Mods.*;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import net.minecraft.client.Minecraft;
+import scala.xml.Elem;
 
 import java.util.ArrayList;
 
@@ -21,12 +23,13 @@ public class ElementInitalizer {
 
         // Combat
         Add(new Armor());
+        Add(new HitInfoElement());
         Add(new TargetHUD());
 
         // Info
         Add(new CoordinateElement());
         Add(new FPSElement());
-        Add(new HitInfoElement());
+        Add(new PlaytimeElement());
         Add(new RotationElement());
         Add(new SneakInfoElement());
         Add(new SpeedElement());
@@ -36,10 +39,15 @@ public class ElementInitalizer {
 
         // Mod
         Add(new AdditionalInfo());
-        this.elements.add(new AutoSprint()); // WHY WONT THIS ADD
+        Add(new AutoSprint()); // WHY WONT THIS ADD
         Add(new CritParticles());
         Add(new ESPMod());
         Add(new FakePlayer());
+        Add(new FullBright());
+        Add(new ItemPhysics());
+        Add(new NoHurtCam());
+        Add(new NameTags());
+        Add(new NoRender());
     }
 
     private void Add(Element element) {
@@ -62,6 +70,14 @@ public class ElementInitalizer {
             if(e.getName().equals(name)) {
                 return e;
             }
+        }
+        return null;
+    }
+
+    public <T extends Element> T getElementByClass(Class<T> clazz) {
+        for (Element module : elements) {
+            if (!clazz.isInstance(module)) continue;
+            return (T) module;
         }
         return null;
     }

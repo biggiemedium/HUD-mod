@@ -3,6 +3,10 @@ package dev.px.hud.Rendering.HUD.Mods;
 import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.Event.Render3dEvent;
+import dev.px.hud.Util.Event.RenderNametagEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class NameTags extends ToggleableElement {
 
@@ -22,5 +26,7 @@ public class NameTags extends ToggleableElement {
         double pZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
 
 
+
     }
+
 }

@@ -10,5 +10,4 @@ public interface IEntityRenderer {
 
     @Invoker(value = "setupCameraTransform")
     void invokeSetupCameraTransform(float var1, int var2);
-
 }

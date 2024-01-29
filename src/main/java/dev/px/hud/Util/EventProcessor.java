@@ -38,12 +38,26 @@ public class EventProcessor extends Util {
             HUDMod.elementInitalizer.getElements().forEach(e -> {
                 if(e instanceof RenderElement) {
                     if(e.isToggled()) {
-                        ((RenderElement) e).render(event.partialTicks);
+                   //     ((RenderElement) e).render(event.partialTicks);
                     }
                 }
             });
 
             HUDMod.notificationManager.render2D();
+        }
+
+    }
+
+    @SubscribeEvent
+    public void onRenderPost(RenderGameOverlayEvent.Post event) {
+        if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
+            HUDMod.elementInitalizer.getElements().forEach(e -> {
+                if(e instanceof RenderElement) {
+                    if(e.isToggled()) {
+                        ((RenderElement) e).render(event.partialTicks);
+                    }
+                }
+            });
         }
 
     }

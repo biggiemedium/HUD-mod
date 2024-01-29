@@ -116,7 +116,7 @@ public class IntegerButton extends SettingButton<Number> {
         // slider
         Renderutil.drawRoundedRect(getButton().getParent().getX() + 6, featureHeight + 14, getButton().getParent().getWidth() - 10, 3, 2, new Color(23, 23, 29, 255));
         if (getSetting().getValue().doubleValue() > getSetting().getMin().doubleValue()) {
-            Renderutil.drawRoundedRect(getButton().getParent().getX() + 6, featureHeight + 14, sliderWidth, 3, 2, HUDMod.colorManager.getCurrentColor());
+            Renderutil.drawRoundedRect(getButton().getParent().getX() + 6, featureHeight + 14, sliderWidth, 3, 2, HUDMod.colorManager.getMainColor());
         }
     }
 
@@ -125,9 +125,6 @@ public class IntegerButton extends SettingButton<Number> {
         if(button == 0) {
             this.leftHeld = true;
         }
-
-        Util.sendClientSideMessage("L click " + leftHeld + " Val " + getSetting().getValue().doubleValue());
-
 
         // module feature bounds
         double highestPoint = featureHeight;

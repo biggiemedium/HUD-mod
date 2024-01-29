@@ -26,8 +26,6 @@ public class AutoSprint extends ToggleableElement {
 
     public void onUpdate() {
         if(Util.isNull()) return;
-        if(Playerutil.isMoving()) {
-            mc.thePlayer.setSprinting(true);
-        }
+        mc.thePlayer.setSprinting(Playerutil.isMoving());
     }
 }

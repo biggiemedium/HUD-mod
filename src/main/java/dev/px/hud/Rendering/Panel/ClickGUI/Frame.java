@@ -7,6 +7,7 @@ import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.MathHelper;
@@ -52,10 +53,11 @@ public class Frame {
                     offset += 15;
                 }
             }
-            //for(int i = 0; i < 50; i++) {
-            //    this.buttons.add(new Button(this.x, this.y + offset, this, new Armor()));
-            //    offset += 15;
-            //}
+
+            for(int i = 0; i < 100; i++) {
+                this.buttons.add(new Button(this.x, this.y + offset, this, null));
+                offset += 15;
+            }
     }
 
     public void draw(int mouseX, int mouseY, float partialTicks) {
@@ -72,8 +74,8 @@ public class Frame {
                     .count();
 
             if(interactingWindows <= 0) {
-                if (expanding) {
-       //             fullheight = MathHelper.clamp_float((mouseY - getY()) - height, 0, 350);
+                if (isDragging() || expanding) {
+                //    fullheight = MathHelper.clamp_float((mouseY - getY()) - height, 0, 350);
                 }
             }
         }
@@ -83,19 +85,20 @@ public class Frame {
         Renderutil.drawRoundedRect(this.x, this.y,this.x + this.width,this.y + (int)this.height, 1, new Color(0xff181A17).getRGB());
         // Horizontal line across title bar
         //Renderutil.drawRoundedRect(this.x - 0.8f, this.y + height, this.x + this.width, this.y + this.height - 2, 1, new Color(39, 179, 206).getRGB());
-        int colorManager = new Color(HUDMod.colorManager.getRed(), HUDMod.colorManager.getGreen(), HUDMod.colorManager.getBlue()).getRGB();
-        Renderutil.drawRoundedRect(this.x - 0.8f, this.y + height, this.x + this.width, this.y + this.height - 2, 1, new Color(colorManager).getRGB());
+        Renderutil.drawRoundedRect(this.x - 0.8f, this.y + height, this.x + this.width, this.y + this.height - 2, 1, new Color(HUDMod.colorManager.getMainColor().getRGB()).getRGB());
         // Line going down entire bar
 
         //Fontutil.drawTextShadow(type.getName(), getX(), (int) getY() + (int) (width / 2) - (int) Fontutil.getWidth(type.getName()), -1);
       //  mc.fontRendererObj.drawStringWithShadow(type.getName(), this.getX() + (getWidth() / 2.0F) - mc.fontRendererObj.getStringWidth(type.getName()), this.getY() + this.getHeight() / 2 - (mc.fontRendererObj.FONT_HEIGHT / 2.0F), 0xffffffff);
         Fontutil.drawTextShadow(type.getName(), (getX() + (getWidth() - Fontutil.getWidth(type.getName())) / 2), getY() + 5, -1);
         double scaledComponentOffset = getComponentOffset() - 1400;
-        scroll = (float) MathHelper.clamp_double(scroll, -Math.max(0, scaledComponentOffset - height), 0);
+        scroll = (float) MathHelper.clamp_double(scroll, -Math.max(0, scaledComponentOffset - fullheight), 0);
 
         if(open) {
             this.featureOffset = 0;
         }
+
+
 
         if(openAnimation.getAnimationFactor() > 0) {
             this.getClickGUI().getScissorStack().pushScissor(x, getY() + height, width, (int) (fullheight * getOpenAnimation().getAnimationFactor()));
@@ -107,8 +110,8 @@ public class Frame {
                     if(b.getX() != this.x) {
                         b.setX(this.x);
                     }
-                    if(b.getY() != this.y + getHeight() + featureOffset) {
-                        b.setY(this.y + getHeight() + featureOffset);
+                    if(b.getY() != this.y + featureOffset + getHeight()) {
+                        b.setY(this.y + featureOffset + getHeight());
                     }
 
                     b.draw(mouseX, mouseY, partialTicks);

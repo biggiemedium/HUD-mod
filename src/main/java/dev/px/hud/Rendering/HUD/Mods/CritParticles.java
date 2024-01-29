@@ -13,10 +13,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class CritParticles extends ToggleableElement {
 
     public CritParticles() {
-        super("Crit particles", "Crits", HUDType.RENDER);
+        super("Crit particles", "Crits", HUDType.MOD);
     }
 
-    private Setting<Integer> amount = create(new Setting<>("Amount", 1, 1, 10));
+    private Setting<Integer> amount = create(new Setting<>("Amount", 5, 1, 10));
+    private Setting<Particle> particleType = create(new Setting<>("Particle", Particle.Magic));
+    private enum Particle {
+        Crit,
+        Magic,
+        Flame
+    }
 
     @Override
     public void enable() {
@@ -29,10 +35,22 @@ public class CritParticles extends ToggleableElement {
     @EventHandler
     public Listener<AttackEntityEvent> entityEventListener = new Listener<>(event -> {
         if(event.target instanceof EntityLivingBase) {
-            Util.sendClientSideMessage("HIT", true);
+            for(int i = 0; i < amount.getValue(); i++) {
+             //   mc.theWorld.spawnParticle(EnumParticleTypes.CRIT, event.entity.posX, event.entity.posY, event.entity.posZ);
+                switch (particleType.getValue()) {
+                    case Crit:
+                        mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT);
+                        break;
+                    case Flame:
+                        mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.FLAME);
+                        break;
+                    case Magic:
+                        mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT_MAGIC);
+                        break;
+                }
+
+            }
         }
     });
-    public void onAttack(AttackEntityEvent event) {
 
-    }
 }

@@ -1,4 +1,4 @@
-package dev.px.hud.Rendering.HUD.Elements.Info;
+package dev.px.hud.Rendering.HUD.Elements.Combat;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import dev.px.hud.Rendering.HUD.RenderElement;
@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class HitInfoElement extends RenderElement {
 
     public HitInfoElement() {
-        super("Hit Info", 100, 100, HUDType.INFO);
+        super("Hit Info", 100, 100, HUDType.COMBAT);
         setTextElement(true);
     }
 
@@ -38,7 +38,7 @@ public class HitInfoElement extends RenderElement {
         }
 
         if(mc.currentScreen instanceof PanelGUIScreen) {
-            return "Target Name 20.0";
+            return "(Target Name) 20.0";
         }
 
         return "";

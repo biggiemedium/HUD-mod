@@ -1,7 +1,9 @@
 package dev.px.hud.Mixin.Render;
 
+import com.sun.javafx.geom.Vec3d;
 import dev.px.hud.Util.Event.Render2dEvent;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;

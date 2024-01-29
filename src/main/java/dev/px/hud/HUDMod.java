@@ -39,16 +39,16 @@ public class HUDMod {
 
     private static Minecraft mc = Wrapper.mc;
     public static EventBus EVENT_BUS = new EventManager();
+    public long playTime = -1;
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-
+        playTime = System.currentTimeMillis();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         colorManager = new ColorManager();
-        colorManager.resetColor();
         clazz = new EventProcessor();
         notificationManager = new NotificationManager();
         elementInitalizer = new ElementInitalizer();
@@ -60,7 +60,6 @@ public class HUDMod {
 
 
         configInitalizer.loads();
-        colorManager.resetColor();
     }
 
     @EventHandler

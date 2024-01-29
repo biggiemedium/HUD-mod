@@ -11,8 +11,6 @@ Tenacity client color util
  */
 public class Colorutil {
 
-    public static int colorManagerInt = new Color(HUDMod.colorManager.getRed(), HUDMod.colorManager.getGreen(), HUDMod.colorManager.getBlue()).getRGB();
-
 
     public static Color[] getAnalogousColor(Color color) {
         Color[] colors = new Color[2];

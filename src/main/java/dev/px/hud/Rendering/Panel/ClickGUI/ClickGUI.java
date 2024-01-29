@@ -36,7 +36,8 @@ public class ClickGUI extends Panel {
 
         if(focusedFrame != null) {
             if(Mouse.hasWheel()) {
-                focusedFrame.handleScroll(Mouse.getDWheel());
+                int scroll = Mouse.getDWheel();
+                focusedFrame.handleScroll(scroll);
             }
         }
 
