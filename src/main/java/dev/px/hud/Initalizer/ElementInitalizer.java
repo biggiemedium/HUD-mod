@@ -33,6 +33,7 @@ public class ElementInitalizer {
         Add(new RotationElement());
         Add(new SneakInfoElement());
         Add(new SpeedElement());
+        Add(new WatermarkElement());
         Add(new WelcomeElement());
 
         // Render
@@ -48,6 +49,7 @@ public class ElementInitalizer {
         Add(new NoHurtCam());
         Add(new NameTags());
         Add(new NoRender());
+        Add(new UnfocusedCPU());
     }
 
     private void Add(Element element) {

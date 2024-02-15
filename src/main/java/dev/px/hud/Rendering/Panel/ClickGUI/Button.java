@@ -64,9 +64,9 @@ public class Button {
                     if (setting.getValue() instanceof Double) {
                     }
 
-                    if(this.element instanceof ToggleableElement) {
-                        this.settingButtons.add(new KeybindButton(this, getX(), getY(), (Setting<Keybind>) setting));
-                    }
+                   // if(this.element instanceof ToggleableElement) {
+                   //     this.settingButtons.add(new KeybindButton(this, getX(), getY(), (Setting<Keybind>) setting));
+                   // }
 
                 });
             }

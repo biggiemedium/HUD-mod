@@ -34,12 +34,7 @@ public class NoRender extends ToggleableElement {
         }
     }
 
-    @SubscribeEvent
-    public void onFog(EntityViewRenderEvent.RenderFogEvent event) {
-        if(fog.getValue()) {
-            event.setCanceled(true);
-        }
-    }
+
 
     public static NoRender INSTANCE;
 }

@@ -30,7 +30,7 @@ import java.util.Objects;
 public class TargetHUD extends RenderElement {
 
     public TargetHUD() {
-        super("TargetHUDD", 200, 200, HUDType.COMBAT);
+        super("TargetHUD", 200, 200, HUDType.COMBAT);
         setWidth(115);
         setHeight(80);
     }

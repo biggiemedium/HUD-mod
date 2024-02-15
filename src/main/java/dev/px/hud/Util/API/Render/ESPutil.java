@@ -11,9 +11,9 @@ import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -54,7 +54,7 @@ public class ESPutil implements Wrapper {
         return null;
     }
 
-    public static Vector4f getEntityPositionsOn2D(Entity entity) {
+    public static org.lwjgl.util.vector.Vector4f getEntityPositionsOn2D(Entity entity) {
         final double[] renderingEntityPos = getInterpolatedPos(entity);
         final double entityRenderWidth = entity.width / 1.5;
         final AxisAlignedBB bb = new AxisAlignedBB(renderingEntityPos[0] - entityRenderWidth,

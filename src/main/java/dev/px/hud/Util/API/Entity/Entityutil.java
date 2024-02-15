@@ -1,8 +1,10 @@
 package dev.px.hud.Util.API.Entity;
 
+import com.sun.javafx.geom.Vec3d;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,9 +14,17 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Vec3;
+import net.minecraft.util.Vector3d;
 
 public class Entityutil implements Wrapper {
 
+    private static final Frustum frustum = new Frustum();
+
+    public static boolean isInView(Entity ent) {
+        frustum.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
+        return frustum.isBoundingBoxInFrustum(ent.getEntityBoundingBox()) || ent.ignoreFrustumCheck;
+    }
 
     public static Entity getTarget(int distance, boolean playersOnly) {
         for(Entity e : mc.theWorld.loadedEntityList) {
@@ -51,11 +61,23 @@ public class Entityutil implements Wrapper {
             return false;
         }
 
-
         if(entity instanceof EntityAnimal || entity instanceof EntityTameable || entity instanceof EntitySquid || entity instanceof EntityAgeable) {
             return true;
         }
 
         return false;
+    }
+
+    public static Vec3 getInterpolatedPos(Entity entity, float ticks) {
+        Vec3 d = new Vec3(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ);
+        d.add(getInterpolatedAmount(entity, ticks));
+        return d;
+    }
+
+    public static Vec3 getInterpolatedAmount(Entity entity, double x, double y, double z) {
+        return new Vec3((entity.posX - entity.lastTickPosX) * x, (entity.posY - entity.lastTickPosY) * y, (entity.posZ - entity.lastTickPosZ) * z);
+    }
+    public static Vec3 getInterpolatedAmount(Entity entity, double ticks) {
+        return getInterpolatedAmount(entity, ticks, ticks, ticks);
     }
 }

@@ -11,12 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vector3d;
-
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
+import org.lwjgl.util.vector.Vector4f;
 
 public class AdditionalInfo extends ToggleableElement {
 

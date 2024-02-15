@@ -22,8 +22,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = HUDMod.MODID, version = HUDMod.VERSION)
 public class HUDMod {
 
+    public static final String NAME = "HUD Mod";
     public static final String MODID = "hudmod";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "2.0";
 
     // Initalizers
     public static ElementInitalizer elementInitalizer;
@@ -39,7 +40,7 @@ public class HUDMod {
 
     private static Minecraft mc = Wrapper.mc;
     public static EventBus EVENT_BUS = new EventManager();
-    public long playTime = -1;
+    public static long playTime = -1;
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
@@ -58,13 +59,11 @@ public class HUDMod {
         soundInitalizer = new SoundManager();
         fontManager = new FontManager();
 
-
         configInitalizer.loads();
     }
 
     @EventHandler
     public void prepost(FMLPostInitializationEvent event) {
-
     }
 
     public <T> void subscribe(T object) {

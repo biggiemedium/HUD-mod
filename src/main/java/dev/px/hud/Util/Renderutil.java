@@ -702,7 +702,36 @@ public class Renderutil extends Util {
         color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 0.5);
     }
 
-    public static void drawBorderedRect(float f, float f1, float f2, float f3, float f4, int i, int j) {
+    public static void lineNoGl(final double firstX, final double firstY, final double secondX, final double secondY, final Color color) {
+
+        GL11.glPushMatrix();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        if (color != null)
+            color(color);
+        GL11.glLineWidth(1);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glBegin(GL11.GL_LINES);
+        {
+            GL11.glVertex2d(firstX, firstY);
+            GL11.glVertex2d(secondX, secondY);
+        }
+        GL11.glEnd();
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableDepth();
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+        color(Color.white);
+        GL11.glPopMatrix();
+    }
+
+        public static void drawBorderedRect(float f, float f1, float f2, float f3, float f4, int i, int j) {
         drawRect(f, f1, f2, f3, j);
         float f5 = (float) (i >> 24 & 255) / 255.0F;
         float f6 = (float) (i >> 16 & 255) / 255.0F;

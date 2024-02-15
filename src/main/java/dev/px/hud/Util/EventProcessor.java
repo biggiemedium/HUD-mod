@@ -38,12 +38,14 @@ public class EventProcessor extends Util {
             HUDMod.elementInitalizer.getElements().forEach(e -> {
                 if(e instanceof RenderElement) {
                     if(e.isToggled()) {
-                   //     ((RenderElement) e).render(event.partialTicks);
+               //         ((RenderElement) e).render2D(event, event.partialTicks);
                     }
                 }
             });
 
-            HUDMod.notificationManager.render2D();
+            if(!(mc.currentScreen instanceof PanelGUIScreen)) {
+                HUDMod.notificationManager.render2D();
+            }
         }
 
     }
@@ -59,7 +61,6 @@ public class EventProcessor extends Util {
                 }
             });
         }
-
     }
 
     @SubscribeEvent

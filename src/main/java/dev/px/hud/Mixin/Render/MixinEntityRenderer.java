@@ -1,6 +1,7 @@
 package dev.px.hud.Mixin.Render;
 
 import com.sun.javafx.geom.Vec3d;
+import dev.px.hud.Util.Event.HurtCamEvent;
 import dev.px.hud.Util.Event.Render2dEvent;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -23,4 +24,13 @@ public class MixinEntityRenderer {
         MinecraftForge.EVENT_BUS.post(packet);
     }
 
+    @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
+    public void onHurtCam(float partialTicks, CallbackInfo ci) {
+        HurtCamEvent event = new HurtCamEvent();
+        MinecraftForge.EVENT_BUS.post(event);
+
+        if(event.isCanceled()) {
+            ci.cancel();
+        }
+    }
 }

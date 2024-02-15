@@ -34,21 +34,27 @@ public class CritParticles extends ToggleableElement {
 
     @EventHandler
     public Listener<AttackEntityEvent> entityEventListener = new Listener<>(event -> {
+        if(event.target == null) return;
+        if(mc.thePlayer.getDistance(event.target.posX, event.target.posY, event.target.posZ) > 10) return;
         if(event.target instanceof EntityLivingBase) {
-            for(int i = 0; i < amount.getValue(); i++) {
-             //   mc.theWorld.spawnParticle(EnumParticleTypes.CRIT, event.entity.posX, event.entity.posY, event.entity.posZ);
+            if(((EntityLivingBase) event.target).hurtTime >= 5) {
                 switch (particleType.getValue()) {
                     case Crit:
-                        mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT);
+                        for (int i = 0; i < amount.getValue(); i++) {
+                            mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT);
+                        }
                         break;
                     case Flame:
-                        mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.FLAME);
+                        for (int i = 0; i < amount.getValue(); i++) {
+                            mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.FLAME);
+                        }
                         break;
                     case Magic:
-                        mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT_MAGIC);
+                        for (int i = 0; i < amount.getValue(); i++) {
+                            mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT_MAGIC);
+                        }
                         break;
                 }
-
             }
         }
     });

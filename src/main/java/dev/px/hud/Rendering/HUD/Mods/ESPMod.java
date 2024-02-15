@@ -1,37 +1,33 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
-import com.sun.javafx.geom.Vec4f;
 import dev.px.hud.HUDMod;
-import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Mixin.Game.IMixinMinecraft;
+import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Entityutil;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Math.Timer;
+import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.ESPutil;
-import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.particle.EntityCrit2FX;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector4f;
 
-import javax.vecmath.Vector4f;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ESPMod extends ToggleableElement {
 
@@ -39,26 +35,41 @@ public class ESPMod extends ToggleableElement {
         super("ESP", "ESP", HUDType.RENDER);
     }
 
+    Setting<Mode> mode = create(new Setting<>("Mode", Mode.Box));
+    Setting<Integer> distance = create(new Setting<>("Distance", 50, 1, 75));
+
+    /* Cirlce stuff */
     Setting<Boolean> circle = create(new Setting<>("Cirlce", true));
     Setting<Boolean> targetOnly = create(new Setting<>("Target only", true, v -> circle.getValue()));
 
-    Setting<Boolean> players = create(new Setting<>("Player", true, v -> !targetOnly.getValue()));
-    Setting<Boolean> passives = create(new Setting<>("Passives", false, v -> !targetOnly.getValue()));
-    Setting<Boolean> hostile = create(new Setting<>("Hostiles", false, v -> !targetOnly.getValue()));
-    Setting<Boolean> items = create(new Setting<>("Items", false, v -> !targetOnly.getValue()));
-
-
-
+    Setting<Boolean> playersOnly = create(new Setting<>("Player Only", true, v -> !targetOnly.getValue()));
 
     private List<ESPTarget> highlightedPlayers = new ArrayList<>();
+    private Map<Entity, org.lwjgl.util.vector.Vector4f> entityPosition = new ConcurrentHashMap<>();
 
+    private enum Mode {
+        Box,
+        R6
+    }
 
     @Override
     public void onUpdate() {
         if(Util.isNull()) return;
+        entityPosition.clear();
+        for (Entity entity : mc.theWorld.loadedEntityList) {
+            if (ESPutil.isInView(entity)) {
+                if(playersOnly.getValue() && entity instanceof EntityPlayer) {
+                    entityPosition.put(entity, ESPutil.getEntityPositionsOn2D(entity));
+                } else if (!playersOnly.getValue()) {
+                    if(Entityutil.isPassive(entity) || entity instanceof EntityMob) {
+                        entityPosition.put(entity, ESPutil.getEntityPositionsOn2D(entity));
+                    }
+                }
+            }
+        }
+
 
         Entity event = mc.objectMouseOver.entityHit;
-
         if(mc.gameSettings.keyBindAttack.isKeyDown()) {
         if(event instanceof EntityLivingBase) {
             if (event != mc.thePlayer) {
@@ -70,9 +81,10 @@ public class ESPMod extends ToggleableElement {
                                 t.getTimer().reset();
                                 if(!highlightedPlayers.contains(event)) {
                                     this.highlightedPlayers.add(t);
-                                } else {
+                                } else if (highlightedPlayers.contains(event)) {
                                     t.getTimer().reset();
                                 }
+
                             }
                         }
                     }
@@ -92,20 +104,14 @@ public class ESPMod extends ToggleableElement {
     @Override
     public void onRender(Render3dEvent event) {
 
-        for(Entity e : mc.theWorld.playerEntities) {
-            if(e != null) {
-                if(e != mc.thePlayer) {
-                    if(e.isEntityAlive()) {
-                        drawHealthBarTenacity(e, false, false);
-                    }
-                }
-            }
-        }
-
+        /* Cirlces */
         if(circle.getValue() && !targetOnly.getValue()) {
             for (Entity e : mc.theWorld.loadedEntityList) {
                 if (e != null) {
                     if (e != mc.thePlayer) {
+                        if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
+                            continue;
+                        }
                         if (e.isEntityAlive()) {
                             if(entityCheck(e)) {
                                 Renderutil.drawCircle(e, 1, HUDMod.colorManager.getMainColor().getRGB(), true);
@@ -120,64 +126,100 @@ public class ESPMod extends ToggleableElement {
             });
         }
 
-    }
+        /* Box 2d */
+        if(mode.getValue() == Mode.Box || mode.getValue() == Mode.R6) {
+                for(Entity e : mc.theWorld.playerEntities) {
+                    if(e == null || e == mc.thePlayer) {
+                        continue;
+                    }
+                    if(!(e instanceof EntityLivingBase)) {
+                        continue;
+                    }
+                    if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
+                        continue;
+                    }
 
-    private void drawHealthBarTenacity(Entity entity, boolean text3d, boolean mcText) {
-        if(entity instanceof EntityLivingBase) {
-            Vector4f pos = ESPutil.getEntityPositionsOn2D(entity);
-            float x = pos.getX(),
-                    y = pos.getY(),
-                    right = pos.getZ(),
-                    bottom = pos.getW();
+                    double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
+                    double y = (e.lastTickPosY + (e.posY - e.lastTickPosY) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY());
+                    double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
+                    GL11.glPushMatrix();
+                    GL11.glTranslated(x, y - 0.2, z);
+                    GlStateManager.disableDepth();
 
-            EntityLivingBase renderingEntity = (EntityLivingBase) entity;
-            float healthValue = renderingEntity.getHealth() / renderingEntity.getMaxHealth();
-            Color healthColor = healthValue > .75 ? new Color(66, 246, 123) : healthValue > .5 ? new Color(228, 255, 105) : healthValue > .35 ? new Color(236, 100, 64) : new Color(255, 65, 68);
+                    GL11.glRotated(-(mc.getRenderManager()).playerViewY, 0.0D, 1.0D, 0.0D);
 
-            float height = (bottom - y) + 1;
-            Renderutil.drawRect(right + 2.5f, y - .5f, 2, height + 1, new Color(0, 0, 0, 180).getRGB());
+                    final float width = 1.1f;
+                    final float height = 2.2f;
 
-            Renderutil.drawRect(right + 3, y + (height - (height * healthValue)), 1, height * healthValue, healthColor.getRGB());
+                    float lineWidth = mode.getValue() == Mode.Box ? 0.07f : 0.04f;
 
+                    if(mode.getValue() == Mode.R6) {
+                        draw2DBox(width, height, lineWidth, 0, new Color(255, 30, 30, 255));
 
-            if (text3d) {
-                healthValue *= 100;
-                String health = String.valueOf(Mathutil.round(healthValue, 1)).substring(0, healthValue == 100 ? 3 : 2);
-                String text = health + "%";
-                double fontScale = .5;
-                float textX = right + 8;
-                float fontHeight = mcText ? (float) (mc.fontRendererObj.FONT_HEIGHT * fontScale) : (float) (Fontutil.getHeight() * fontScale);
-                float newHeight = height - fontHeight;
-                float textY = y + (newHeight - (newHeight * (healthValue / 100)));
-
-                GL11.glPushMatrix();
-                GL11.glTranslated(textX - 5, textY, 1);
-                GL11.glScaled(fontScale, fontScale, 1);
-                GL11.glTranslated(-(textX - 5), -textY, 1);
-                if (mcText) {
-                    mc.fontRendererObj.drawStringWithShadow(text, textX, textY, -1);
-                } else {
-                    Fontutil.drawTextShadow(text, textX, textY, -1);
+                    } else if(mode.getValue() == Mode.Box) {
+                        draw2DBox(width, height, lineWidth, 0.04f, new Color(0, 0, 0, 165));
+                        if (((EntityLivingBase) e).hurtTime > 0)
+                            draw2DBox(width, height, lineWidth, 0, new Color(255, 30, 30, 255));
+                        else
+                            draw2DBox(width, height, lineWidth, 0, Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 5));
+                    }
+                    GlStateManager.enableDepth();
+                    GL11.glPopMatrix();
                 }
-                GL11.glPopMatrix();
-            }
         }
     }
 
 
+    private void drawHealthBarTenacity(Entity entity) {
+        if(entity instanceof EntityLivingBase) {
+
+            GL11.glPushMatrix();
+            Vector4f v = ESPutil.getEntityPositionsOn2D(entity);;
+            mc.entityRenderer.setupOverlayRendering();
+            double posX = v.x;
+            double posY = v.y;
+            double endPosX = v.z;
+            double endPosY = v.w;
+
+            float w = 0.5f;
+
+            //Drawing box
+            Color c = HUDMod.colorManager.getMainColor();
+
+            /*
+            Renderutil.lineNoGl(posX - w, posY, posX + w - w, endPosY, c);
+            Renderutil.lineNoGl(posX, endPosY - w, endPosX, endPosY, c);
+            Renderutil.lineNoGl(posX - w, posY, endPosX, posY + w, c);
+            Renderutil.lineNoGl(endPosX - w, posY, endPosX, endPosY, c);
+             */
+            double percentage = (endPosY - posY) * ((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth();
+            double distance = 2;
+            float progress = ((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth();
+            Color healthColor = progress > .75 ? new Color(66, 246, 123) : progress > .5 ? new Color(228, 255, 105) : progress > .35 ? new Color(236, 100, 64) : new Color(255, 65, 68);
+            Renderutil.lineNoGl(posX - w - distance, endPosY - percentage, posX + w - w - distance, endPosY, healthColor);
+            GL11.glPopMatrix();
+        }
+    }
+
+    private void draw2DBox(final float width, final float height, final float lineWidth, final float offset, final Color c) {
+        Renderutil.rect(-width / 2 - offset, -offset, width / 4, lineWidth, c);
+        Renderutil.rect(width / 2 - offset, -offset, -width / 4, lineWidth, c);
+        Renderutil.rect(width / 2 - offset, height - offset, -width / 4, lineWidth, c);
+        Renderutil.rect(-width / 2 - offset, height - offset, width / 4, lineWidth, c);
+
+        Renderutil.rect(-width / 2 - offset, height - offset, lineWidth, -height / 4, c);
+        Renderutil.rect(width / 2 - lineWidth - offset, height - offset, lineWidth, -height / 4, c);
+        Renderutil.rect(width / 2 - lineWidth - offset, -offset, lineWidth, height / 4, c);
+        Renderutil.rect(-width / 2 - offset, -offset, lineWidth, height / 4, c);
+    }
+
+    public boolean containsName(final List<Entity> list, final String name){
+        return list.stream().filter(o -> o.getName().equals(name)).findFirst().isPresent();
+    }
 
     private boolean entityCheck(Entity e) {
 
-        if(e instanceof EntityPlayer && players.getValue()) {
-            return true;
-        }
-        if(e instanceof EntityMob && hostile.getValue()) {
-            return true;
-        }
-        if(Entityutil.isPassive(e) && passives.getValue()) {
-            return true;
-        }
-        if(e instanceof EntityItem && items.getValue()) {
+        if(e instanceof EntityPlayer && playersOnly.getValue()) {
             return true;
         }
 
@@ -209,6 +251,4 @@ public class ESPMod extends ToggleableElement {
             this.timer = timer;
         }
     }
-
-
 }

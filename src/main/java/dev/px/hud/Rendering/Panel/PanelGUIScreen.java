@@ -1,5 +1,6 @@
 package dev.px.hud.Rendering.Panel;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.Rendering.Panel.Commands.CommandGUI;
 import dev.px.hud.Rendering.Panel.Profiles.PlayerProfiles;
@@ -53,6 +54,9 @@ public class PanelGUIScreen extends GuiScreen {
         }
 
         this.currentPanel.draw(mouseX, mouseY, partialTicks);
+        if(mc.currentScreen == this) {
+                HUDMod.notificationManager.render2D();
+        }
     }
 
     @Override

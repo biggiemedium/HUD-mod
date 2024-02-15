@@ -18,5 +18,6 @@
     "Render.MixinRenderPlayer",
     "Render.IMixinItemRenderer",
     "Render.MixinRenderEntityItem",
+    "Game.MixinMinecraft"
   ]
 }

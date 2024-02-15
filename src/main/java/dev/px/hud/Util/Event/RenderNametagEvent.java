@@ -1,8 +1,10 @@
 package dev.px.hud.Util.Event;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+@Cancelable
 public class RenderNametagEvent extends Event {
 
     private AbstractClientPlayer player;
