@@ -6,10 +6,7 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Renderutil;
-<<<<<<< Updated upstream
-=======
 import net.minecraft.client.gui.ScaledResolution;
->>>>>>> Stashed changes
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -52,15 +49,10 @@ public class ClickGUI extends Panel {
 
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
-<<<<<<< Updated upstream
-                ((RenderElement) e).dragging(mouseX, mouseY);
-                ((RenderElement) e).render(partialTicks);
-=======
                 if(e.isToggled()) {
                     ((RenderElement) e).dragging(mouseX, mouseY);
                     ((RenderElement) e).render(partialTicks);
                 }
->>>>>>> Stashed changes
             }
         }
 
@@ -74,13 +66,9 @@ public class ClickGUI extends Panel {
 
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
-<<<<<<< Updated upstream
-                ((RenderElement) e).mouseClicked(mouseX, mouseY, button);
-=======
                 if(e.isToggled()) {
                     ((RenderElement) e).mouseClicked(mouseX, mouseY, button);
                 }
->>>>>>> Stashed changes
             }
         }
 
@@ -95,13 +83,9 @@ public class ClickGUI extends Panel {
 
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
-<<<<<<< Updated upstream
-                ((RenderElement) e).mouseRelease(mouseX, mouseY, state);
-=======
                 if(e.isToggled()) {
                     ((RenderElement) e).mouseRelease(mouseX, mouseY, state);
                 }
->>>>>>> Stashed changes
             }
         }
     }

@@ -93,14 +93,10 @@ public class RenderElement extends Element {
             mc.fontRendererObj.drawStringWithShadow(getName() + " X: " + getX() + " Y: " + getY(), new ScaledResolution(mc).getScaledWidth() - (mc.fontRendererObj.getStringWidth(getName() + "X: " + getX() + " Y: " + getY())), new ScaledResolution(mc).getScaledHeight() - mc.fontRendererObj.FONT_HEIGHT, -1);
         }
 
-<<<<<<< Updated upstream
-        Renderutil.drawRect(getX() - 1, getY() - 1, getWidth() + 2, getHeight() + 2, new Color(54, 54, 54, dragging ? 150 : 100));
-=======
         Renderutil.drawOutlineRect(getX() - 1, getY() - 1, getWidth() + 2, getHeight() + 2, 1, new Color(0xff181A17).getRGB());
         if(this.textElement) {
             Renderutil.drawRect(getX() - 1, getY() - 1, getWidth() + 2, getHeight() + 2, new Color(54, 54, 54, dragging ? 150 : 100));
         }
->>>>>>> Stashed changes
     }
 
 

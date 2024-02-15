@@ -1,9 +1,5 @@
 package dev.px.hud.Util;
 
-<<<<<<< Updated upstream
-import com.sun.javafx.geom.Vec3d;
-=======
->>>>>>> Stashed changes
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
@@ -16,11 +12,8 @@ import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.ElementToggleEvent;
 import dev.px.hud.Util.Event.Render3dEvent;
-<<<<<<< Updated upstream
-=======
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
->>>>>>> Stashed changes
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -54,20 +47,14 @@ public class EventProcessor extends Util {
             if(!(mc.currentScreen instanceof PanelGUIScreen)) {
                 HUDMod.notificationManager.render2D();
             }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
         }
 
     }
 
     @SubscribeEvent
     public void onRenderPost(RenderGameOverlayEvent.Post event) {
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
         if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
             HUDMod.elementInitalizer.getElements().forEach(e -> {
                 if(e instanceof RenderElement) {
@@ -77,10 +64,7 @@ public class EventProcessor extends Util {
                 }
             });
         }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     }
 
     @SubscribeEvent

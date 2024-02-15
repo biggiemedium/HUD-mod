@@ -57,11 +57,7 @@ public class PanelGUIScreen extends GuiScreen {
 
         this.currentPanel.draw(mouseX, mouseY, partialTicks);
         if(mc.currentScreen == this) {
-<<<<<<< Updated upstream
-                HUDMod.notificationManager.render2D();
-=======
             HUDMod.notificationManager.render2D();
->>>>>>> Stashed changes
         }
     }
 

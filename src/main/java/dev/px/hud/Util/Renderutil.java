@@ -800,8 +800,6 @@ public class Renderutil extends Util {
         GL11.glColor4f((float) f1, (float) f2, (float) f3, (float) f);
     }
 
-<<<<<<< Updated upstream
-=======
     public static void drawBorderedRect(float x, float y, float w, float h, int outlineColor, int color) {
         drawRect(x, y, w, h, color);
         drawOutlineRect(x, y, w, h, 1F, outlineColor);
@@ -844,7 +842,6 @@ public class Renderutil extends Util {
         GlStateManager.disableBlend();
     }
 
->>>>>>> Stashed changes
     public static void scissor(double x, double y, double width, double height) {
         final ScaledResolution sr = new ScaledResolution(mc);
         final double scale = sr.getScaleFactor();

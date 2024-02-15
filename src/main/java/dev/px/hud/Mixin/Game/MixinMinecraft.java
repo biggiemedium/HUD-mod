@@ -22,10 +22,7 @@ import java.util.List;
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
     @Inject(method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I", at = @At("HEAD"), cancellable = true)
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
@@ -36,29 +33,7 @@ public class MixinMinecraft {
         }
     }
 
-<<<<<<< Updated upstream
-    @Inject(method = "Lnet/minecraft/client/Minecraft;setWindowIcon()V", at = @At("HEAD"), cancellable = true)
-    public void preSetWindowIcon(CallbackInfo callbackInfo) {
-        try (InputStream in = HUDMod.class.getResourceAsStream("\\assets\\minecraft\\GUI\\sped.png\\")) {
-            BufferedImage img = ImageIO.read(in);
-            List<ByteBuffer> sizes = new ArrayList<>();
-            int w = img.getWidth();
-            do  {
-                BufferedImage tmp = new BufferedImage(w, w, img.getType());
-                tmp.createGraphics().drawImage(img, 0, 0, w, w, null);
-                sizes.add(this.convertImageToBuffer(tmp));
-                w >>= 1;
-            } while (w >= 8);
-            Display.setIcon(sizes.toArray(new ByteBuffer[sizes.size()]));
-            callbackInfo.cancel();
-        } catch (Exception e) {
-            new RuntimeException("failed to override the window icon!", e).printStackTrace();
-        }
 
-    }
-=======
-
->>>>>>> Stashed changes
 
     /*
     @Inject(method = "runTick()V", at = @At("RETURN"))

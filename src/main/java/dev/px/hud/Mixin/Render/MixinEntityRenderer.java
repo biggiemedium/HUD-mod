@@ -1,9 +1,5 @@
 package dev.px.hud.Mixin.Render;
 
-<<<<<<< Updated upstream
-import com.sun.javafx.geom.Vec3d;
-=======
->>>>>>> Stashed changes
 import dev.px.hud.Util.Event.HurtCamEvent;
 import dev.px.hud.Util.Event.Render2dEvent;
 import net.minecraft.client.gui.GuiIngame;
