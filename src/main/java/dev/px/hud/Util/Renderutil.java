@@ -800,6 +800,51 @@ public class Renderutil extends Util {
         GL11.glColor4f((float) f1, (float) f2, (float) f3, (float) f);
     }
 
+<<<<<<< Updated upstream
+=======
+    public static void drawBorderedRect(float x, float y, float w, float h, int outlineColor, int color) {
+        drawRect(x, y, w, h, color);
+        drawOutlineRect(x, y, w, h, 1F, outlineColor);
+    }
+
+
+    public static void drawOutlineRect(float x, float y, float w, float h, float lineWidth, int color) {
+        float right = x + w;
+        float bottom = y + h;
+
+        float alpha = (color >> 24 & 0xFF) / 255.0F;
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer bufferBuilder = tessellator.getWorldRenderer();
+
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+
+        GlStateManager.color(red, green, blue, alpha);
+
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+
+        GL11.glLineWidth(lineWidth);
+        bufferBuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+        bufferBuilder.pos(x, bottom, 0.0D).endVertex(); // top left
+        bufferBuilder.pos(right, bottom, 0.0D).endVertex(); // top right
+        bufferBuilder.pos(right, bottom, 0.0D).endVertex(); // top right
+        bufferBuilder.pos(right, y, 0.0D).endVertex(); // bottom right
+        bufferBuilder.pos(right, y, 0.0D).endVertex(); // bottom right
+        bufferBuilder.pos(x, y, 0.0D).endVertex(); // bottom left
+        bufferBuilder.pos(x, y, 0.0D).endVertex(); // bottom left
+        bufferBuilder.pos(x, bottom, 0.0D).endVertex(); // top left
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
+>>>>>>> Stashed changes
     public static void scissor(double x, double y, double width, double height) {
         final ScaledResolution sr = new ScaledResolution(mc);
         final double scale = sr.getScaleFactor();

@@ -6,6 +6,10 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Renderutil;
+<<<<<<< Updated upstream
+=======
+import net.minecraft.client.gui.ScaledResolution;
+>>>>>>> Stashed changes
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -16,10 +20,10 @@ public class ClickGUI extends Panel {
 
     public ClickGUI() {
         super("GUI");
-        int offsetNormal = 200;
+        int offsetNormal = 15;
         for(Element.HUDType t : Element.HUDType.values()) {
-            this.frames.add(new Frame(t, offsetNormal, 20, this));
-            offsetNormal += 120;
+            this.frames.add(new Frame(t, new ScaledResolution(mc).getScaledWidth() - 100, offsetNormal, this));
+            offsetNormal += 50;
         }
     }
 
@@ -45,12 +49,21 @@ public class ClickGUI extends Panel {
         for(Frame f : this.frames) {
             f.draw(mouseX, mouseY, partialTicks);
         }
+
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
+<<<<<<< Updated upstream
                 ((RenderElement) e).dragging(mouseX, mouseY);
                 ((RenderElement) e).render(partialTicks);
+=======
+                if(e.isToggled()) {
+                    ((RenderElement) e).dragging(mouseX, mouseY);
+                    ((RenderElement) e).render(partialTicks);
+                }
+>>>>>>> Stashed changes
             }
         }
+
     }
 
     @Override
@@ -61,7 +74,13 @@ public class ClickGUI extends Panel {
 
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
+<<<<<<< Updated upstream
                 ((RenderElement) e).mouseClicked(mouseX, mouseY, button);
+=======
+                if(e.isToggled()) {
+                    ((RenderElement) e).mouseClicked(mouseX, mouseY, button);
+                }
+>>>>>>> Stashed changes
             }
         }
 
@@ -76,7 +95,13 @@ public class ClickGUI extends Panel {
 
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
+<<<<<<< Updated upstream
                 ((RenderElement) e).mouseRelease(mouseX, mouseY, state);
+=======
+                if(e.isToggled()) {
+                    ((RenderElement) e).mouseRelease(mouseX, mouseY, state);
+                }
+>>>>>>> Stashed changes
             }
         }
     }

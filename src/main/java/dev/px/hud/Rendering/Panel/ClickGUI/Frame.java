@@ -39,7 +39,7 @@ public class Frame {
             this.width = 88;
             this.height = 15;
             this.type = type;
-            this.open = true;
+            this.open = false;
             this.dragging = false;
             this.scroll = 0;
             this.fullheight = 196;

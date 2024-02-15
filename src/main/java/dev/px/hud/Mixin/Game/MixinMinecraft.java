@@ -22,6 +22,10 @@ import java.util.List;
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     @Inject(method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I", at = @At("HEAD"), cancellable = true)
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
@@ -32,6 +36,7 @@ public class MixinMinecraft {
         }
     }
 
+<<<<<<< Updated upstream
     @Inject(method = "Lnet/minecraft/client/Minecraft;setWindowIcon()V", at = @At("HEAD"), cancellable = true)
     public void preSetWindowIcon(CallbackInfo callbackInfo) {
         try (InputStream in = HUDMod.class.getResourceAsStream("\\assets\\minecraft\\GUI\\sped.png\\")) {
@@ -51,6 +56,9 @@ public class MixinMinecraft {
         }
 
     }
+=======
+
+>>>>>>> Stashed changes
 
     /*
     @Inject(method = "runTick()V", at = @At("RETURN"))

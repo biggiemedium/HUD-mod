@@ -50,13 +50,19 @@ public class ToggleableElement extends Element implements Listenable {
         if(isEnabled()) {
             enable();
             MinecraftForge.EVENT_BUS.register(this);
+<<<<<<< Updated upstream
                HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
+=======
+>>>>>>> Stashed changes
             MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementEnableEvent(this));
             HUDMod.EVENT_BUS.subscribe(this);
         } else {
             disable();
             MinecraftForge.EVENT_BUS.unregister(this);
+<<<<<<< Updated upstream
              HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
+=======
+>>>>>>> Stashed changes
             MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementDisableEvent(this));
             HUDMod.EVENT_BUS.unsubscribe(this);
         }

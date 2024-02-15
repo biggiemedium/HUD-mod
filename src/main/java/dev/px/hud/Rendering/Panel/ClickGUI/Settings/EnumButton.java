@@ -1,6 +1,9 @@
 package dev.px.hud.Rendering.Panel.ClickGUI.Settings;
 
+<<<<<<< Updated upstream
 import com.sun.javafx.binding.StringFormatter;
+=======
+>>>>>>> Stashed changes
 import dev.px.hud.Rendering.Panel.ClickGUI.Button;
 import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;

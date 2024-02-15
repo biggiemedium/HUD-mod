@@ -1,6 +1,9 @@
 package dev.px.hud.Util.API.Entity;
 
+<<<<<<< Updated upstream
 import com.sun.javafx.geom.Vec3d;
+=======
+>>>>>>> Stashed changes
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.entity.EntityPlayerSP;
