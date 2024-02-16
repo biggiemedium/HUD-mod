@@ -4,6 +4,7 @@ import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.SettingUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -19,7 +20,7 @@ public class Setting<T> {
     private Predicate<T> visibility;
 
     // Taken from cosmos client
-    private List<T> exclusions;
+    private List<T> exclusions = new ArrayList<>();
 
     public Setting(String name, T value) {
         this.name = name;

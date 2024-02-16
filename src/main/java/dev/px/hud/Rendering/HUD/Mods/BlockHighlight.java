@@ -6,6 +6,7 @@ import dev.px.hud.Util.Event.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.AxisAlignedBB;
@@ -16,6 +17,8 @@ import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class BlockHighlight extends ToggleableElement {
 
@@ -24,58 +27,48 @@ public class BlockHighlight extends ToggleableElement {
     }
 
     Setting<Color> highlightColor = create(new Setting<>("Color", new Color(255, 255, 255)));
-    Setting<Boolean> slide = create(new Setting<>("Slide", true));
-    Setting<Integer> slideTime = create(new Setting<>("Slide Time", 100, 0, 1000, v -> slide.getValue()));
+    Setting<Float> lineWidth = create(new Setting<>("Line Width", 1.0f, 5.0f, 0.1f));
+    Setting<Mode> mode = create(new Setting<>("Mode", Mode.Outline));
 
     private AxisAlignedBB currentBB;
     private AxisAlignedBB slideBB;
     private dev.px.hud.Util.API.Math.Timer slideTimer = new dev.px.hud.Util.API.Math.Timer();
+
+    private enum Mode {
+        Outline,
+        Full
+    }
 
     /*
     Code taken from earthhack
      */
 
     @Override
+    public void disable() {
+        this.currentBB = null;
+        this.slideBB = null;
+    }
+
+    @Override
     public void onRender(Render3dEvent event) {
 
-        if(mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return;
+        if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK)
+            return;
 
         BlockPos pos = mc.objectMouseOver.getBlockPos();
-        if(pos != null) {
-            if (mc.theWorld.getWorldBorder().contains(pos)) {
-                if (mc.theWorld.getBlockState(pos).getBlock().getMaterial() != Material.air) {
-                    AxisAlignedBB bb = mc.theWorld.getBlockState(pos).getBlock().getSelectedBoundingBox(mc.theWorld, pos);
-                    if (!bb.equals(currentBB)) {
-                        slideBB = currentBB;
-                        currentBB = bb;
-                        slideTimer.reset();
-                    }
-
-                    double factor;
-                    AxisAlignedBB slide;
-                    if(this.slide.getValue() && (slide = slideBB) != null && ((factor = slideTimer.getTime()) / Math.max(1.0, slideTime.getValue())) < 1.0) {
-                        AxisAlignedBB renderBB = new AxisAlignedBB(
-                                slide.minX + (bb.minX - slide.minX) * factor,
-                                slide.minY + (bb.minY - slide.minY) * factor,
-                                slide.minZ + (bb.minZ - slide.minZ) * factor,
-                                slide.maxX + (bb.maxX - slide.maxX) * factor,
-                                slide.maxY + (bb.maxY - slide.maxY) * factor,
-                                slide.maxZ + (bb.maxZ - slide.maxZ) * factor
-                        );
-
-                        renderBox(interpolateAxis(renderBB).expand(0.002, 0.002, 0.002), new Color(this.highlightColor.getValue().getRed(), this.highlightColor.getValue().getGreen(), this.highlightColor.getValue().getBlue(), 150), this.highlightColor.getValue(), 1);
-                    } else {
-                        renderBox(interpolateAxis(bb).expand(0.002, 0.002, 0.002), new Color(this.highlightColor.getValue().getRed(), this.highlightColor.getValue().getGreen(), this.highlightColor.getValue().getBlue(), 150), this.highlightColor.getValue(), 1);
-                    }
-
-                }
+        if (pos != null) {
+            AxisAlignedBB bb = mc.theWorld.getBlockState(pos).getBlock().getSelectedBoundingBox(mc.theWorld, pos);
+          if(mode.getValue() == Mode.Outline) {
+              drawOutline(bb, lineWidth.getValue(), new Color(highlightColor.getValue().getRed(), highlightColor.getValue().getGreen(), highlightColor.getValue().getBlue(), 200));
+          } else {
+              renderBox(bb, new Color(highlightColor.getValue().getRed(), highlightColor.getValue().getGreen(), highlightColor.getValue().getBlue(), 100), new Color(highlightColor.getValue().getRed(), highlightColor.getValue().getGreen(), highlightColor.getValue().getBlue(), 200), lineWidth.getValue());
+          }
 
         }
 
     }
-}
 
-    public AxisAlignedBB interpolateAxis(AxisAlignedBB bb){
+    public AxisAlignedBB interpolateAxis(AxisAlignedBB bb) {
         return new AxisAlignedBB(
                 bb.minX - mc.getRenderManager().viewerPosX,
                 bb.minY - mc.getRenderManager().viewerPosY,
@@ -142,7 +135,7 @@ public class BlockHighlight extends ToggleableElement {
         GL11.glPopMatrix();
     }
 
-    public void renderBox3D(double x, double y, double z) {
+    public static void renderBox3D(double x, double y, double z) {
         VertexBuffer BLOCK_FILL_BUFFER = new VertexBuffer(DefaultVertexFormats.POSITION);
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glPushMatrix();
@@ -157,9 +150,9 @@ public class BlockHighlight extends ToggleableElement {
         GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_FASTEST);
         GL11.glDisable(GL11.GL_LIGHTING);
         BLOCK_FILL_BUFFER.bindBuffer();
-        double viewX = ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
-        double viewY = ((MixinRenderManager) mc.getRenderManager()).getRenderPosY();
-        double viewZ = ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
+        double viewX = ((MixinRenderManager) Minecraft.getMinecraft().getRenderManager()).getRenderPosX();
+        double viewY = ((MixinRenderManager) Minecraft.getMinecraft().getRenderManager()).getRenderPosY();
+        double viewZ = ((MixinRenderManager) Minecraft.getMinecraft().getRenderManager()).getRenderPosZ();
         GL11.glTranslated(x - viewX, y - viewY, z - viewZ);
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
@@ -200,8 +193,7 @@ public class BlockHighlight extends ToggleableElement {
         GL11.glPopMatrix();
     }
 
-    public static void fillBox(AxisAlignedBB boundingBox)
-    {
+    public static void fillBox(AxisAlignedBB boundingBox) {
         if (boundingBox != null) {
             glBegin(GL_QUADS);
             glVertex3d((float) boundingBox.minX, (float) boundingBox.minY, (float) boundingBox.maxZ);
@@ -289,8 +281,7 @@ public class BlockHighlight extends ToggleableElement {
         }
     }
 
-    public static void drawOutline(AxisAlignedBB bb, float lineWidth, Color color)
-    {
+    public static void drawOutline(AxisAlignedBB bb, float lineWidth, Color color) {
         glPushMatrix();
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -311,10 +302,9 @@ public class BlockHighlight extends ToggleableElement {
         glDisable(GL_BLEND);
         glPopMatrix();
     }
-    public static void fillOutline(AxisAlignedBB bb)
-    {
-        if (bb != null)
-        {
+
+    public static void fillOutline(AxisAlignedBB bb) {
+        if (bb != null) {
             glBegin(GL_LINES);
             {
                 glVertex3d(bb.minX, bb.minY, bb.minZ);

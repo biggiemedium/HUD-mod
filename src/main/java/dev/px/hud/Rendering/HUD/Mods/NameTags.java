@@ -41,7 +41,6 @@ public class NameTags extends ToggleableElement {
             double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY();
             double pZ = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
 
-
         }
 
     }

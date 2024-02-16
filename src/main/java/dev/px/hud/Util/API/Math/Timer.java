@@ -12,6 +12,8 @@ public class Timer {
         return this.getTime(System.nanoTime() - this.time) >= ms;
     }
 
+
+
     public void reset() {
         this.time = System.nanoTime();
     }
@@ -21,7 +23,7 @@ public class Timer {
     }
 
     public long getTime() {
-        return time;
+        return System.currentTimeMillis() - time;
     }
 
     public void setTime(long time) {

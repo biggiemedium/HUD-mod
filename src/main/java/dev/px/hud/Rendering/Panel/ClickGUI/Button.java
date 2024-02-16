@@ -57,11 +57,13 @@ public class Button {
                         settingButtons.add(new EnumButton(this, getX(), getY(), (Setting<Enum>) setting));
                     }
                     if (setting.getValue() instanceof Float) {
+                        settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Number>) setting));
                     }
                     if (setting.getValue() instanceof Integer) {
                         settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Number>) setting));
                     }
                     if (setting.getValue() instanceof Double) {
+                        settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Number>) setting));
                     }
 
                    // if(this.element instanceof ToggleableElement) {
