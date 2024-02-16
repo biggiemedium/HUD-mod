@@ -32,8 +32,9 @@ public class CritParticles extends ToggleableElement {
     public void disable() {
     }
 
-    @EventHandler
-    public Listener<AttackEntityEvent> entityEventListener = new Listener<>(event -> {
+
+    @SubscribeEvent
+    public void onHit(AttackEntityEvent event) {
         if(event.target == null) return;
         if(mc.thePlayer.getDistance(event.target.posX, event.target.posY, event.target.posZ) > 10) return;
         if(event.target instanceof EntityLivingBase) {
@@ -57,6 +58,7 @@ public class CritParticles extends ToggleableElement {
                 }
             }
         }
-    });
+
+    }
 
 }

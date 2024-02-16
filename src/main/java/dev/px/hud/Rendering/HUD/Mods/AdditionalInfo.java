@@ -3,6 +3,7 @@ package dev.px.hud.Rendering.HUD.Mods;
 import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Math.Mathutil;
+import dev.px.hud.Util.API.Math.Timer;
 import dev.px.hud.Util.API.Render.ESPutil;
 import dev.px.hud.Util.Event.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
@@ -13,15 +14,26 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vector3d;
 import org.lwjgl.util.vector.Vector4f;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class AdditionalInfo extends ToggleableElement {
 
     public AdditionalInfo() {
         super("Side Nametag", "", HUDType.RENDER);
     }
 
+    private Map<EntityPlayer, Timer> targetMap = new ConcurrentHashMap<>();
+
     @Override
     public void enable() {
+        this.targetMap = new ConcurrentHashMap<>();
+    }
 
+    @Override
+    public void disable() {
+        this.targetMap.clear();
+        this.targetMap = null; // Check if this causes error
     }
 
     @Override

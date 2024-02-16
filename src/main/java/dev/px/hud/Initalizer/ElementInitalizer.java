@@ -40,7 +40,8 @@ public class ElementInitalizer {
 
         // Mod
         Add(new AdditionalInfo());
-        Add(new AutoSprint()); // WHY WONT THIS ADD
+        Add(new AutoSprint());
+        Add(new BlockHighlight());
         Add(new CritParticles());
         Add(new ESPMod());
         Add(new FakePlayer());

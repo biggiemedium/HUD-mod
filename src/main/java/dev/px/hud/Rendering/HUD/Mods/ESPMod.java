@@ -2,6 +2,7 @@ package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Mixin.Game.IMixinMinecraft;
+import dev.px.hud.Mixin.Render.IEntityRenderer;
 import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Entityutil;
@@ -14,13 +15,17 @@ import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Vec3;
+import net.minecraft.util.Vec3i;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import java.awt.*;
@@ -28,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ESPMod extends ToggleableElement {
 
@@ -36,15 +42,13 @@ public class ESPMod extends ToggleableElement {
     }
 
     Setting<Mode> mode = create(new Setting<>("Mode", Mode.Box));
-    Setting<Integer> distance = create(new Setting<>("Distance", 50, 1, 75));
+    Setting<Integer> distance = create(new Setting<>("Distance", 35, 1, 75));
 
     /* Cirlce stuff */
     Setting<Boolean> circle = create(new Setting<>("Cirlce", true));
-    Setting<Boolean> targetOnly = create(new Setting<>("Target only", true, v -> circle.getValue()));
+    Setting<Boolean> playersOnly = create(new Setting<>("Player Only", true));
 
-    Setting<Boolean> playersOnly = create(new Setting<>("Player Only", true, v -> !targetOnly.getValue()));
-
-    private List<ESPTarget> highlightedPlayers = new ArrayList<>();
+    private Map<Entity, Timer> targetMap = new ConcurrentHashMap<>();
     private Map<Entity, org.lwjgl.util.vector.Vector4f> entityPosition = new ConcurrentHashMap<>();
 
     private enum Mode {
@@ -54,77 +58,63 @@ public class ESPMod extends ToggleableElement {
 
     @Override
     public void onUpdate() {
-        if(Util.isNull()) return;
+        if (Util.isNull()) return;
         entityPosition.clear();
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (ESPutil.isInView(entity)) {
-                if(playersOnly.getValue() && entity instanceof EntityPlayer) {
+                if (playersOnly.getValue() && entity instanceof EntityPlayer) {
                     entityPosition.put(entity, ESPutil.getEntityPositionsOn2D(entity));
                 } else if (!playersOnly.getValue()) {
-                    if(Entityutil.isPassive(entity) || entity instanceof EntityMob) {
+                    if (Entityutil.isPassive(entity) || entity instanceof EntityMob) {
                         entityPosition.put(entity, ESPutil.getEntityPositionsOn2D(entity));
                     }
                 }
             }
         }
 
+        targetMap.forEach((e, t) -> {
+            if(t.passed(7 * 1000)) {
+                targetMap.remove(e, t);
+            }
+        });
 
-        Entity event = mc.objectMouseOver.entityHit;
-        if(mc.gameSettings.keyBindAttack.isKeyDown()) {
-        if(event instanceof EntityLivingBase) {
-            if (event != mc.thePlayer) {
-                if (event.isEntityAlive()) {
-                    if (entityCheck(event)) {
-                        if (circle.getValue()) {
-                            if (targetOnly.getValue()) {
-                                ESPTarget t = new ESPTarget(event, new Timer());
-                                t.getTimer().reset();
-                                if(!highlightedPlayers.contains(event)) {
-                                    this.highlightedPlayers.add(t);
-                                } else if (highlightedPlayers.contains(event)) {
-                                    t.getTimer().reset();
-                                }
-
+        Entity e = mc.objectMouseOver.entityHit;
+            if(mc.gameSettings.keyBindAttack.isKeyDown()) {
+                if(e != null && e instanceof EntityLivingBase) {
+                    if(circle.getValue()) {
+                        if (playersOnly.getValue() && e instanceof EntityPlayer) {
+                            if (!targetMap.containsKey(e)) {
+                                Timer t = new Timer();
+                                t.reset();
+                                targetMap.put(e, t);
+                            } else {
+                                targetMap.forEach((entity, t) -> {
+                                    t.reset();
+                                });
                             }
                         }
                     }
                 }
-            }
         }
-        }
-
-
-        this.highlightedPlayers.removeIf(e ->
-                e.getEntity() == null
-                        || e.getTimer().passed(6 * 1000)
-                        || e.getEntity().isDead
-                        || mc.thePlayer.getDistanceSqToEntity(e.getEntity()) > 100);
     }
 
     @Override
     public void onRender(Render3dEvent event) {
 
         /* Cirlces */
-        if(circle.getValue() && !targetOnly.getValue()) {
-            for (Entity e : mc.theWorld.loadedEntityList) {
-                if (e != null) {
-                    if (e != mc.thePlayer) {
-                        if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
-                            continue;
-                        }
-                        if (e.isEntityAlive()) {
-                            if(entityCheck(e)) {
-                                Renderutil.drawCircle(e, 1, HUDMod.colorManager.getMainColor().getRGB(), true);
-                            }
-                        }
-                    }
-                }
-            }
-        } else if(circle.getValue() && targetOnly.getValue()) {
-            this.highlightedPlayers.forEach(e -> {
-                Renderutil.drawCircle(e.getEntity(), 1, HUDMod.colorManager.getMainColor().getRGB(), true);
-            });
-        }
+       for(Entity e : targetMap.keySet()) {
+           if(e == null) {
+               continue;
+           }
+           if(e == mc.thePlayer) {
+               continue;
+           }
+           if(playersOnly.getValue() && !(e instanceof EntityPlayer)) {
+               continue;
+           }
+
+           Renderutil.drawCircle(e, 1, HUDMod.colorManager.getMainColor().getRGB(), true);
+       }
 
         /* Box 2d */
         if(mode.getValue() == Mode.Box || mode.getValue() == Mode.R6) {
@@ -161,12 +151,44 @@ public class ESPMod extends ToggleableElement {
                         if (((EntityLivingBase) e).hurtTime > 0)
                             draw2DBox(width, height, lineWidth, 0, new Color(255, 30, 30, 255));
                         else
-                            draw2DBox(width, height, lineWidth, 0, Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 5));
+                            draw2DBox(width, height, lineWidth, 0, Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 15));
                     }
                     GlStateManager.enableDepth();
                     GL11.glPopMatrix();
                 }
         }
+
+        if(mode.getValue() == Mode.R6) {
+            for(Entity e : mc.theWorld.playerEntities) {
+                if (e == null || e == mc.thePlayer) {
+                    continue;
+                }
+                if (!(e instanceof EntityLivingBase)) {
+                    continue;
+                }
+                if (mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
+                    continue;
+                }
+                Vec3 vec = Entityutil.getInterpolatedPos(e, event.getPartialTicks())
+                        .subtract(new Vec3(
+                                        ((MixinRenderManager) mc.getRenderManager()).getRenderPosX(),
+                                        ((MixinRenderManager) mc.getRenderManager()).getRenderPosY(),
+                                        ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ())
+                        );
+                if(vec != null) {
+                    boolean bobbing = mc.gameSettings.viewBobbing;
+                    mc.gameSettings.viewBobbing = false;
+                    mc.entityRenderer.setupOverlayRendering();
+                    ((IEntityRenderer) mc.entityRenderer).invokeSetupCameraTransform(event.getPartialTicks(), 0);
+                    Vec3 forward = new Vec3(0, 0, 1).rotatePitch(-(float) Math.toRadians(Minecraft.getMinecraft().thePlayer.rotationPitch)).rotateYaw(-(float) Math.toRadians(Minecraft.getMinecraft().thePlayer.rotationYaw));
+                    Tracers.drawLine3D((float) forward.xCoord, (float) forward.yCoord + mc.thePlayer.eyeHeight, (float) forward.zCoord, (float) vec.xCoord, (float) vec.yCoord, (float) vec.zCoord, 0.5f, new Color(255, 30, 30, 255).getRGB());
+                    mc.gameSettings.viewBobbing = bobbing;
+                    ((IEntityRenderer) mc.entityRenderer).invokeSetupCameraTransform(event.getPartialTicks(), 0);
+                }
+
+            }
+        }
+
     }
 
 

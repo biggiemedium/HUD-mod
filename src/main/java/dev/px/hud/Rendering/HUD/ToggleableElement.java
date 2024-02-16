@@ -12,7 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class ToggleableElement extends Element implements Listenable {
 
-    private String name;
+    private String name, description;
     private HUDType hudType;
 
     private boolean enabled;
@@ -23,6 +23,17 @@ public class ToggleableElement extends Element implements Listenable {
         super(name, hudType);
         this.name = name;
         this.hudType = hudType;
+        this.description = description;
+        this.key = -1;
+        this.enabled = toggled;
+        this.settings.add(keybind);
+    }
+
+    public ToggleableElement(String name, HUDType hudType) {
+        super(name, hudType);
+        this.name = name;
+        this.hudType = hudType;
+        this.description = "";
         this.key = -1;
         this.enabled = toggled;
         this.settings.add(keybind);

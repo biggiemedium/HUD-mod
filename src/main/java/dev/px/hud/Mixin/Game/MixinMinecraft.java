@@ -27,7 +27,7 @@ public class MixinMinecraft {
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
             if (HUDMod.elementInitalizer.isElementToggled(UnfocusedCPU.class) && !Display.isActive()) {
-                callbackInfoReturnable.setReturnValue(1);
+                callbackInfoReturnable.setReturnValue(5);
             }
         } catch (NullPointerException e) {
         }
