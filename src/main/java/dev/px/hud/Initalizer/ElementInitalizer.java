@@ -42,6 +42,7 @@ public class ElementInitalizer {
         Add(new AdditionalInfo());
         Add(new AutoSprint());
         Add(new BlockHighlight());
+        Add(new ChunkAnimator());
         Add(new CritParticles());
         Add(new ESPMod());
         Add(new FakePlayer());

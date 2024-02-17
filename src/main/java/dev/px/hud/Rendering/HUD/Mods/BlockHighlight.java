@@ -52,19 +52,18 @@ public class BlockHighlight extends ToggleableElement {
     @Override
     public void onRender(Render3dEvent event) {
 
-        if (mc.objectMouseOver == null || mc.objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK)
+        if (mc.objectMouseOver == null)
             return;
 
-        BlockPos pos = mc.objectMouseOver.getBlockPos();
-        if (pos != null) {
-            AxisAlignedBB bb = mc.theWorld.getBlockState(pos).getBlock().getSelectedBoundingBox(mc.theWorld, pos);
-          if(mode.getValue() == Mode.Outline) {
-              drawOutline(bb, lineWidth.getValue(), new Color(highlightColor.getValue().getRed(), highlightColor.getValue().getGreen(), highlightColor.getValue().getBlue(), 200));
-          } else {
-              renderBox(bb, new Color(highlightColor.getValue().getRed(), highlightColor.getValue().getGreen(), highlightColor.getValue().getBlue(), 100), new Color(highlightColor.getValue().getRed(), highlightColor.getValue().getGreen(), highlightColor.getValue().getBlue(), 200), lineWidth.getValue());
-          }
+        if(mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
 
+            BlockPos pos = mc.objectMouseOver.getBlockPos();
+            if (pos != null) {
+                AxisAlignedBB bb = mc.theWorld.getBlockState(pos).getBlock().getSelectedBoundingBox(mc.theWorld, pos);
+                drawBox(bb, highlightColor.getValue());
+            }
         }
+
 
     }
 

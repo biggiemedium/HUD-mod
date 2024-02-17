@@ -60,54 +60,53 @@ public class IntegerButton extends SettingButton<Number> {
                     Number max = getSetting().getMax();
                     Number min = getSetting().getMin();
 
-                    // set the value based on the type
                     if (getSetting().getValue() instanceof Double) {
                         double valueSlid = MathHelper.clamp_double(Mathutil.round(percentFilled * ((max.doubleValue() - min.doubleValue()) / 130.0D) + min.doubleValue(), 2), min.doubleValue(), max.doubleValue());
 
-                        // exclude number
                         if (getSetting().isExclusion(valueSlid)) {
                             getSetting().setValue(valueSlid + Math.pow(1, -2));
                         } else {
                             getSetting().setValue(valueSlid);
-                            Util.sendClientSideMessage(getSetting().getValue() + "");
                         }
+
                     } else if (getSetting().getValue() instanceof Float) {
                         float valueSlid = MathHelper.clamp_float(Mathutil.round(percentFilled * (float) ((max.floatValue() - min.floatValue()) / 130.0D) + min.floatValue(), 2), min.floatValue(), max.floatValue());
-
-                        // exclude number
                         if (getSetting().isExclusion(valueSlid)) {
                             getSetting().setValue(valueSlid + Math.pow(1, -2));
                         } else {
                             getSetting().setValue(valueSlid);
-                            Util.sendClientSideMessage(getSetting().getValue() + "");
+                        }
+
+                    } else if(getSetting().getValue() instanceof Integer) {
+                        int valueSlid = MathHelper.clamp_int((int) Mathutil.round(percentFilled * (float) ((max.intValue() - min.intValue()) / 130.0) + min.intValue(), 0), min.intValue(), max.intValue());
+
+                        if (getSetting().isExclusion(valueSlid)) {
+                            getSetting().setValue(valueSlid + Math.pow(1, -0)); // rounding scale 0
+                        } else {
+                            getSetting().setValue(valueSlid);
                         }
                     }
+
                 }
 
-                // if less than min, setting is min
                 else if (isMouseOver(getX(), featureHeight + 13, 5, getHeight() - 13, mouseX, mouseY)) {
                     getSetting().setValue(getSetting().getMin());
                 }
 
-                // if greater than max, setting is max
                 else if (isMouseOver(getX() + (getWidth() - 5), featureHeight + 13, 5, getHeight() - 13, mouseX, mouseY)) {
                     getSetting().setValue(getSetting().getMax());
                 }
             }
         }
 
-        float sliderWidth = 91 * (getSetting().getValue().floatValue() - getSetting().getMin().floatValue()) / (getSetting().getMax().floatValue() - getSetting().getMin().floatValue());
-
-        // clamp
+        float sliderWidth = 85 * (getSetting().getValue().floatValue() - getSetting().getMin().floatValue()) / (getSetting().getMax().floatValue() - getSetting().getMin().floatValue());
         if (sliderWidth < 2) {
             sliderWidth = 2;
         }
-
-        if (sliderWidth > 91) {
-            sliderWidth = 91;
+        if (sliderWidth > 85) {
+            sliderWidth = 85;
         }
 
-        // slider
         Renderutil.drawRoundedRect(getButton().getParent().getX() + 6, featureHeight + 14, getButton().getParent().getWidth() - 10, 3, 2, new Color(23, 23, 29, 255));
         if (getSetting().getValue().doubleValue() > getSetting().getMin().doubleValue()) {
             Renderutil.drawRoundedRect(getButton().getParent().getX() + 6, featureHeight + 14, sliderWidth, 3, 2, HUDMod.colorManager.getMainColor());

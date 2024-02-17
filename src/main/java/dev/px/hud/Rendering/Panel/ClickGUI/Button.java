@@ -65,6 +65,9 @@ public class Button {
                     if (setting.getValue() instanceof Double) {
                         settingButtons.add(new IntegerButton(this, getX(), getY(), (Setting<Number>) setting));
                     }
+                    if (setting.getValue() instanceof Color) {
+                        settingButtons.add(new ColorButton(this, getX(), getY(), (Setting<Color>) setting));
+                    }
 
                    // if(this.element instanceof ToggleableElement) {
                    //     this.settingButtons.add(new KeybindButton(this, getX(), getY(), (Setting<Keybind>) setting));

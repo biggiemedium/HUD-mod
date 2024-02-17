@@ -49,20 +49,22 @@ public class TargetHUD extends RenderElement {
 
         if (timer.passed(4000)) {
             if (target != null && (target.getDistanceSqToEntity(mc.thePlayer) > 100 || mc.theWorld.getEntityByID(Objects.requireNonNull(target).getEntityId()) == null)) {
-                scale = Math.max(0, scale - scaleTimer.getTime() / 8E+13 - (1 - scale) / 10);
+                this.scale = 0;
                 timer.reset();
             } else {
-                scale = Math.min(1, scale + scaleTimer.getTime() / 4E+14 + (1 - scale) / 10);
+                scale = 1;
             }
         }
 
         if(mc.currentScreen instanceof PanelGUIScreen) {
             if(PanelGUIScreen.INSTANCE.getCurrentPanel().getClass() == ClickGUI.class) {
                 this.target = mc.thePlayer;
+                this.scale = 1;
             }
         } else {
             if(!timer.passed(7)) {
                 target = (EntityPlayer) Entityutil.getTarget(15, true);
+                this.scale = 0;
             }
         }
 
