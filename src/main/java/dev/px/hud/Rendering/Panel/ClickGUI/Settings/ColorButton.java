@@ -44,7 +44,7 @@ public class ColorButton extends SettingButton<Color> {
     public void draw(int mouseX, int mouseY, float partialTicks) {
         this.featureHeight = getButton().getParent().getY() + getButton().getParent().getHeight() + getButton().getSettingOffset() + getButton().getParent().getScroll() + 2;
         Renderutil.drawRect((float) getX(), (float)  featureHeight, (float) getWidth(), (float)  getHeight(), new Color(0x181A18).darker());
-        double expandHeight = 0 + getHeight();
+        double expandHeight = 0 + 15; // 15 is getHeight();
 
         glScaled(0.55, 0.55, 0.55); {
             double scaledX = (getX() + 6) * 1.81818181F;
@@ -56,7 +56,6 @@ public class ColorButton extends SettingButton<Color> {
         if(animation.getAnimationFactor() > 0) {
             expandHeight += 70 * animation.getAnimationFactor();
             Vector2f circleCenter = new Vector2f((float) getX() + ((float) (getWidth() - 34) / 2F) + 4, (float) (featureHeight + getHeight() + 34));
-
             if(leftHeld) {
                 if (isWithinCircle(circleCenter.x, circleCenter.y, 32, mouseX, mouseY)) {
                     float xDistance = mouseX - circleCenter.x;
@@ -94,7 +93,7 @@ public class ColorButton extends SettingButton<Color> {
             // transparency slider
             drawGradientRoundedRect((float) (getX() + getWidth() - 10), (float) (featureHeight + getHeight() + 2), 3, 62, 2, true);
             drawPolygon(getX() + getWidth() - 8.5, featureHeight + getHeight() + (64 * (1 - selectedColor.getTransparency())) + 2, 2, 360, Color.WHITE);
-
+            
             getButton().addSettingOffset((float) (expandHeight));
             getButton().getParent().addFeatureOffset((expandHeight));
         }
@@ -102,7 +101,7 @@ public class ColorButton extends SettingButton<Color> {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
-        if(isMouseOver(getX(), featureHeight, getWidth(), getHeight(), mouseX, mouseY)) {
+        if(isMouseOver(getX(), featureHeight, getWidth(), getHeight() + (70 * animation.getAnimationFactor()), mouseX, mouseY)) {
             if(button == 0) {
                 this.leftHeld = true;
             } else if(button == 1) {

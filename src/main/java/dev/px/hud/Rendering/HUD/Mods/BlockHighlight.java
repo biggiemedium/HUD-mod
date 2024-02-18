@@ -61,6 +61,7 @@ public class BlockHighlight extends ToggleableElement {
             if (pos != null) {
                 AxisAlignedBB bb = mc.theWorld.getBlockState(pos).getBlock().getSelectedBoundingBox(mc.theWorld, pos);
                 drawBox(bb, highlightColor.getValue());
+                String S;
             }
         }
 
