@@ -3,6 +3,7 @@ package dev.px.hud.Initalizer;
 import dev.px.hud.Util.Config.Config;
 import dev.px.hud.Util.Config.Configs.ClientPreferences;
 import dev.px.hud.Util.Config.Configs.FramePositions;
+import dev.px.hud.Util.Config.Configs.RenderElementConfig;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public class ConfigInitalizer {
     public ConfigInitalizer() {
         Add(new FramePositions());
         Add(new ClientPreferences());
+        Add(new RenderElementConfig());
     }
 
     private void Add(Config config) {
@@ -26,8 +28,8 @@ public class ConfigInitalizer {
     }
 
     public void saves() {
-        this.configs.forEach(save -> {
-            save.saves();
-        });
+        for(Config c : this.configs) {
+            c.saves();
+        }
     }
 }

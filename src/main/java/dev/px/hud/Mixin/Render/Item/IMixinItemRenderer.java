@@ -1,4 +1,4 @@
-package dev.px.hud.Mixin.Render;
+package dev.px.hud.Mixin.Render.Item;
 
 import net.minecraft.client.renderer.ItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;

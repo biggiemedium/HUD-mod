@@ -1,4 +1,4 @@
-package dev.px.hud.Mixin.Render;
+package dev.px.hud.Mixin.Render.Item;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Mods.ItemPhysics;

@@ -1,4 +1,4 @@
-package dev.px.hud.Util.Event;
+package dev.px.hud.Util.Event.Render;
 
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.util.BlockPos;

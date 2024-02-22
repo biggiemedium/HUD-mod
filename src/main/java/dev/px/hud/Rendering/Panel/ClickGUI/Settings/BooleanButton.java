@@ -1,19 +1,16 @@
 package dev.px.hud.Rendering.Panel.ClickGUI.Settings;
 
-import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Panel.ClickGUI.Button;
 import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Font.Fontutil;
-import dev.px.hud.Util.API.Util;
-import dev.px.hud.Util.Event.SettingUpdateEvent;
+import dev.px.hud.Util.Event.Client.SettingUpdateEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.io.IOException;
 

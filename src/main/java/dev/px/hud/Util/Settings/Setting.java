@@ -1,7 +1,7 @@
 package dev.px.hud.Util.Settings;
 
 import dev.px.hud.Util.API.Util;
-import dev.px.hud.Util.Event.SettingUpdateEvent;
+import dev.px.hud.Util.Event.Client.SettingUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;

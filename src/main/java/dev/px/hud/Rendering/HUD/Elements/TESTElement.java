@@ -1,19 +1,9 @@
 package dev.px.hud.Rendering.HUD.Elements;
 
-import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.RenderElement;
-import dev.px.hud.Util.API.Font.Fontutil;
-import dev.px.hud.Util.API.Render.Colorutil;
-import dev.px.hud.Util.API.Render.RoundedShader;
-import dev.px.hud.Util.Renderutil;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import org.lwjgl.opengl.GL11;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
+import net.minecraft.util.MathHelper;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class TESTElement extends RenderElement {
@@ -31,17 +21,32 @@ public class TESTElement extends RenderElement {
 
     private final ArrayList<Float> speeds = new ArrayList<>();
     private double lastVertices;
+    private float currentSpeed;
 
     @Override
     public void render(float partialTicks) {
-        if(customFont.getValue()) {
-            Fontutil.drawTextShadow("Test", (float) getX(),  (float) getY() + (float) Fontutil.getHeight(), -1);
-        } else {
-            mc.fontRendererObj.drawStringWithShadow("Test Element", getX(), getY(), -1);
-        }
 
-
-        this.setWidth(mc.fontRendererObj.getStringWidth("TEST Element"));
-        this.setHeight(mc.fontRendererObj.FONT_HEIGHT);
     }
+
+    @Override
+    public void render2D(Render2DEvent event) {
+        renderText("Biome: " + mc.theWorld.getBiomeGenForCoords(mc.thePlayer.playerLocation).biomeName, getX(), getY());
+    }
+
+    private float getSpeedInKM() {
+        double deltaX = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+        double deltaZ = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
+
+        float distance = MathHelper.sqrt_double(deltaX * deltaX + deltaZ * deltaZ);
+
+        double floor = Math.floor(( distance/1000.0f ) / ( 0.05f/3600.0f ));
+
+        String formatter = String.valueOf(floor);
+
+        if (!formatter.contains("."))
+            formatter += ".0";
+
+        return Float.valueOf(formatter);
+    }
+
 }

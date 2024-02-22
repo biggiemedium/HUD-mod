@@ -1,4 +1,4 @@
-package dev.px.hud.Util.Event;
+package dev.px.hud.Util.Event.Render;
 
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.common.eventhandler.Event;

@@ -1,4 +1,4 @@
-package dev.px.hud.Util.Event;
+package dev.px.hud.Util.Event.Render;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;

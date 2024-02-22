@@ -1,7 +1,7 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.Rendering.HUD.ToggleableElement;
-import dev.px.hud.Util.Event.Render3dEvent;
+import dev.px.hud.Util.Event.Render.Render3dEvent;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

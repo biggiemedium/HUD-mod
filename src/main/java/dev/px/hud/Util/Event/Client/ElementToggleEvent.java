@@ -1,4 +1,4 @@
-package dev.px.hud.Util.Event;
+package dev.px.hud.Util.Event.Client;
 
 import dev.px.hud.Rendering.HUD.Element;
 import net.minecraftforge.fml.common.eventhandler.Event;

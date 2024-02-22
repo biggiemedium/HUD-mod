@@ -1,9 +1,7 @@
 package dev.px.hud.Initalizer;
 
 import dev.px.hud.Rendering.HUD.Element;
-import dev.px.hud.Rendering.HUD.Elements.Combat.Armor;
-import dev.px.hud.Rendering.HUD.Elements.Combat.HitInfoElement;
-import dev.px.hud.Rendering.HUD.Elements.Combat.TargetHUD;
+import dev.px.hud.Rendering.HUD.Elements.Combat.*;
 import dev.px.hud.Rendering.HUD.Elements.Info.*;
 import dev.px.hud.Rendering.HUD.Elements.TESTElement;
 import dev.px.hud.Rendering.HUD.Mods.*;
@@ -23,7 +21,10 @@ public class ElementInitalizer {
 
         // Combat
         Add(new Armor());
+        Add(new CPS());
         Add(new HitInfoElement());
+        Add(new InventoryElement());
+        Add(new Radar());
         Add(new TargetHUD());
 
         // Info
@@ -33,6 +34,7 @@ public class ElementInitalizer {
         Add(new RotationElement());
         Add(new SneakInfoElement());
         Add(new SpeedElement());
+        Add(new TimeElement());
         Add(new WatermarkElement());
         Add(new WelcomeElement());
 
@@ -51,7 +53,10 @@ public class ElementInitalizer {
         Add(new NoHurtCam());
         Add(new NameTags());
         Add(new NoRender());
+        Add(new OldAnimations());
+        Add(new Trajectories());
         Add(new UnfocusedCPU());
+        Add(new ViewModel());
     }
 
     private void Add(Element element) {

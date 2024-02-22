@@ -1,7 +1,6 @@
 package dev.px.hud.Manager;
 
 import dev.px.hud.Rendering.Notification.Notification;
-import dev.px.hud.Util.Event.Render2dEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

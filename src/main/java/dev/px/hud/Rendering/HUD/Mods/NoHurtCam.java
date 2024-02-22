@@ -1,9 +1,7 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.Rendering.HUD.ToggleableElement;
-import dev.px.hud.Util.Event.HurtCamEvent;
-import dev.px.hud.Util.Settings.Setting;
-import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import dev.px.hud.Util.Event.Render.HurtCamEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class NoHurtCam extends ToggleableElement {

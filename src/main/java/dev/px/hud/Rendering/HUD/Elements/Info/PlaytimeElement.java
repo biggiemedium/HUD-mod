@@ -1,13 +1,11 @@
 package dev.px.hud.Rendering.HUD.Elements.Info;
 
-import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Util.API.Render.RoundedShader;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
+import dev.px.hud.Util.Renderutil;
 
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class PlaytimeElement extends RenderElement {
 
@@ -15,16 +13,19 @@ public class PlaytimeElement extends RenderElement {
         super("Playtime", 25, 100, HUDType.INFO);
         setTextElement(true);
         setHeight(70);
-        setWidth(85);
+        setWidth(90);
     }
 
     @Override
-    public void render(float partialTicks) {
-        String s = String.format("%d min, %d sec",
-                TimeUnit.MILLISECONDS.toMinutes(HUDMod.playTime),
-                TimeUnit.MILLISECONDS.toSeconds(HUDMod.playTime) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(HUDMod.playTime)));
+    public void render2D(Render2DEvent event) {
 
-        mc.fontRendererObj.drawStringWithShadow("Playtime: " + s, getX(), getY(), -1);
+        RoundedShader.drawRound(getX(), getY(), getWidth(), getHeight(), 4, new Color(42, 41, 41, 175));
+        RoundedShader.drawRound(getX(), getY(), getWidth(), 18, 4, new Color(35, 35, 35, 175));
+        RoundedShader.drawRound(getX(), getY() + 17, getWidth(), 2, 0, new Color(35, 35, 35, 175));
+        Renderutil.drawBlurredShadow(getX(), getY(), getWidth(), getHeight(), 10, new Color(42, 41, 41, 125));
+
+        renderText("Session", getX() + ((getWidth() / 2)), getY() + 2, -1);
+
+
     }
 }

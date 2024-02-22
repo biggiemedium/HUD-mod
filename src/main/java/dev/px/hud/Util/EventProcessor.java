@@ -6,16 +6,11 @@ import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.Entity.Entityutil;
-import dev.px.hud.Util.API.Entity.Playerutil;
-import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Util;
-import dev.px.hud.Util.Event.ElementToggleEvent;
-import dev.px.hud.Util.Event.Render3dEvent;
-import net.minecraft.client.gui.GuiChat;
+import dev.px.hud.Util.Event.Client.ElementToggleEvent;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
+import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,7 +20,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 public class EventProcessor extends Util {
 
@@ -47,6 +41,18 @@ public class EventProcessor extends Util {
             if(!(mc.currentScreen instanceof PanelGUIScreen)) {
                 HUDMod.notificationManager.render2D();
             }
+
+        } else if(event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+            ScaledResolution sc = new ScaledResolution(mc);
+            Render2DEvent renderEvent = new Render2DEvent(event.partialTicks, sc);
+            MinecraftForge.EVENT_BUS.post(renderEvent);
+            HUDMod.elementInitalizer.getElements().forEach(element -> {
+                if(element instanceof RenderElement) {
+                    if(element.isToggled()) {
+                        ((RenderElement) element).render2D(renderEvent);
+                    }
+                }
+            });
 
         }
 
@@ -78,6 +84,12 @@ public class EventProcessor extends Util {
 
                     if(keyCode == Keyboard.KEY_RSHIFT) {
                         mc.displayGuiScreen(new PanelGUIScreen());
+                    }
+                    if(keyCode == Keyboard.KEY_U) {
+                        HUDMod.configInitalizer.saves();
+                    }
+                    if(keyCode == Keyboard.KEY_P) {
+                        HUDMod.notificationManager.Add(new Notification("Test", "THis is a test", Notification.NotificationType.INFO, 7000));
                     }
 
                     for(Element e : HUDMod.elementInitalizer.getElements()) {

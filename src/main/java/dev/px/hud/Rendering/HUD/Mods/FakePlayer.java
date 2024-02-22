@@ -1,6 +1,8 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
+import dev.px.hud.Rendering.Notification.Notification;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
@@ -21,6 +23,9 @@ public class FakePlayer extends ToggleableElement {
         fakePlayer.rotationYaw = mc.thePlayer.rotationYaw;
         fakePlayer.setGameType(WorldSettings.GameType.SURVIVAL);
         mc.theWorld.addEntityToWorld(-69420, fakePlayer);
+
+        fakePlayer.inventory.copyInventory(mc.thePlayer.inventory);
+        HUDMod.notificationManager.Add(new Notification("Fake Player", "Fake player has been summoned!", Notification.NotificationType.INFO, 5));
     }
 
     @Override

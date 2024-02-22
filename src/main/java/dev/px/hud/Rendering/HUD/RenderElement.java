@@ -2,18 +2,14 @@ package dev.px.hud.Rendering.HUD;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import dev.px.hud.HUDMod;
-import dev.px.hud.Manager.ColorManager;
-import dev.px.hud.Rendering.Panel.HUDEditor.HudEditorPanel;
-import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
-import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.awt.*;
 
@@ -61,6 +57,7 @@ public class RenderElement extends Element {
         this.textElement = false;
         this.dragging = false;
         settingDefaults();
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public RenderElement(String name, int x, int y, int width, int height, Element.HUDType hudType, boolean textElement) {
@@ -74,6 +71,7 @@ public class RenderElement extends Element {
         this.textElement = textElement;
         this.dragging = false;
         settingDefaults();
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public RenderElement(String name, int x, int y, Element.HUDType hudType, boolean textElement) {
@@ -112,9 +110,9 @@ public class RenderElement extends Element {
 
 
     public void settingDefaults() {
-        customFont = new Setting<Boolean>("CustomFont", false, v -> isTextElement());
+        customFont = new Setting<Boolean>("CustomFont", true, v -> isTextElement());
         this.rainbowText = new Setting<>("Rainbow Text", false, v -> isTextElement());
-        fontColor = new Setting<Color>("Color", new Color(255, 255, 255), v -> isTextElement() && rainbowText.getValue());
+        fontColor = new Setting<Color>("Color", new Color(255, 255, 255), v -> isTextElement() && !rainbowText.getValue());
             getSettings().add(customFont);
             getSettings().add(rainbowText);
             getSettings().add(fontColor);
@@ -122,6 +120,15 @@ public class RenderElement extends Element {
 
     protected void renderText(String text, int x, int y, int color) {
         int c = rainbowText.getValue() ? Colorutil.rainbow(8, 1, 0.7f, 0.8f, 0.8f).getRGB() : color;
+        if(customFont.getValue()) {
+            Fontutil.drawTextShadow(text, x, y, c);
+        } else {
+            mc.fontRendererObj.drawStringWithShadow(text, x, y, c);
+        }
+    }
+
+    protected void renderText(String text, int x, int y) {
+        int c = rainbowText.getValue() ? Colorutil.rainbow(8, 1, 0.7f, 0.8f, 0.8f).getRGB() : fontColor.getValue().getRGB();
         if(customFont.getValue()) {
             Fontutil.drawTextShadow(text, x, y, c);
         } else {
@@ -159,6 +166,11 @@ public class RenderElement extends Element {
     }
 
     public void render(float partialTicks) {
+
+    }
+
+    // I added this after Render method but im too lazy to refactor every render element
+    public void render2D(Render2DEvent event) {
 
     }
 

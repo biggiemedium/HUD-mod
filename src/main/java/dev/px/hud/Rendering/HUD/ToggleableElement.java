@@ -1,12 +1,10 @@
 package dev.px.hud.Rendering.HUD;
 
 import dev.px.hud.HUDMod;
-import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Util.API.Keybind;
-import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Bus.Listener.Listenable;
-import dev.px.hud.Util.Event.ElementToggleEvent;
-import dev.px.hud.Util.Event.Render3dEvent;
+import dev.px.hud.Util.Event.Client.ElementToggleEvent;
+import dev.px.hud.Util.Event.Render.Render3dEvent;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraftforge.common.MinecraftForge;
 

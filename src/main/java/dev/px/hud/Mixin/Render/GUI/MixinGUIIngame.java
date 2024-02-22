@@ -1,9 +1,6 @@
 package dev.px.hud.Mixin.Render.GUI;
 
-import dev.px.hud.HUDMod;
-import dev.px.hud.Rendering.HUD.Element;
-import dev.px.hud.Util.API.Util;
-import dev.px.hud.Util.Event.RenderImageEvent;
+import dev.px.hud.Util.Event.Render.RenderImageEvent;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import org.spongepowered.asm.mixin.Mixin;

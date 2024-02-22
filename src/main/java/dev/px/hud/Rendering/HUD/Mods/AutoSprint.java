@@ -3,9 +3,6 @@ package dev.px.hud.Rendering.HUD.Mods;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Playerutil;
 import dev.px.hud.Util.API.Util;
-import dev.px.hud.Util.Event.ClientUpdateEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class AutoSprint extends ToggleableElement {
 

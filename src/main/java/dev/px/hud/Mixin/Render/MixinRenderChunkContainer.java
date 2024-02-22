@@ -1,6 +1,6 @@
 package dev.px.hud.Mixin.Render;
 
-import dev.px.hud.Util.Event.RenderChunkEvent;
+import dev.px.hud.Util.Event.Render.RenderChunkEvent;
 import net.minecraft.client.renderer.ChunkRenderContainer;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraftforge.common.MinecraftForge;

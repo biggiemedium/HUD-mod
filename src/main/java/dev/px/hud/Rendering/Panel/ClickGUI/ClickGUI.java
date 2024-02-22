@@ -4,10 +4,9 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.Panel;
-import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -52,6 +51,7 @@ public class ClickGUI extends Panel {
                 if(e.isToggled()) {
                     ((RenderElement) e).dragging(mouseX, mouseY);
                     ((RenderElement) e).render(partialTicks);
+                    ((RenderElement) e).render2D(new Render2DEvent(partialTicks, new ScaledResolution(mc)));
                 }
             }
         }
@@ -97,4 +97,15 @@ public class ClickGUI extends Panel {
     public ArrayList<Frame> getFrames() {
         return frames;
     }
+
+    public Frame getFramebyName(String name) {
+        for(Frame f : frames) {
+            if(f.getName().equalsIgnoreCase(name)) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public static ClickGUI INSTANCE = new ClickGUI();
 }

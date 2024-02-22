@@ -4,6 +4,8 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.Panel;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
+import net.minecraft.client.gui.ScaledResolution;
 
 import java.io.IOException;
 
@@ -19,6 +21,7 @@ public class HudEditorPanel extends Panel {
             if(e instanceof RenderElement) {
                 ((RenderElement) e).dragging(mouseX, mouseY);
                 ((RenderElement) e).render(partialTicks);
+                ((RenderElement) e).render2D(new Render2DEvent(partialTicks, new ScaledResolution(mc)));
             }
         }
     }

@@ -1,20 +1,13 @@
 package dev.px.hud.Rendering.HUD.Elements.Combat;
 
-import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
-import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import scala.Int;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class Armor extends RenderElement {
 
@@ -26,17 +19,17 @@ public class Armor extends RenderElement {
     Setting<Integer> scale = create(new Setting<Integer>("Scale", 1, 0, 5));
 
     @Override
-    public void render(float partialTicks) {
+    public void render2D(Render2DEvent event) {
         GlStateManager.enableTexture2D();
 
         int iteration = 0;
 
-        for(int i = 0; i < mc.thePlayer.inventory.armorInventory.length; i++) {
+        for (int i = 0; i < mc.thePlayer.inventory.armorInventory.length; i++) {
             iteration++;
-            ItemStack is = mc.thePlayer.inventory.armorInventory[i];
-            if(i == 0) {
+            if (i == 0) {
                 continue;
             }
+            ItemStack is = mc.thePlayer.inventory.armorItemInSlot(i);
 
             int x = (int) (getX() - 90 + (9 - iteration) * 20 + 2);
             GlStateManager.enableDepth();
@@ -47,6 +40,10 @@ public class Armor extends RenderElement {
             GlStateManager.enableTexture2D();
             GlStateManager.disableLighting();
             GlStateManager.disableDepth();
+            String s = (is.stackSize > 1) ? (is.stackSize + "") : "";
+            mc.fontRendererObj.drawStringWithShadow(s, (x + 19 - 2 - mc.fontRendererObj.getStringWidth(s)), (getY() + 9), 16777215);
+            int dmg = (int) calculatePercentage(is);
+            mc.fontRendererObj.drawStringWithShadow(dmg + "", (x + 8 - mc.fontRendererObj.getStringWidth(dmg + "") / 2f), (getY() - 11), new Color(0, 255, 0).getRGB());
         }
         GlStateManager.enableDepth();
         GlStateManager.disableLighting();
@@ -82,6 +79,11 @@ public class Armor extends RenderElement {
         GlStateManager.enableAlpha();
 
         GlStateManager.popMatrix();
+    }
+
+    public static float calculatePercentage(ItemStack stack) {
+        float durability = stack.getMaxDamage() - stack.getItemDamage();
+        return (durability / (float) stack.getMaxDamage()) * 100F;
     }
 
     private enum Mode {

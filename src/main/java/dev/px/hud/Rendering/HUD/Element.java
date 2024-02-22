@@ -1,15 +1,9 @@
 package dev.px.hud.Rendering.HUD;
 
-import dev.px.hud.Util.Event.SettingUpdateEvent;
-import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraftforge.common.MinecraftForge;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Element implements Wrapper {

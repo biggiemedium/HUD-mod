@@ -15,15 +15,18 @@ public class NoRender extends ToggleableElement {
 
     public Setting<Boolean> viewClip = create(new Setting<>("View Clip", true));
     public Setting<Boolean> fire = create(new Setting<>("Fire", false));
-
     public Setting<Boolean> fog = create(new Setting<>("Fog", true));
+    public Setting<Boolean> armor = create(new Setting<>("Armor", false));
+    public Setting<Boolean> weather = create(new Setting<>("Weather", false));
 
 
-
-    Setting<Boolean> armor = create(new Setting<>("Armor", false));
-    Setting<Integer> armorTransparency = create(new Setting<>("Transparency", 200, 0, 255, v -> armor.getValue()));
-
-
+    @SubscribeEvent
+    public void onFogDensity(final EntityViewRenderEvent.FogDensity event) {
+        if (fog.getValue()) {
+            event.density = (0.0f);
+            event.setCanceled(true);
+        }
+    }
 
     @SubscribeEvent
     public void onRender(RenderBlockOverlayEvent event) {
@@ -33,8 +36,6 @@ public class NoRender extends ToggleableElement {
             }
         }
     }
-
-
 
     public static NoRender INSTANCE;
 }

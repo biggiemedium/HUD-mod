@@ -1,18 +1,16 @@
 package dev.px.hud.Rendering.HUD.Elements.Combat;
 
-import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.Animation.Animation;
-import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Entity.Entityutil;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Timer;
+import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -25,7 +23,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Objects;
 
 public class TargetHUD extends RenderElement {
 
@@ -33,6 +30,7 @@ public class TargetHUD extends RenderElement {
         super("TargetHUD", 200, 200, HUDType.COMBAT);
         setWidth(115);
         setHeight(80);
+        setTextElement(false);
     }
 
     /* Target checking */
@@ -45,26 +43,16 @@ public class TargetHUD extends RenderElement {
     private float health;
 
     @Override
-    public void render(float partialTicks) {
+    public void render2D(Render2DEvent event) {
 
-        if (timer.passed(4000)) {
-            if (target != null && (target.getDistanceSqToEntity(mc.thePlayer) > 100 || mc.theWorld.getEntityByID(Objects.requireNonNull(target).getEntityId()) == null)) {
-                this.scale = 0;
-                timer.reset();
-            } else {
-                scale = 1;
-            }
-        }
 
         if(mc.currentScreen instanceof PanelGUIScreen) {
             if(PanelGUIScreen.INSTANCE.getCurrentPanel().getClass() == ClickGUI.class) {
                 this.target = mc.thePlayer;
-                this.scale = 1;
             }
         } else {
             if(!timer.passed(7)) {
                 target = (EntityPlayer) Entityutil.getTarget(15, true);
-                this.scale = 0;
             }
         }
 
@@ -75,11 +63,10 @@ public class TargetHUD extends RenderElement {
             GL11.glPushMatrix();
 
             GlStateManager.enableTexture2D();
-
             GL11.glPushMatrix();
             GlStateManager.translate((getX() + 38 + 2 + 129 / 2f) * (1 - scale), (getY() - 34 + 48 / 2f) * (1 - scale), 0);
             GlStateManager.scale(scale, scale, 0);
-            Renderutil.drawRoundedRect(getX(), getY(), getWidth(), getHeight(), 1.5f, new Color(35, 33, 33, 200));
+            RoundedShader.drawRound(getX(), getY(), getWidth(), getHeight(), 3f, new Color(35, 33, 33, 200));
             GL11.glPopMatrix();
 
             GL11.glPushMatrix();
@@ -116,10 +103,10 @@ public class TargetHUD extends RenderElement {
             /* Display Info */
             GlStateManager.pushMatrix();
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        //    Renderutil.scissor(getX() + 32, getY() + 4 - Fontutil.getHeight() * 4, 91, 30);
+            //    Renderutil.scissor(getX() + 32, getY() + 4 - Fontutil.getHeight() * 4, 91, 30);
 
-            Fontutil.drawTextShadow(target.getName(), getX() + 32, getY() + 4, -1);
-            Fontutil.drawTextShadow("Health: " + health, getX() + 32, getY() + (int) (4 + Fontutil.getHeight()), -1);
+            renderText(target.getName(), getX() + 32, getY() + 4, -1);
+            renderText("Health: " + health, getX() + 32, getY() + (int) (4 + Fontutil.getHeight()), -1);
 
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
             GlStateManager.popMatrix();
@@ -130,6 +117,11 @@ public class TargetHUD extends RenderElement {
             GL11.glPopMatrix();
             scaleTimer.reset();
         }
+    }
+
+    @Override
+    public void render(float partialTicks) {
+
     }
 
     public void renderPlayerModelTexture(float x, float y, float u, float v, int uWidth, int vHeight, int width, int height, final float tileWidth, final float tileHeight, final AbstractClientPlayer target) {

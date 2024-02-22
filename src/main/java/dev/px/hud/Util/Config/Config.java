@@ -2,16 +2,10 @@ package dev.px.hud.Util.Config;
 
 import dev.px.hud.Command.CommandManifest;
 import dev.px.hud.HUDMod;
+import dev.px.hud.Util.API.Util;
 
 import java.io.File;
 import java.io.IOException;
-
-/**
- * @author PX
- *
- * if you are going to skid my config into your shitty clients
- * at least credit me, This is the config system for my old client Deteorite
- */
 
 public class Config {
 
@@ -45,9 +39,12 @@ public class Config {
         if(!saveDoc.exists()) {
             try {
                 saveDoc.createNewFile();
+                Util.sendClientSideMessage("File dont be existing", true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            Util.sendClientSideMessage("File exists", true);
         }
     }
 
@@ -72,5 +69,9 @@ public class Config {
 
     public File getSubFile() {
         return this.subFile;
+    }
+
+    public File getSaveDoc() {
+        return saveDoc;
     }
 }

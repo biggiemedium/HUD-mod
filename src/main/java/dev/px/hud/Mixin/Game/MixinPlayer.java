@@ -1,6 +1,6 @@
 package dev.px.hud.Mixin.Game;
 
-import dev.px.hud.Util.Event.ClientUpdateEvent;
+import dev.px.hud.Util.Event.Client.ClientUpdateEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;

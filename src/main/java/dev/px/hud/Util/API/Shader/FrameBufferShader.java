@@ -1,6 +1,6 @@
 package dev.px.hud.Util.API.Shader;
 
-import dev.px.hud.Mixin.Render.IEntityRenderer;
+import dev.px.hud.Mixin.Render.Item.IEntityRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;

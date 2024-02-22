@@ -9,17 +9,21 @@
     "Render.GUI.MixinGui",
     "Render.MixinMainScreen",
     "Render.GUI.MixinGUIIngame",
-    "Render.IEntityRenderer",
+    "Render.Item.IEntityRenderer",
     "Render.MixinGuiControls",
     "Render.MixinRenderManager",
     "Game.IMixinMinecraft",
     "Game.MixinPlayer",
     "Render.MixinFontRenderer",
     "Render.MixinRenderPlayer",
-    "Render.IMixinItemRenderer",
-    "Render.MixinRenderEntityItem",
+    "Render.Item.IMixinItemRenderer",
+    "Render.Item.MixinRenderEntityItem",
     "Game.MixinMinecraft",
     "Render.MixinRenderChunk",
-    "Render.MixinRenderChunkContainer"
+    "Render.MixinRenderChunkContainer",
+    "Render.Item.MixinItemRenderer",
+    "Render.Item.MixinRenderItem",
+    "Render.Model.MixinModelBiped",
+    "Render.Model.MixinLayerArmorBase"
   ]
 }

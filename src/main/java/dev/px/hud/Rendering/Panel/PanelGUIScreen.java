@@ -4,11 +4,12 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.Rendering.Panel.Commands.CommandGUI;
 import dev.px.hud.Rendering.Panel.HUDEditor.HudEditorPanel;
-import dev.px.hud.Rendering.Panel.Profiles.PlayerProfiles;
+import dev.px.hud.Rendering.Panel.Settings.ClientSettings;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
@@ -17,15 +18,20 @@ import java.util.ArrayList;
 public class PanelGUIScreen extends GuiScreen {
 
     public PanelGUIScreen() {
-        this.panels.add(this.currentPanel = new ClickGUI());
-        this.panels.add(new HudEditorPanel());
-        this.panels.add(new PlayerProfiles());
-        this.panels.add(new CommandGUI());
+        this.panels.add(this.currentPanel = CLICKGUI);
+        this.panels.add(HUDEDITOR);
+        this.panels.add(CLIENTSETTINGS);
+        this.panels.add(COMMANDGUI);
     }
 
     private ArrayList<Panel> panels = new ArrayList<>();
     private Panel currentPanel;
     private Color baseColor = new Color(57, 56, 56);
+
+    private ClickGUI CLICKGUI = new ClickGUI();
+    private HudEditorPanel HUDEDITOR = new HudEditorPanel();
+    private ClientSettings CLIENTSETTINGS = new ClientSettings();
+    private CommandGUI COMMANDGUI = new CommandGUI();
 
     /*
     We must make visuals for panels
@@ -81,6 +87,16 @@ public class PanelGUIScreen extends GuiScreen {
   //  protected void keyTyped(char typedChar, int keyCode) throws IOException {
   //      this.currentPanel.keyTyped(typedChar, keyCode);
   //  }
+
+
+    @Override
+    public void onGuiClosed() {
+
+        if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+            HUDMod.configInitalizer.saves();
+            mc.currentScreen = null;
+        }
+    }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
