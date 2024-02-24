@@ -4,12 +4,15 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Mods.NoRender;
 import dev.px.hud.Util.Event.Render.HurtCamEvent;
 import dev.px.hud.Util.Event.Render.GUIIngameRenderEvent;
+import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,6 +21,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityRenderer.class)
 public class MixinEntityRenderer {
+
+    /*
+    @Inject(method = "setupFog", at = @At("HEAD"), cancellable = true)
+    public void setupFog(int startCoords, float partialTicks, CallbackInfo ci) {
+        if(HUDMod.elementInitalizer.isElementToggled(NoRender.class) && HUDMod.elementInitalizer.getElementByClass(NoRender.class).fog.getValue()) {
+            ci.cancel();
+        }
+    }
+
+     */
 
     // DONT FUCK WITH THIS
     @Redirect(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "net/minecraft/client/gui/GuiIngame.renderGameOverlay(F)V"))

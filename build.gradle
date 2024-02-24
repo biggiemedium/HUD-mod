@@ -39,7 +39,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
-
+    coreMod = 'dev.px.hud.Mixin.Loader'
     mappings = "stable_20"
     // makeObfSourceJar = false
 }
@@ -66,10 +66,22 @@ dependencies {
         exclude module: 'guava'
         exclude module: 'commons-io'
     }
+    compile group: 'net.jodah', name: 'typetools', version: '0.5.0' // yuck
 }
 
-processResources
-{
+mixin {
+    defaultObfuscationEnv searge
+    add sourceSets.main, 'mixins.hud.refmap.json'
+}
+
+reobf {
+    shadowJar {
+        mappingType = 'SEARGE'
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -86,4 +98,5 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+    rename "(.+_at.cfg)", 'META-INF/$1';
 }

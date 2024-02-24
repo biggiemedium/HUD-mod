@@ -56,6 +56,8 @@ public class MainMenuGUI extends GuiScreen {
             }
         }
 
+        this.drawGradientRect(0, 0, this.width, this.height, -2130706433, 16777215);
+        this.drawGradientRect(0, 0, this.width, this.height, 0, Integer.MIN_VALUE);
         this.mc.getTextureManager().bindTexture(title);
 
         super.drawScreen(mouseX, mouseY, partialTicks);

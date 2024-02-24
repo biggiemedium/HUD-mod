@@ -30,7 +30,7 @@ public class TESTElement extends RenderElement {
 
     @Override
     public void render2D(Render2DEvent event) {
-        renderText("Biome: " + mc.theWorld.getBiomeGenForCoords(mc.thePlayer.playerLocation).biomeName, getX(), getY());
+
     }
 
     private float getSpeedInKM() {

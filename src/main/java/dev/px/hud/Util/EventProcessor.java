@@ -11,6 +11,9 @@ import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +29,8 @@ public class EventProcessor extends Util {
     public EventProcessor() {
         MinecraftForge.EVENT_BUS.register(this);
     }
+
+    private ResourceLocation shaders = new ResourceLocation("minecraft", "shaders/post/blur" + ".json");
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent event) {
@@ -122,7 +127,9 @@ public class EventProcessor extends Util {
                 }
             }
             });
+
         }
+
     }
 
     @SubscribeEvent
