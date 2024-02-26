@@ -185,7 +185,36 @@ public class ESPMod extends ToggleableElement {
     }
 
 
-  
+    private void drawHealthBarTenacity(Entity entity) {
+        if(entity instanceof EntityLivingBase) {
+
+            GL11.glPushMatrix();
+            Vector4f v = ESPutil.getEntityPositionsOn2D(entity);;
+            mc.entityRenderer.setupOverlayRendering();
+            double posX = v.x;
+            double posY = v.y;
+            double endPosX = v.z;
+            double endPosY = v.w;
+
+            float w = 0.5f;
+
+            //Drawing box
+            Color c = HUDMod.colorManager.getMainColor();
+
+            /*
+            Renderutil.lineNoGl(posX - w, posY, posX + w - w, endPosY, c);
+            Renderutil.lineNoGl(posX, endPosY - w, endPosX, endPosY, c);
+            Renderutil.lineNoGl(posX - w, posY, endPosX, posY + w, c);
+            Renderutil.lineNoGl(endPosX - w, posY, endPosX, endPosY, c);
+             */
+            double percentage = (endPosY - posY) * ((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth();
+            double distance = 2;
+            float progress = ((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth();
+            Color healthColor = progress > .75 ? new Color(66, 246, 123) : progress > .5 ? new Color(228, 255, 105) : progress > .35 ? new Color(236, 100, 64) : new Color(255, 65, 68);
+            Renderutil.lineNoGl(posX - w - distance, endPosY - percentage, posX + w - w - distance, endPosY, healthColor);
+            GL11.glPopMatrix();
+        }
+    }
 
     private void draw2DBox(final float width, final float height, final float lineWidth, final float offset, final Color c) {
         Renderutil.rect(-width / 2 - offset, -offset, width / 4, lineWidth, c);

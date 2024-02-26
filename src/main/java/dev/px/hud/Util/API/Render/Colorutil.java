@@ -6,7 +6,9 @@ import dev.px.hud.Util.API.Math.Mathutil;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-
+/*
+Tenacity client color util
+ */
 public class Colorutil {
 
 

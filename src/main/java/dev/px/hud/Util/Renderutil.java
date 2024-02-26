@@ -19,8 +19,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -32,6 +34,7 @@ public class Renderutil extends Util {
 
     static {
         itemRender = mc.getRenderItem();
+        zLevel = 0;
     }
     public static void drawRect(double x, double y, double width, double height, int color) {
         double d4;
@@ -759,6 +762,17 @@ public class Renderutil extends Util {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
+    }
+
+    public static void setDockIcon(String path){
+        if(net.minecraft.util.Util.getOSType() != net.minecraft.util.Util.EnumOS.OSX) return;  // Redundant check
+        InputStream icon = Renderutil.class.getResourceAsStream(path); // you could probably use resource location but users can then change it with a TexturePack
+        if (icon != null) {
+            try {
+                Class<?> appClass = Class.forName("com.apple.eawt.Application");
+                appClass.getMethod("setDockIconImage", Image.class).invoke(appClass.getMethod("getApplication").invoke(null), ImageIO.read(icon));
+            } catch (Exception e) { System.err.println("[ MacOS Utils ] Error setting dock icon: " + e.getMessage()); }
+        } else { System.err.println("[ MacOS Utils ] Icon file could not be found"); }
     }
 
     public static Color staticRainbow() {

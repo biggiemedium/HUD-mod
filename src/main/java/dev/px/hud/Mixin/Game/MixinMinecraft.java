@@ -3,7 +3,9 @@ package dev.px.hud.Mixin.Game;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Mods.UnfocusedCPU;
 import dev.px.hud.Rendering.MCGUI.MainMenuGUI;
+import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Util;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +36,16 @@ public class MixinMinecraft {
     }
 
 
-
+    @Inject(method = "setWindowIcon", at = @At("HEAD"), cancellable = true)
+    private void setGameIcon(CallbackInfo c) {
+        if(Util.getOSType() == Util.EnumOS.OSX) {
+            Renderutil.setDockIcon("/assets/minecraft/GUI/sped.png");
+            c.cancel();
+        } else {
+            // windows impl
+      //      c.cancel();
+        }
+    }
 
     /*
     @Inject(method = "runTick()V", at = @At("RETURN"))

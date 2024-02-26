@@ -78,8 +78,9 @@ public class SpeedElement extends RenderElement {
 
             setWidth(110);
             setHeight(45);
+            GL11.glPushMatrix();
             RoundedShader.drawRound(getX(), getY(), getWidth(), getHeight(), 2, new Color(26, 26, 26, 180));
-
+            GL11.glPopMatrix();
             renderText("Speed", getX() + 1, getY() + 2, fontColor.getValue().getRGB());
             renderText("Average: " + Mathutil.round(getSpeedInKM(), 1), getX() + (getWidth() - getFontWidth("Average: " + Mathutil.round(getSpeedInKM(), 1))), getY() + 2, fontColor.getValue().getRGB());
 

@@ -24,6 +24,7 @@
     "Render.Item.MixinItemRenderer",
     "Render.Item.MixinRenderItem",
     "Render.Model.MixinModelBiped",
-    "Render.Model.MixinLayerArmorBase"
+    "Render.Model.MixinLayerArmorBase",
+    "Render.GUI.MixinGuiNewChat"
   ]
 }

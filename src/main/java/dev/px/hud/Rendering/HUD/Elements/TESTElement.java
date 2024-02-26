@@ -1,8 +1,12 @@
 package dev.px.hud.Rendering.HUD.Elements;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Util.API.Render.Colorutil;
+import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import net.minecraft.util.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -30,7 +34,17 @@ public class TESTElement extends RenderElement {
 
     @Override
     public void render2D(Render2DEvent event) {
-
+        setWidth(55);
+        setHeight(55);
+        GL11.glPushMatrix();
+        RoundedShader
+                .drawGradientRound
+                        ((float) getX(), (float)  getY(), (float) getWidth(), (float) getHeight(),6f,
+                Colorutil.applyOpacity(Colorutil.interpolateColorsBackAndForth(15, 270, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true), .85f),
+                Colorutil.interpolateColorsBackAndForth(15, 0, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true),
+                Colorutil.interpolateColorsBackAndForth(15, 180, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true),
+        Colorutil.interpolateColorsBackAndForth(15, 90, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true));
+        GL11.glPopMatrix();
     }
 
     private float getSpeedInKM() {

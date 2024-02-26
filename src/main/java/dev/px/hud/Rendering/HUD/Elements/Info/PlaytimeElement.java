@@ -4,6 +4,7 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
@@ -19,13 +20,14 @@ public class PlaytimeElement extends RenderElement {
     @Override
     public void render2D(Render2DEvent event) {
 
+        GL11.glPushMatrix();
         RoundedShader.drawRound(getX(), getY(), getWidth(), getHeight(), 4, new Color(42, 41, 41, 175));
         RoundedShader.drawRound(getX(), getY(), getWidth(), 18, 4, new Color(35, 35, 35, 175));
         RoundedShader.drawRound(getX(), getY() + 17, getWidth(), 2, 0, new Color(35, 35, 35, 175));
         Renderutil.drawBlurredShadow(getX(), getY(), getWidth(), getHeight(), 10, new Color(42, 41, 41, 125));
+        GL11.glPopMatrix();
 
         renderText("Session", getX() + ((getWidth() / 2)), getY() + 2, -1);
-
 
     }
 }

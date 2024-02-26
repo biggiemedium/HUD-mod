@@ -32,6 +32,7 @@ public class MixinEntityRenderer {
 
      */
 
+    /*
     // DONT FUCK WITH THIS
     @Redirect(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "net/minecraft/client/gui/GuiIngame.renderGameOverlay(F)V"))
     public void onRender2D(GuiIngame guiIngame, float partialTicks) {
@@ -39,6 +40,8 @@ public class MixinEntityRenderer {
         guiIngame.renderGameOverlay(partialTicks);
         MinecraftForge.EVENT_BUS.post(packet);
     }
+
+     */
 
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
     public void onHurtCam(float partialTicks, CallbackInfo ci) {

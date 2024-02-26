@@ -10,6 +10,7 @@ import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -44,8 +45,9 @@ public class Radar extends RenderElement {
 
 
             Renderutil.drawBlurredShadow(xOffset, getY(), sizeRect, sizeRect, 17, new Color(0x3D3939));
+        GL11.glPushMatrix();
             RoundedShader.drawRound(xOffset, getY(), sizeRect, sizeRect, 7f, backgroundColor.getValue());
-
+        GL11.glPopMatrix();
 
             Renderutil.drawRect(xOffset + (sizeRect / 2F - 0.5), yOffset + 3.5, xOffset + (sizeRect / 2F + 0.2), (yOffset + sizeRect) - 3.5, getColor(155, 100));
 
@@ -74,7 +76,9 @@ public class Radar extends RenderElement {
                     rotX = -(sizeRect / 2F - 5);
                 }
 
+                GL11.glPushMatrix();
                 RoundedShader.drawRound((xOffset + sizeRect / 2F + rotX) - 2, (yOffset + sizeRect / 2F + rotY) - 2, 4, 4, 4f, enemyColor.getValue());
+                GL11.glPopMatrix();
             }
     }
 

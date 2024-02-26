@@ -20,6 +20,7 @@ public class Armor extends RenderElement {
 
     @Override
     public void render2D(Render2DEvent event) {
+
         GlStateManager.enableTexture2D();
 
         int iteration = 0;
@@ -47,6 +48,8 @@ public class Armor extends RenderElement {
         }
         GlStateManager.enableDepth();
         GlStateManager.disableLighting();
+
+
     }
 
     private void renderItemStack(ItemStack stack, int x, int y) {
