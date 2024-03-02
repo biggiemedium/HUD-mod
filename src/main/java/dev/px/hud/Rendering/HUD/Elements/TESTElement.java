@@ -45,6 +45,7 @@ public class TESTElement extends RenderElement {
                 Colorutil.interpolateColorsBackAndForth(15, 180, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true),
         Colorutil.interpolateColorsBackAndForth(15, 90, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true));
         GL11.glPopMatrix();
+        String s;
     }
 
     private float getSpeedInKM() {

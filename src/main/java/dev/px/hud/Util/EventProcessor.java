@@ -89,6 +89,9 @@ public class EventProcessor extends Util {
                     if(keyCode == Keyboard.KEY_RSHIFT) {
                         mc.displayGuiScreen(PanelGUIScreen.INSTANCE);
                     }
+                    if(keyCode == Keyboard.KEY_U) {
+                        HUDMod.configManager.save();
+                    }
                     if(keyCode == Keyboard.KEY_P) {
                         HUDMod.notificationManager.Add(new Notification("Test", "Test notification" , Notification.NotificationType.INFO, 7000));
                     }

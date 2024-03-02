@@ -5,6 +5,7 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Chatutil;
 import dev.px.hud.Util.API.Entity.Entityutil;
+import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +20,7 @@ public class HitInfoElement extends RenderElement {
     Setting<Boolean> ogTheme = create(new Setting<>("OG Theme", true, v -> !rainbowText.getValue()));
 
     @Override
-    public void render(float partialTicks) {
-        super.render(partialTicks);
-
+    public void render2D(Render2DEvent event) {
         renderText(getEName(), getX(), getY(), fontColor.getValue().getRGB());
 
         setWidth(getFontWidth(getEName()));
@@ -32,7 +31,9 @@ public class HitInfoElement extends RenderElement {
         if(mc.objectMouseOver.entityHit != null) {
             Entity name = mc.objectMouseOver.entityHit;
             if(name instanceof EntityPlayer) {
-                String s = ogTheme.getValue() ? name.getName() + " " + ChatFormatting.GOLD + Entityutil.getHealth((EntityPlayer) name) + ChatFormatting.RESET : name.getName() + " " + Entityutil.getHealth((EntityPlayer) name);
+                String s = ogTheme.getValue() ?
+                        name.getName() + " " + ChatFormatting.GOLD + Entityutil.getHealth((EntityPlayer) name) + ChatFormatting.RESET :
+                        name.getName() + " " + Entityutil.getHealth((EntityPlayer) name);
                 return s;
             }
         }

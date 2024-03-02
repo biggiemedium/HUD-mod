@@ -29,12 +29,13 @@ public class Trajectories extends ToggleableElement {
     @Override
     public void onRender(Render3dEvent event) {
 
-        if (mc.thePlayer == null || mc.theWorld == null) return;
+        if (mc.thePlayer == null || mc.theWorld == null || mc.gameSettings == null) return;
         final double renderPosX = mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * event.getPartialTicks();
         final double renderPosY = mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * event.getPartialTicks();
         final double renderPosZ = mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * event.getPartialTicks();
 
-        if (mc.gameSettings.thirdPersonView == 0 && (mc.thePlayer.getHeldItem().getItem() instanceof ItemBow || mc.thePlayer.getHeldItem().getItem() instanceof ItemFishingRod || mc.thePlayer.getHeldItem().getItem() instanceof ItemEnderPearl || mc.thePlayer.getHeldItem().getItem() instanceof ItemEgg || mc.thePlayer.getHeldItem().getItem() instanceof ItemSnowball || mc.thePlayer.getHeldItem().getItem() instanceof ItemExpBottle)) {
+       // if(mc.thePlayer.getHeldItem() == null) return;
+        if (mc.gameSettings.thirdPersonView == 0 && mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemBow || mc.thePlayer.getHeldItem().getItem() instanceof ItemFishingRod || mc.thePlayer.getHeldItem().getItem() instanceof ItemEnderPearl || mc.thePlayer.getHeldItem().getItem() instanceof ItemEgg || mc.thePlayer.getHeldItem().getItem() instanceof ItemSnowball || mc.thePlayer.getHeldItem().getItem() instanceof ItemExpBottle)) {
 
             GL11.glPushMatrix();
             final Item item = mc.thePlayer.getHeldItem().getItem();

@@ -109,8 +109,7 @@ public class Button {
             //mc.fontRendererObj.drawStringWithShadow(this.open ? "-" : "+", ((float) this.x) + (float) (width - mc.fontRendererObj.getStringWidth(this.open ? "-" : "+")) - 3, (int) featureHeight + 3, -1);
 
         if(element != null) {
-            GL11.glScaled(0.8, 0.8, 0.8);
-            {
+            GL11.glScaled(0.8, 0.8, 0.8);{
 
                 // scaled position
                 float scaledX = ((float) getX() + 4) * 1.25F;

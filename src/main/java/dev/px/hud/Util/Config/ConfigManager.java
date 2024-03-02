@@ -65,7 +65,7 @@ public class ConfigManager {
     }
 
     public void saveGUI() {
-        if(Util.isNull()) return;
+
         try {
             File file = new File(this.guiPath, "GUI.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -76,6 +76,7 @@ public class ConfigManager {
             }
             writer.close();
         } catch (Exception ignored) {}
+
     }
 
     public void loadGUI() {
@@ -214,7 +215,7 @@ public class ConfigManager {
                     continue;
                 }
                 try {
-                    if (module.isToggled() && !module.getName().matches("null")) {
+                    if (module.isToggled() && !module.getName().matches("null") && !module.getName().equalsIgnoreCase("fakeplayer")) {
                         out.write(module.getName());
                         out.write("\r\n");
                     }

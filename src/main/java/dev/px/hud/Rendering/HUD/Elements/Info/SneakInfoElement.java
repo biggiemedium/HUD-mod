@@ -14,8 +14,8 @@ public class SneakInfoElement extends RenderElement {
 
     @Override
     public void render(float partialTicks) {
-        setWidth(25);
-        setWidth(getFontHeight() + 4);
+        setWidth(getFontWidth(getSprintState()) + 2);
+        setHeight(getFontHeight() + 4);
         renderText(getSprintState(), getX(), getY(), fontColor.getValue().getRGB());
     }
 
