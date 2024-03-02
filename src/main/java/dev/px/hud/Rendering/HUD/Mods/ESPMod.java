@@ -52,7 +52,10 @@ public class ESPMod extends ToggleableElement {
 
     @Override
     public void onUpdate() {
-        if (Util.isNull()) return;
+        if (Util.isNull() || mc.thePlayer.ticksExisted < 20) {
+            return;
+        }
+
         entityPosition.clear();
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (ESPutil.isInView(entity)) {
@@ -72,23 +75,27 @@ public class ESPMod extends ToggleableElement {
             }
         });
 
-        Entity e = mc.objectMouseOver.entityHit;
-            if(mc.gameSettings.keyBindAttack.isKeyDown()) {
-                if(e != null && e instanceof EntityLivingBase) {
-                    if(circle.getValue()) {
-                        if (playersOnly.getValue() && e instanceof EntityPlayer) {
-                            if (!targetMap.containsKey(e)) {
-                                Timer t = new Timer();
-                                t.reset();
-                                targetMap.put(e, t);
-                            } else {
-                                targetMap.forEach((entity, t) -> {
+        if(mc.objectMouseOver != null) {
+            Entity e = mc.objectMouseOver.entityHit;
+            if (mc.gameSettings.keyBindAttack.isKeyDown()) {
+                if (e instanceof EntityLivingBase) {
+                    if (e != null) {
+                        if (circle.getValue()) {
+                            if (playersOnly.getValue() && e instanceof EntityPlayer) {
+                                if (!targetMap.containsKey(e)) {
+                                    Timer t = new Timer();
                                     t.reset();
-                                });
+                                    targetMap.put(e, t);
+                                } else {
+                                    targetMap.forEach((entity, t) -> {
+                                        t.reset();
+                                    });
+                                }
                             }
                         }
                     }
                 }
+            }
         }
     }
 

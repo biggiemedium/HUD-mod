@@ -21,13 +21,13 @@ public class ConfigInitalizer {
         this.configs.add(config);
     }
 
-    public void loads() {
+    public void loadAll() {
         this.configs.forEach(load -> {
             load.loads();
         });
     }
 
-    public void saves() {
+    public void savesAll() {
         for(Config c : this.configs) {
             c.saves();
         }

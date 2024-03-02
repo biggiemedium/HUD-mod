@@ -18,10 +18,12 @@ import java.util.ArrayList;
 public class PanelGUIScreen extends GuiScreen {
 
     public PanelGUIScreen() {
-        this.panels.add(this.currentPanel = CLICKGUI);
+        this.currentPanel = CLICKGUI;
+        this.panels.add(CLICKGUI);
         this.panels.add(HUDEDITOR);
         this.panels.add(CLIENTSETTINGS);
         this.panels.add(COMMANDGUI);
+
     }
 
     private ArrayList<Panel> panels = new ArrayList<>();
@@ -91,9 +93,8 @@ public class PanelGUIScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-
+        HUDMod.configManager.saveRenderElements();
         if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-            HUDMod.configInitalizer.saves();
             mc.currentScreen = null;
         }
     }
@@ -110,6 +111,10 @@ public class PanelGUIScreen extends GuiScreen {
 
     public boolean isHovered(int mouseX, int mouseY, int x, int y, int width, int height) {
         return (mouseX >= x && mouseX <= (x + width)) && (mouseY >= y && mouseY <= (y + height));
+    }
+
+    public ClickGUI getCLICKGUI() {
+        return CLICKGUI;
     }
 
     public ArrayList<Panel> getPanels() {

@@ -2,6 +2,7 @@ package dev.px.hud.Util.Config.Configs;
 
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.Rendering.Panel.ClickGUI.Frame;
+import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Config.Config;
 import dev.px.hud.Util.Config.ConfigManifest;
@@ -21,7 +22,7 @@ public class FramePositions extends Config {
     public void saves() {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(getSaveDoc()));
-        for(Frame f : ClickGUI.INSTANCE.getFrames()) {
+        for(Frame f : PanelGUIScreen.INSTANCE.getCLICKGUI().getFrames()) {
                 String open = f.isOpen() ? "open" : "closed";
                 writer.write(f.getName() + ":" + f.getX() + ":" + f.getY() + ":" + open);
                 writer.write("\r\n");

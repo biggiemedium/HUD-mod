@@ -4,6 +4,7 @@ import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
+import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Util;
@@ -11,8 +12,6 @@ import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -88,13 +87,10 @@ public class EventProcessor extends Util {
                         return;
 
                     if(keyCode == Keyboard.KEY_RSHIFT) {
-                        mc.displayGuiScreen(new PanelGUIScreen());
-                    }
-                    if(keyCode == Keyboard.KEY_U) {
-                        HUDMod.configInitalizer.saves();
+                        mc.displayGuiScreen(PanelGUIScreen.INSTANCE);
                     }
                     if(keyCode == Keyboard.KEY_P) {
-                        HUDMod.notificationManager.Add(new Notification("Test", "THis is a test", Notification.NotificationType.INFO, 7000));
+                        HUDMod.notificationManager.Add(new Notification("Test", "Test notification" , Notification.NotificationType.INFO, 7000));
                     }
 
                     for(Element e : HUDMod.elementInitalizer.getElements()) {
@@ -120,6 +116,9 @@ public class EventProcessor extends Util {
     @SubscribeEvent
     public void onTick(TickEvent event) {
         if(event.type == TickEvent.Type.CLIENT) {
+            if(Util.isNull()) {
+                return;
+            }
             HUDMod.elementInitalizer.getElements().forEach(element -> {
                 if (element instanceof ToggleableElement) {
                 if (element.isToggled()) {

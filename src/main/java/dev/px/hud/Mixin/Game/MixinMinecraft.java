@@ -2,7 +2,6 @@ package dev.px.hud.Mixin.Game;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Mods.UnfocusedCPU;
-import dev.px.hud.Rendering.MCGUI.MainMenuGUI;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Util;
@@ -13,13 +12,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
@@ -33,6 +28,11 @@ public class MixinMinecraft {
             }
         } catch (NullPointerException e) {
         }
+    }
+
+    @Inject(method = "shutdown", at = @At("HEAD"), cancellable = true)
+    public void shutDown(CallbackInfo ci) {
+        HUDMod.configManager.save();
     }
 
 

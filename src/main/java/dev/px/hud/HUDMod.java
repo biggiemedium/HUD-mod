@@ -7,6 +7,7 @@ import dev.px.hud.Manager.ColorManager;
 import dev.px.hud.Manager.FontManager;
 import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Manager.SoundManager;
+import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
 import dev.px.hud.Util.Event.Bus.EventManager;
 import dev.px.hud.Util.EventProcessor;
@@ -29,7 +30,7 @@ public class HUDMod {
     // Initalizers
     public static ElementInitalizer elementInitalizer;
     public static EventProcessor clazz;
-    public static ConfigInitalizer configInitalizer;
+    public static ConfigManager configManager;
     public static CommandInitalizer commandInitalizer;
 
     // Manager
@@ -53,13 +54,11 @@ public class HUDMod {
         clazz = new EventProcessor();
         notificationManager = new NotificationManager();
         elementInitalizer = new ElementInitalizer();
-        configInitalizer = new ConfigInitalizer();
         commandInitalizer = new CommandInitalizer();
 
         soundInitalizer = new SoundManager();
         fontManager = new FontManager();
-
-        configInitalizer.loads();
+        configManager = new ConfigManager();
     }
 
     @EventHandler
