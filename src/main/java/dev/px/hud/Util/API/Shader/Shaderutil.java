@@ -112,13 +112,14 @@ public class Shaderutil implements Wrapper {
         int status = glGetProgrami(program, GL_LINK_STATUS);
 
         if (status == 0) {
-            throw new IllegalStateException("Shader failed to link!");
+            return;
+         //   throw new IllegalStateException("Shader failed to link!");
         }
         this.programID = program;
     }
 
     public Shaderutil(String fragmentShaderLoc) {
-        this(fragmentShaderLoc, "textures/vertex.vsh");
+        this(fragmentShaderLoc, "Textures/vertex.vsh");
     }
 
     public static void setupRoundedRectUniforms(float x, float y, float width, float height, float radius, Shaderutil roundedTexturedShader) {
@@ -161,8 +162,10 @@ public class Shaderutil implements Wrapper {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            final InputStreamReader inputReader = new InputStreamReader(inputStream);
+            final BufferedReader bufferedReader = new BufferedReader(inputReader);
             String line;
+
             while ((line = bufferedReader.readLine()) != null)
                 stringBuilder.append(line).append('\n');
 

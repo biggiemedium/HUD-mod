@@ -354,7 +354,7 @@ public class FontRenderer {
      * @param in The text to convert to unicode
      * @return The converted text
      */
-    @SuppressWarnings("unmappable character")
+    @SuppressWarnings("deprecation")
     private String getUnicodeText(String in) {
 
         // final unicode text

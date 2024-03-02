@@ -3,6 +3,7 @@ package dev.px.hud.Util.API.Render;
 import dev.px.hud.Mixin.Game.IMixinMinecraft;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.Wrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -36,7 +37,7 @@ public class ESPutil implements Wrapper {
     }
 
     public static double[] getInterpolatedPos(Entity entity) {
-        float ticks = ((IMixinMinecraft) mc).timer().renderPartialTicks;
+        float ticks = ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks;
         return new double[]{
                 Mathutil.interpolate(entity.lastTickPosX, entity.posX, ticks) - mc.getRenderManager().viewerPosX,
                 Mathutil.interpolate(entity.lastTickPosY, entity.posY, ticks) - mc.getRenderManager().viewerPosY,

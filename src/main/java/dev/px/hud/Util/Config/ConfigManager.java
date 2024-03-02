@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ConfigManager {
 
@@ -283,10 +284,17 @@ public class ConfigManager {
                 String name = cl.split(":")[0];
                 String modName = cl.split(":")[1];
                 String value = cl.split(":")[2];
-         //       Setting setting = LeapFrog.getSettingManager().getSetting(name, LeapFrog.getModuleManager().getModuleName(modName));
+                AtomicReference<Setting> setting = null;
+                HUDMod.elementInitalizer.getElements().forEach(s -> s.getSettings().forEach(set -> {
+                    if(set.getValue() instanceof Boolean) {
+                        setting.set(set);
+                    }
+                }));
 
-                boolean val = value.equalsIgnoreCase("true");
-          //      setting.setValue(val);
+                if(setting != null) {
+                    boolean val = value.equalsIgnoreCase("true");
+                    setting.get().setValue(val);
+                }
             }
             reader.close();
         } catch (Exception ignored) {}
