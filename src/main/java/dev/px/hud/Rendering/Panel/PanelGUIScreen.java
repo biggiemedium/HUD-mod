@@ -93,7 +93,7 @@ public class PanelGUIScreen extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        HUDMod.configManager.saveRenderElements();
+        HUDMod.configManager.save();
         if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
             mc.currentScreen = null;
         }

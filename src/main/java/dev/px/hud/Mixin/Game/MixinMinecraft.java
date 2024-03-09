@@ -19,6 +19,10 @@ import java.nio.ByteBuffer;
 @Mixin(Minecraft.class)
 public class MixinMinecraft {
 
+    @Inject(method = "createDisplay", at = @At("TAIL"), cancellable = true)
+    public void setDisplay(CallbackInfo ci) {
+        Display.setTitle(HUDMod.NAME + " | " + HUDMod.VERSION);
+    }
 
     @Inject(method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I", at = @At("HEAD"), cancellable = true)
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {

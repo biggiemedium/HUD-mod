@@ -1,6 +1,7 @@
 package dev.px.hud.Rendering.HUD.Elements.Combat;
 
 import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Util.Settings.Setting;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class CPS extends RenderElement {
     private boolean pressed;
     private long last;
     private List<Long> clickList = new ArrayList<>();
+ //  private Setting<Boolean> rClick = create(new Setting<>("RClick", false);
 
     @Override
     public void render(float partialTicks) {

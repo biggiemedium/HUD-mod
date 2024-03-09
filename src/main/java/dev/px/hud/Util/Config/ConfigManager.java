@@ -6,7 +6,6 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.Frame;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 
@@ -58,6 +57,7 @@ public class ConfigManager {
         saveRenderElementPositions();
         saveGUI();
         saveRenderElementSetting();
+        saveToggleElementSetting();
     }
 
     public void load() {
@@ -256,6 +256,25 @@ public class ConfigManager {
         }
     }
 
+    public void saveToggleElementSetting() {
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleBoolean.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof ToggleableElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Boolean) {
+                            String v = (Boolean) set.getValue() ? "true" : "false";
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+    }
+
     public void saveRenderElementSetting() {
         try {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderBoolean.txt");
@@ -286,13 +305,22 @@ public class ConfigManager {
                 String modName = cl.split(":")[1];
                 String value = cl.split(":")[2];
                 AtomicReference<Setting> setting = null;
-                HUDMod.elementInitalizer.getElements().forEach(s -> s.getSettings().forEach(set -> {
-                    if(set.getValue() instanceof Boolean) {
-                        setting.set(set);
+                Element ele = null;
+                for(Element e : HUDMod.elementInitalizer.getElements()) {
+                    if(HUDMod.elementInitalizer.getElementByName(e.getName()) != null) {
+                        ele = e;
                     }
-                }));
+                }
 
-                if(setting != null) {
+                if(ele != null) {
+                    ele.getSettings().forEach(set -> {
+                        if(set.getValue() instanceof Boolean) {
+                            setting.set(set);
+                        }
+                    });
+                }
+
+                if(setting.get() != null) {
                     boolean val = value.equalsIgnoreCase("true");
                     setting.get().setValue(val);
                 }

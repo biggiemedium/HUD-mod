@@ -7,7 +7,6 @@ import dev.px.hud.Rendering.HUD.Elements.TESTElement;
 import dev.px.hud.Rendering.HUD.Mods.*;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import net.minecraft.client.Minecraft;
-import scala.xml.Elem;
 
 import java.util.ArrayList;
 
@@ -34,6 +33,7 @@ public class ElementInitalizer {
         Add(new RotationElement());
         Add(new SneakInfoElement());
         Add(new SpeedElement());
+        Add(new TextRadarElement());
         Add(new TimeElement());
         Add(new WatermarkElement());
         Add(new WelcomeElement());

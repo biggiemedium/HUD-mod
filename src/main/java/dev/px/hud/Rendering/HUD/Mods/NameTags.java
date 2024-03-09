@@ -1,23 +1,35 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+import dev.px.hud.HUDMod;
 import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Entityutil;
+import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Render.Colorutil;
+import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NameTags extends ToggleableElement {
 
@@ -27,9 +39,11 @@ public class NameTags extends ToggleableElement {
 
     Setting<Integer> distance = create(new Setting<>("Distance", 35, 1, 75));
     Setting<Float> scale = create(new Setting<>("Scale", 0.3f, 0.1f, 8f));
+    Setting<Boolean> outline = create(new Setting<>("Outline", true));
 
     Setting<Boolean> armor = create(new Setting<>("Armor", true));
     Setting<Boolean> durability = create(new Setting<>("Durability", false, v-> armor.getValue()));
+    Setting<Boolean> enchantment = create(new Setting<>("Enchantment", true, v-> armor.getValue()));
     Setting<Boolean> health = create(new Setting<>("Health", true));
     Setting<Boolean> ping = create(new Setting<>("Ping", true));
     Setting<Boolean> item = create(new Setting<>("Item Held", true));
@@ -46,13 +60,15 @@ public class NameTags extends ToggleableElement {
         if(mc.getRenderManager() == null || mc.getRenderManager().options == null) return;
         for(EntityPlayer e : mc.theWorld.playerEntities) {
             if(e == null) { continue; }
+       //     if(e == mc.thePlayer) { continue; }
+            if(!e.isEntityAlive()) { continue; }
             if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) { continue; }
             double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
             double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY();
             double pZ = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
             Vec3 pos = new Vec3(pX, pY, pZ);
 
-
+            renderNameTag(e, pX, pY, pZ, event.getPartialTicks());
         }
 
     }
@@ -62,7 +78,7 @@ public class NameTags extends ToggleableElement {
         event.setCanceled(true);
     }
 
-    private void renderNameTag(EntityPlayer player, double x, double y, double z, float ticks) {
+    private void renderNameTag(EntityPlayer target, double x, double y, double z, float ticks) {
         Entity camera = mc.getRenderViewEntity();
         assert (camera != null);
         double originalPositionX = camera.posX;
@@ -72,33 +88,87 @@ public class NameTags extends ToggleableElement {
         camera.posY = Mathutil.interpolate(camera.prevPosY, camera.posY, ticks);
         camera.posZ = Mathutil.interpolate(camera.prevPosZ, camera.posZ, ticks);
 
+        double tempY = y;
+        tempY += target.isSneaking() ? 0.5 : 0.7;
         double distance = camera.getDistance(x + mc.getRenderManager().viewerPosX, y + mc.getRenderManager().viewerPosY, z + mc.getRenderManager().viewerPosZ);
         double scale = (0.0018 + (double) this.scale.getValue() * (distance * (double) 0.4f)) / 1000.0;
-        if (distance <= 8.0) {
-            scale = 0.0245;
+        if (distance > 0.0) {
+            scale = 0.02 + (this.scale.getValue() / 100f) * distance;
         }
+
 
         GlStateManager.pushMatrix();
         RenderHelper.enableStandardItemLighting();
         GlStateManager.enablePolygonOffset();
         GlStateManager.doPolygonOffset(1.0f, -1500000.0f);
         GlStateManager.disableLighting();
-        GlStateManager.translate((float) x, (float) distance + (player.isSneaking() ? 0.0 : 0.08f) + 1.4f, (float) z);
+        GlStateManager.translate((float) x, (float) tempY + 1.6f, (float) z);
         GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(mc.getRenderManager().playerViewX, mc.gameSettings.thirdPersonView == 2 ? -1.0f : 1.0f, 0.0f, 0.0f);
         GlStateManager.scale(-scale, -scale, scale);
-        GlStateManager.enableBlend(); // Code may be fucky starting here
-        String nameTag = getDisplayTag(player);
+        GlStateManager.disableDepth();
+        GlStateManager.enableBlend();
+
+        String nameTag = getDisplayTag(target);
+
         float width = mc.fontRendererObj.getStringWidth(nameTag) / 2;
         float height = mc.fontRendererObj.FONT_HEIGHT;
 
         GlStateManager.enableBlend();
-        Renderutil.drawRect(-width - 1, -(height + 1), width + 2, 2, 0x5F0A0A0A);
+        if(outline.getValue()) {
+            Renderutil.drawRect(-width - 1, -(height + 1), width + 2, 2, 0x5F0A0A0A);
+        }
         GlStateManager.disableBlend();
-        mc.fontRendererObj.drawStringWithShadow(nameTag, -width+1, -height+3, getColorByHealth(player.getMaxHealth(), player.getHealth()));
+        mc.fontRendererObj.drawStringWithShadow(nameTag, -width+1, -height+3, -1);
 
         GlStateManager.pushMatrix();
 
+        final Iterator<ItemStack> items = Arrays.stream(target.inventory.armorInventory).iterator();
+        final ArrayList<ItemStack> stacks = new ArrayList<>();
+
+        //stacks.add(player.getHeldItemOffhand());
+
+        while (items.hasNext())
+        {
+            final ItemStack stack = items.next();
+            if (stack.stackSize > 0 && armor.getValue())
+            {
+                stacks.add(stack);
+            }
+        }
+
+        if(target.getHeldItem() != null) {
+            if(item.getValue()) {
+                stacks.add(target.getHeldItem());
+            }
+        }
+
+        Collections.reverse(stacks);
+
+        int x2 = (int) -width;
+        int y2 = -32;
+        int z2 = 0;
+
+        for (ItemStack stack : stacks)
+        {
+            RenderItemStack(stack, x2, y2, z2);
+            if(enchantment.getValue()) {
+                RenderItemEnchantments(stack, x2, -62);
+            }
+            x2 += 16;
+        }
+
+        GlStateManager.popMatrix();
+
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
+        GlStateManager.disablePolygonOffset();
+        GlStateManager.doPolygonOffset(1.0f, 1500000.0f);
+        GlStateManager.popMatrix();
+
+        camera.posX = originalPositionX;
+        camera.posY = originalPositionY;
+        camera.posZ = originalPositionZ;
     }
 
     // Ionar2 Code
@@ -154,4 +224,102 @@ public class NameTags extends ToggleableElement {
         name = Math.floor(health) == (double) health ? name + color + " " + (health > 0.0f ? Integer.valueOf((int) Math.floor(health)) : "dead") : name + color + " " + (health > 0.0f ? Integer.valueOf((int) health) : "dead");
         return pingStr + name;
     }
+
+    private void RenderItemStack(final ItemStack itemStack, int n, final int n2, final int n3) {
+        GlStateManager.pushMatrix();
+        GlStateManager.depthMask(true);
+        GlStateManager.clear(256);
+        RenderHelper.enableStandardItemLighting();
+        mc.getRenderItem().zLevel = -150.0f;
+        GlStateManager.disableAlpha();
+        GlStateManager.enableDepth();
+        GlStateManager.disableCull();
+        final int n4 = (n3 > 4) ? ((n3 - 4) * 8 / 2) : 0;
+        mc.getRenderItem().renderItemAndEffectIntoGUI(itemStack, n, n2 + n4);
+        mc.getRenderItem().renderItemOverlays(mc.fontRendererObj, itemStack, n, n2 + n4);
+        mc.getRenderItem().zLevel = 0.0f;
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableCull();
+        GlStateManager.enableAlpha();
+        final float n5 = 0.5f;
+        final float n6 = 0.5f;
+        GlStateManager.scale(n6, n5, n6);
+        GlStateManager.disableDepth();
+        if (itemStack.getMaxDamage() > 1 && durability.getValue()) {
+            this.RenderItemDamage(itemStack, n * 2, n2 - 100);
+        }
+        GlStateManager.enableDepth();
+        final float n7 = 2.0f;
+        final int n8 = 2;
+        GlStateManager.scale((float) n8, n7, (float) n8);
+        GlStateManager.popMatrix();
+    }
+    private void RenderItemDamage(final ItemStack itemStack, final int n, int n2)
+    {
+        final float n3 = ((float) (itemStack.getMaxDamage() - itemStack.getItemDamage())
+                / (float) itemStack.getMaxDamage()) * 100.0f;
+
+        int color = 0x1FFF00;
+
+        if (n3 > 30 && n3 < 70)
+            color = 0xFFFF00;
+        else if (n3 <= 30)
+            color = 0xFF0000;
+
+        GlStateManager.scale(0.5f, 0.5f, 0.5f);
+        GlStateManager.disableDepth();
+
+        mc.fontRendererObj.drawStringWithShadow(new StringBuilder().insert(0, String.valueOf((int) (n3))).append('%').toString(), (float) (n * 2), (float) n2, color);
+
+        GlStateManager.enableDepth();
+        GlStateManager.scale(2.0f, 2.0f, 2.0f);
+    }
+
+    private void RenderItemEnchantments(final ItemStack itemStack, int n, int n2)
+    {
+        GlStateManager.scale(0.5f, 0.5f, 0.5f);
+        final int n3 = -1;
+        final Iterator<Integer> iterator2;
+        Iterator<Integer> iterator = iterator2 = EnchantmentHelper.getEnchantments(itemStack).keySet().iterator();
+        while (iterator.hasNext())
+        {
+            final Integer enchantment;
+            if ((enchantment = iterator2.next()) == null)
+            {
+                iterator = iterator2;
+            } else
+            {
+
+                mc.fontRendererObj.drawStringWithShadow(
+                        GetEnchantName(Enchantment.getEnchantmentById(enchantment), EnchantmentHelper.getEnchantmentLevel(enchantment, itemStack)),
+                        (float) (n * 2), (float) n2, n3);
+
+                n2 += 8;
+                iterator = iterator2;
+            }
+        }
+        if (itemStack.getItem().equals(Items.golden_apple) && itemStack.hasEffect())
+        {
+            mc.fontRendererObj.drawStringWithShadow(ChatFormatting.DARK_RED + "God", (float) (n * 2), (float) n2, -1);
+        }
+        GlStateManager.scale(2.0f, 2.0f, 2.0f);
+    }
+    private String GetEnchantName(Enchantment enchantment, int n) {
+        String substring = enchantment.getTranslatedName(n);
+        final int n2 = (n > 1) ? 2 : 3;
+        if (substring.length() > n2)
+        {
+            substring = substring.substring(0, n2);
+        }
+        final StringBuilder sb = new StringBuilder();
+        final String s = substring;
+        final int n3 = 0;
+        String s2 = sb.insert(n3, s.substring(n3, 1).toUpperCase()).append(substring.substring(1)).toString();
+        if (n > 1)
+        {
+            s2 = new StringBuilder().insert(0, s2).append(n).toString();
+        }
+        return s2;
+    }
+
 }

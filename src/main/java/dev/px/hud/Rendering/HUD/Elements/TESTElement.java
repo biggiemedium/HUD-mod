@@ -2,9 +2,12 @@ package dev.px.hud.Rendering.HUD.Elements;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Util.API.Entity.Entityutil;
+import dev.px.hud.Util.API.Entity.Playerutil;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
@@ -46,6 +49,19 @@ public class TESTElement extends RenderElement {
         Colorutil.interpolateColorsBackAndForth(15, 90, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true));
         GL11.glPopMatrix();
         String s;
+
+        int off = 0;
+        for(EntityPlayer p : mc.theWorld.playerEntities) {
+            if(p == null) {
+                continue;
+            }
+            if(p.isDead) {
+                continue;
+            }
+            off += getFontHeight();
+            renderText(p.getName() + Entityutil.getHealth(p), getX(), getY() + off, -1);
+        }
+
     }
 
     private float getSpeedInKM() {

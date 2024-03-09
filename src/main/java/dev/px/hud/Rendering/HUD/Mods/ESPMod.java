@@ -35,6 +35,7 @@ public class ESPMod extends ToggleableElement {
         super("ESP", "ESP", HUDType.RENDER);
     }
 
+    Setting<Boolean> showESP = create(new Setting<>("ESP", true));
     Setting<Mode> mode = create(new Setting<>("Mode", Mode.Box));
     Setting<Integer> distance = create(new Setting<>("Distance", 35, 1, 75));
 
@@ -116,6 +117,8 @@ public class ESPMod extends ToggleableElement {
 
            Renderutil.drawCircle(e, 1, HUDMod.colorManager.getMainColor().getRGB(), true);
        }
+
+       if(!showESP.getValue()) return; // im lazy
 
         /* Box 2d */
         if(mode.getValue() == Mode.Box || mode.getValue() == Mode.R6) {
