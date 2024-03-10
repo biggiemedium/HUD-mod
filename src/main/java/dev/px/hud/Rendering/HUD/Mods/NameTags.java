@@ -131,9 +131,16 @@ public class NameTags extends ToggleableElement {
         while (items.hasNext())
         {
             final ItemStack stack = items.next();
+<<<<<<< Updated upstream
             if (stack.stackSize > 0 && armor.getValue())
             {
                 stacks.add(stack);
+=======
+            if(stack != null) {
+                if (stack.stackSize > 0 && armor.getValue()) {
+                    stacks.add(stack);
+                }
+>>>>>>> Stashed changes
             }
         }
 

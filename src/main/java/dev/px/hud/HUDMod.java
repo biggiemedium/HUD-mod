@@ -7,6 +7,7 @@ import dev.px.hud.Manager.ColorManager;
 import dev.px.hud.Manager.FontManager;
 import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Manager.SoundManager;
+import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
 import dev.px.hud.Util.Event.Bus.EventManager;
@@ -43,6 +44,7 @@ public class HUDMod {
     public static NotificationManager notificationManager;
 
     private static Minecraft mc = Wrapper.mc;
+    public static PanelGUIScreen screen;
     public static EventBus EVENT_BUS = new EventManager();
     public static long playTime = -1;
 
@@ -61,6 +63,7 @@ public class HUDMod {
 
         soundInitalizer = new SoundManager();
         fontManager = new FontManager();
+        screen = new PanelGUIScreen();
         configManager = new ConfigManager();
     }
 
