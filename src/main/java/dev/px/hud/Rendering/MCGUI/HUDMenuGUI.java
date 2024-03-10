@@ -34,6 +34,8 @@ public class HUDMenuGUI extends GuiScreen {
 
         this.doneButton = new GuiButton(69, this.width / 2, this.height - 38, "Done");
         this.blurButton = new GuiButton(69420, this.width / 2, 30, "Blur");
+        buttonList.add(doneButton);
+        buttonList.add(blurButton);
         super.initGui();
     }
 

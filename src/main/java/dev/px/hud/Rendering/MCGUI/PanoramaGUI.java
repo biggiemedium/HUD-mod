@@ -18,12 +18,12 @@ public class PanoramaGUI extends GuiScreen {
 
 
     private ResourceLocation[] panoramas = new ResourceLocation[] {
-            new ResourceLocation("panorama/panorama_0.png"),
-            new ResourceLocation("panorama/panorama_1.png"),
-            new ResourceLocation("panorama/panorama_2.png"),
-            new ResourceLocation("panorama/panorama_3.png"),
-            new ResourceLocation("panorama/panorama_4.png"),
-            new ResourceLocation("panorama/panorama_5.png")
+            new ResourceLocation("minecraft", "panorama/panorama_0.png"),
+            new ResourceLocation("minecraft", "panorama/panorama_1.png"),
+            new ResourceLocation("minecraft", "panorama/panorama_2.png"),
+            new ResourceLocation("minecraft", "panorama/panorama_3.png"),
+            new ResourceLocation("minecraft", "panorama/panorama_4.png"),
+            new ResourceLocation("minecraft", "panorama/panorama_5.png")
     };
 
     private int panoramaTimer;
