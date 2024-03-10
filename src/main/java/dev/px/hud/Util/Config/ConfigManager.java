@@ -6,6 +6,7 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.Frame;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 
@@ -263,11 +264,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleBoolean.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-<<<<<<< Updated upstream
-                if(s instanceof ToggleableElement) {
-=======
                 if(s instanceof RenderElement) {
->>>>>>> Stashed changes
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Boolean) {
                             String v = (Boolean) set.getValue() ? "true" : "false";
@@ -279,8 +276,6 @@ public class ConfigManager {
             }
             writer.close();
         } catch (Exception ignored) {}
-<<<<<<< Updated upstream
-=======
 
         try {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleFloat.txt");
@@ -375,7 +370,6 @@ public class ConfigManager {
             }
             writer.close();
         } catch (Exception ignored) {}
->>>>>>> Stashed changes
     }
 
     public void saveRenderElementSetting() {
@@ -397,35 +391,6 @@ public class ConfigManager {
         } catch (Exception ignored) {}
 
         try {
-<<<<<<< Updated upstream
-            File f = new File(this.elementPath, "RenderBoolean.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(f));
-            String line;
-            while((line = reader.readLine()) != null) {
-                String cl = line.trim();
-                String name = cl.split(":")[0];
-                String modName = cl.split(":")[1];
-                String value = cl.split(":")[2];
-                AtomicReference<Setting> setting = null;
-                Element ele = null;
-                for(Element e : HUDMod.elementInitalizer.getElements()) {
-                    if(HUDMod.elementInitalizer.getElementByName(e.getName()) != null) {
-                        ele = e;
-                    }
-                }
-
-                if(ele != null) {
-                    ele.getSettings().forEach(set -> {
-                        if(set.getValue() instanceof Boolean) {
-                            setting.set(set);
-                        }
-                    });
-                }
-
-                if(setting.get() != null) {
-                    boolean val = value.equalsIgnoreCase("true");
-                    setting.get().setValue(val);
-=======
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderFloat.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
@@ -437,7 +402,6 @@ public class ConfigManager {
                             writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
                         }
                     }
->>>>>>> Stashed changes
                 }
 
             }
