@@ -2,11 +2,16 @@ package dev.px.hud.Mixin.Game;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Mods.UnfocusedCPU;
+import dev.px.hud.Rendering.MCGUI.CustomMainMenuGUI;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.Util;
 import org.lwjgl.opengl.Display;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,7 +22,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 @Mixin(Minecraft.class)
-public class MixinMinecraft {
+public abstract class MixinMinecraft {
+
+    @Shadow public abstract void displayGuiScreen(GuiScreen p_displayGuiScreen_1_);
+
+    @Shadow public GuiScreen currentScreen;
+
+    @Shadow public GuiIngame ingameGUI;
 
     @Inject(method = "createDisplay", at = @At("TAIL"), cancellable = true)
     public void setDisplay(CallbackInfo ci) {
@@ -51,15 +62,12 @@ public class MixinMinecraft {
         }
     }
 
-    /*
     @Inject(method = "runTick()V", at = @At("RETURN"))
     public void customGUIScreen(CallbackInfo ci) {
-        Minecraft.getMinecraft().displayGuiScreen(new MainMenuGUI());
+        if(this.currentScreen instanceof GuiMainMenu) {
+            this.displayGuiScreen(new CustomMainMenuGUI());
+        }
     }
-
-     */
-    
-
 
     private ByteBuffer convertImageToBuffer(BufferedImage bufferedimage) throws IOException {
         int[] aint = bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), null, 0, bufferedimage.getWidth());

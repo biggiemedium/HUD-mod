@@ -6,9 +6,11 @@ import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.Frame;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -49,6 +51,7 @@ public class ConfigManager {
         loadRenderElementPositions();
         loadGUI();
         loadRenderElementSetting();
+        loadToggleElementSetting();
     }
 
     public void save() {
@@ -65,11 +68,10 @@ public class ConfigManager {
     }
 
     public void saveGUI() {
-
         try {
             File file = new File(this.guiPath, "GUI.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            for(Frame f : PanelGUIScreen.INSTANCE.getCLICKGUI().getFrames()) {
+            for(Frame f : HUDMod.screen.getCLICKGUI().getFrames()) {
                 String s = f.isOpen() ? "open" : "closed";
                 writer.write(f.getName() + ":" + f.getX() + ":" + f.getY() + ":" + s);
                 writer.write("\r\n");
@@ -93,17 +95,18 @@ public class ConfigManager {
                 String y = cl.split(":")[2];
                 String open = cl.split(":")[3];
 
-                if(PanelGUIScreen.INSTANCE.getCLICKGUI().getFramebyName(name) == null) { // || !f.exists()
+                if(HUDMod.screen.getCLICKGUI().getFramebyName(name) == null) { // || !f.exists()
                     continue;
                 }
 
                 boolean openTab = open.equalsIgnoreCase("open");
-                PanelGUIScreen.INSTANCE.getCLICKGUI().getFramebyName(name).setX(Integer.parseInt(x));
-                PanelGUIScreen.INSTANCE.getCLICKGUI().getFramebyName(name).setY(Integer.parseInt(y));
-                PanelGUIScreen.INSTANCE.getCLICKGUI().getFramebyName(name).setOpen(openTab);
+                HUDMod.screen.getCLICKGUI().getFramebyName(name).setX(Integer.parseInt(x));
+                HUDMod.screen.getCLICKGUI().getFramebyName(name).setY(Integer.parseInt(y));
+                HUDMod.screen.getCLICKGUI().getFramebyName(name).setOpen(openTab);
             }
 
         } catch (Exception ignored) {}
+
     }
 
     public void loadRenderElements() {
@@ -261,11 +264,105 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleBoolean.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Boolean) {
                             String v = (Boolean) set.getValue() ? "true" : "false";
                             writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleFloat.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Float) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            float v = (float) set.getValue();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleDouble.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Double) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            double v = (double) set.getValue();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleInteger.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Integer) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            int v = (int) set.getValue();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleEnum.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Enum) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            String v = ((Enum<?>) set.getValue()).name();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleColor.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Color) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            String v = Integer.toString(((Color) set.getValue()).getRGB());
+                            int red = ((Color) set.getValue()).getRed();
+                            int green = ((Color) set.getValue()).getGreen();
+                            int blue = ((Color) set.getValue()).getBlue();
+                            int alpha = ((Color) set.getValue()).getAlpha();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + red + ":" + green + ":" + blue + ":" + alpha + "\r\n");
                         }
                     }
                 }
@@ -292,41 +389,443 @@ public class ConfigManager {
             }
             writer.close();
         } catch (Exception ignored) {}
-    }
 
-    public void loadRenderElementSetting() {
         try {
-            File f = new File(this.elementPath, "RenderBoolean.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(f));
-            String line;
-            while((line = reader.readLine()) != null) {
-                String cl = line.trim();
-                String name = cl.split(":")[0];
-                String modName = cl.split(":")[1];
-                String value = cl.split(":")[2];
-                AtomicReference<Setting> setting = null;
-                Element ele = null;
-                for(Element e : HUDMod.elementInitalizer.getElements()) {
-                    if(HUDMod.elementInitalizer.getElementByName(e.getName()) != null) {
-                        ele = e;
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderFloat.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Float) {
+                           // String v = (Boolean) set.getValue() ? "true" : "false";
+                            float v = (float) set.getValue();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
                     }
                 }
 
-                if(ele != null) {
-                    ele.getSettings().forEach(set -> {
-                        if(set.getValue() instanceof Boolean) {
-                            setting.set(set);
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderDouble.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Double) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            double v = (double) set.getValue();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
                         }
-                    });
+                    }
                 }
 
-                if(setting.get() != null) {
-                    boolean val = value.equalsIgnoreCase("true");
-                    setting.get().setValue(val);
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderInteger.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Integer) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            int v = (int) set.getValue();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderEnum.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Enum) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            String v = ((Enum<?>) set.getValue()).name();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + v + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "RenderColor.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Element s : HUDMod.elementInitalizer.getElements()) {
+                if(s instanceof RenderElement) {
+                    for(Setting set : s.getSettings()) {
+                        if(set.getValue() instanceof Color) {
+                            // String v = (Boolean) set.getValue() ? "true" : "false";
+                            String v = Integer.toString(((Color) set.getValue()).getRGB());
+                            int red = ((Color) set.getValue()).getRed();
+                            int green = ((Color) set.getValue()).getGreen();
+                            int blue = ((Color) set.getValue()).getBlue();
+                            int alpha = ((Color) set.getValue()).getAlpha();
+                            writer.write(s.getName() + ":" + set.getName() + ":" + red + ":" + green + ":" + blue + ":" + alpha + "\r\n");
+                        }
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+    }
+
+    public void loadToggleElementSetting() {
+        // BOOLEAN
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "ToggleBoolean.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Boolean) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(value.equalsIgnoreCase("true"));
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
             reader.close();
-        } catch (Exception ignored) {}
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // FLOAT
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "ToggleFloat.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Float) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(Float.valueOf(value));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // DOUBLE
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "ToggleDouble.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Double) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(Double.valueOf(value));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // INTEGER
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "ToggleInteger.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Integer) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(Integer.valueOf(value));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+
+        // ENUM
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "ToggleEnum.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Enum) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    Enum<?> v = Enum.valueOf(((Enum<?>) s.getValue()).getClass(), value);
+                                    ((Setting<Enum<?>>) s).setValue(v);
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // COLOR
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "ToggleColor.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 6) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String red = parts[2].trim();
+                    String green = parts[3].trim();
+                    String blue = parts[4].trim();
+                    String alpha = parts[5].trim();
+
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Color) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    Color c = new Color(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue), Integer.parseInt(alpha));
+                                    s.setValue(c);
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    public void loadRenderElementSetting() {
+
+        // BOOLEAN
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "RenderBoolean.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Boolean) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(value.equalsIgnoreCase("true"));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // FLOAT
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "RenderFloat.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Float) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(Float.valueOf(value));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // DOUBLE
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "RenderDouble.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Double) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(Double.valueOf(value));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // INTEGER
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "RenderInteger.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Integer) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    s.setValue(Integer.valueOf(value));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+
+        // ENUM
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "RenderEnum.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 3) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String value = parts[2].trim();
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Enum) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    Enum<?> v = Enum.valueOf(((Enum<?>) s.getValue()).getClass(), value);
+                                    ((Setting<Enum<?>>) s).setValue(v);
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        // COLOR
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "RenderColor.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 6) {
+                    String elementName = parts[0].trim();
+                    String settingName = parts[1].trim();
+                    String red = parts[2].trim();
+                    String green = parts[3].trim();
+                    String blue = parts[4].trim();
+                    String alpha = parts[5].trim();
+
+
+                    Element e = HUDMod.elementInitalizer.getElementByName(elementName);
+                    if(e != null) {
+                        for(Setting s : e.getSettings()) {
+                            if(s.getValue() instanceof Color) {
+                                if(s.getName().equalsIgnoreCase(settingName)) {
+                                    Color c = new Color(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue), Integer.parseInt(alpha));
+                                    s.setValue(c);
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
 }

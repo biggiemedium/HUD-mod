@@ -21,8 +21,8 @@ public class PanelGUIScreen extends GuiScreen {
         this.currentPanel = CLICKGUI;
         this.panels.add(CLICKGUI);
         this.panels.add(HUDEDITOR);
-        this.panels.add(CLIENTSETTINGS);
-        this.panels.add(COMMANDGUI);
+    //    this.panels.add(CLIENTSETTINGS);
+    //    this.panels.add(COMMANDGUI);
 
     }
 

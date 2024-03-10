@@ -30,6 +30,7 @@ public class Trajectories extends ToggleableElement {
     public void onRender(Render3dEvent event) {
 
         if (mc.thePlayer == null || mc.theWorld == null || mc.gameSettings == null) return;
+        if(mc.thePlayer.getHeldItem() == null) return;
         final double renderPosX = mc.thePlayer.lastTickPosX + (mc.thePlayer.posX - mc.thePlayer.lastTickPosX) * event.getPartialTicks();
         final double renderPosY = mc.thePlayer.lastTickPosY + (mc.thePlayer.posY - mc.thePlayer.lastTickPosY) * event.getPartialTicks();
         final double renderPosZ = mc.thePlayer.lastTickPosZ + (mc.thePlayer.posZ - mc.thePlayer.lastTickPosZ) * event.getPartialTicks();
@@ -38,7 +39,7 @@ public class Trajectories extends ToggleableElement {
         if (mc.gameSettings.thirdPersonView == 0 && mc.thePlayer.getHeldItem() != null && (mc.thePlayer.getHeldItem().getItem() instanceof ItemBow || mc.thePlayer.getHeldItem().getItem() instanceof ItemFishingRod || mc.thePlayer.getHeldItem().getItem() instanceof ItemEnderPearl || mc.thePlayer.getHeldItem().getItem() instanceof ItemEgg || mc.thePlayer.getHeldItem().getItem() instanceof ItemSnowball || mc.thePlayer.getHeldItem().getItem() instanceof ItemExpBottle)) {
 
             GL11.glPushMatrix();
-            final Item item = mc.thePlayer.getHeldItem().getItem();
+            Item item = mc.thePlayer.getHeldItem().getItem();
             double posX = renderPosX - MathHelper.cos(mc.thePlayer.rotationYaw / 180.0f * 3.1415927f) * 0.16f;
             double posY = renderPosY + mc.thePlayer.getEyeHeight() - 0.1000000014901161;
             double posZ = renderPosZ - MathHelper.sin(mc.thePlayer.rotationYaw / 180.0f * 3.1415927f) * 0.16f;

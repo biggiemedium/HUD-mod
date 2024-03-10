@@ -16,7 +16,7 @@ public class InventoryElement extends RenderElement {
     }
 
     public Setting<Boolean> background = create(new Setting<>("Background", true));
-    public Setting<Float> scale = create(new Setting<>("Scale", 1.0f, 0.0f, 10.0f));
+    public Setting<Float> scale = create(new Setting<>("Scale", 1.0f, 0.0f, 2.0f));
 
     @Override
     public void render2D(Render2DEvent event) {

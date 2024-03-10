@@ -19,8 +19,10 @@ public class HUDMenuGUI extends GuiScreen {
 
     private boolean textOverride;
     private boolean textAntiAias;
+   // private GuiScreen screen;
 
     public HUDMenuGUI() {
+    //    this.screen = screen;
         this.key = Keyboard.KEY_RSHIFT;
         this.textOverride = false;
         this.textAntiAias = true;
@@ -32,15 +34,20 @@ public class HUDMenuGUI extends GuiScreen {
         this.width = sr.getScaledWidth();
         this.height = sr.getScaledHeight();
 
-        this.doneButton = new GuiButton(69, this.width / 2, this.height - 38, "Done");
-        this.blurButton = new GuiButton(69420, this.width / 2, 30, "Blur");
+        this.buttonList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done", new Object[0])));
+        this.buttonList.add(this.blurButton = new GuiButton(101, this.width / 2 - 155, this.height / 6 + 96 - 6, 150, 20, "Blur"));
+     //   buttonList.add(doneButton);
+     //   buttonList.add(blurButton);
         super.initGui();
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
-        if(button.id == 69) {
-            mc.displayGuiScreen(new GuiMainMenu());
+        if(button.id == 101) { // blur
+
+        }
+        if(button.id == 200) {
+            mc.displayGuiScreen(new CustomMainMenuGUI());
         }
         super.actionPerformed(button);
     }

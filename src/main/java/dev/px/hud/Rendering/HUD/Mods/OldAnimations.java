@@ -11,6 +11,7 @@ public class OldAnimations extends ToggleableElement {
     }
 
     public Setting<Boolean> sword = create(new Setting<>("Sword", true));
+    public Setting<Boolean> bow = create(new Setting<>("Bow", true));
 
     public static OldAnimations INSTANCE;
 }

@@ -87,7 +87,7 @@ public class EventProcessor extends Util {
                         return;
 
                     if(keyCode == Keyboard.KEY_RSHIFT) {
-                        mc.displayGuiScreen(PanelGUIScreen.INSTANCE);
+                        mc.displayGuiScreen(HUDMod.screen);
                     }
                     if(keyCode == Keyboard.KEY_U) {
                         HUDMod.configManager.save();
