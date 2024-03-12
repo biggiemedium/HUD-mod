@@ -3,6 +3,7 @@ package dev.px.hud.Rendering.HUD.Mods;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Notification.Notification;
+import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
@@ -12,6 +13,8 @@ public class FakePlayer extends ToggleableElement {
     public FakePlayer() {
         super("Fake Player", "Spawns fake entity (Client Side)", HUDType.MOD);
     }
+
+    Setting<Boolean> copyInventory = create(new Setting<>("Copy Inventory", true));
 
     private EntityOtherPlayerMP fakePlayer;
 
@@ -24,7 +27,9 @@ public class FakePlayer extends ToggleableElement {
         fakePlayer.setGameType(WorldSettings.GameType.SURVIVAL);
         mc.theWorld.addEntityToWorld(-69420, fakePlayer);
 
-        fakePlayer.inventory.copyInventory(mc.thePlayer.inventory);
+        if(copyInventory.getValue()) {
+            fakePlayer.inventory.copyInventory(mc.thePlayer.inventory);
+        }
         HUDMod.notificationManager.Add(new Notification("Fake Player", "Fake player has been summoned!", Notification.NotificationType.INFO, 5));
     }
 

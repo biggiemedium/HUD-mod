@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -75,7 +76,11 @@ public class NameTags extends ToggleableElement {
 
     @SubscribeEvent
     public void onNameTagRender(RenderLivingEvent.Specials.Pre<EntityPlayer> event) {
-        event.setCanceled(true);
+        if(event.entity instanceof EntityPlayer) {
+            if(event.entity instanceof EntityLivingBase) {
+                event.setCanceled(true);
+            }
+        }
     }
 
     private void renderNameTag(EntityPlayer target, double x, double y, double z, float ticks) {
@@ -102,7 +107,7 @@ public class NameTags extends ToggleableElement {
         GlStateManager.enablePolygonOffset();
         GlStateManager.doPolygonOffset(1.0f, -1500000.0f);
         GlStateManager.disableLighting();
-        GlStateManager.translate((float) x, (float) tempY + 1.6f, (float) z);
+        GlStateManager.translate((float) x, (float) tempY + 1.4f, (float) z);
         GlStateManager.rotate(-mc.getRenderManager().playerViewY, 0.0f, 1.0f, 0.0f);
         GlStateManager.rotate(mc.getRenderManager().playerViewX, mc.gameSettings.thirdPersonView == 2 ? -1.0f : 1.0f, 0.0f, 0.0f);
         GlStateManager.scale(-scale, -scale, scale);

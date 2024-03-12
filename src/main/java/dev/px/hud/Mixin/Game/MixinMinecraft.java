@@ -56,7 +56,7 @@ public abstract class MixinMinecraft {
         if(Util.getOSType() == Util.EnumOS.OSX) {
             Renderutil.setDockIcon("/assets/minecraft/GUI/sped.png");
             c.cancel();
-        } else {
+        } else if(Util.getOSType() == Util.EnumOS.WINDOWS) {
             // windows impl
       //      c.cancel();
         }
