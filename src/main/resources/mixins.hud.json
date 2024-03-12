@@ -6,8 +6,6 @@
   "mixins": [
     "Render.MixinEntityRenderer",
     "Network.MixinNetworkManager",
-    "Render.GUI.MixinGui",
-    "Render.MixinMainScreen",
     "Render.GUI.MixinGUIIngame",
     "Render.Item.IEntityRenderer",
     "Render.MixinGuiControls",

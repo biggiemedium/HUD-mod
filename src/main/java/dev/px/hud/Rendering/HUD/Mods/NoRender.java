@@ -40,12 +40,14 @@ public class NoRender extends ToggleableElement {
     @Override
     public void onUpdate() {
         if(player == null || world == null) return;
+
         if(weather.getValue()) {
             if(world.isRaining() || world.isThundering()) {
                 world.setRainStrength(0.0f);
                 world.setThunderStrength(0.0f);
             }
         }
+
     }
 
     public static NoRender INSTANCE;

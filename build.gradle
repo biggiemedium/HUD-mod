@@ -31,7 +31,7 @@ plugins {
 */
 version = "1.0"
 group= "dev.px.hud" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+archivesBaseName = "hudmod"
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -39,9 +39,13 @@ targetCompatibility = JavaVersion.VERSION_1_8
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
-    coreMod = 'dev.px.hud.Mixin.Loader'
+    coreMod = "dev.px.hud.Mixin.Loader"
     mappings = "stable_20"
     // makeObfSourceJar = false
+}
+
+mixin {
+
 }
 
 repositories {
@@ -66,19 +70,8 @@ dependencies {
         exclude module: 'guava'
         exclude module: 'commons-io'
     }
-    compile group: 'net.jodah', name: 'typetools', version: '0.5.0' // yuck
-}
 
-mixin {
-    defaultObfuscationEnv searge
-    add sourceSets.main, 'mixins.hud.refmap.json'
-}
-
-reobf {
-    shadowJar {
-        mappingType = 'SEARGE'
-        classpath = sourceSets.main.compileClasspath
-    }
+    compile group: 'net.jodah', name: 'typetools', version: '0.5.0'
 }
 
 processResources {
@@ -98,5 +91,49 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-    rename "(.+_at.cfg)", 'META-INF/$1';
+
+   // rename '(.+_at.cfg)', 'META-INF/$1'
 }
+
+
+
+shadowJar {
+    dependencies {
+        include(dependency('org.spongepowered:mixin'))
+        include(dependency('net.jodah:typetools'))
+    }
+    exclude 'dummyThing'
+    exclude 'LICENSE.txt'
+    classifier = 'release'
+}
+
+mixin {
+    defaultObfuscationEnv searge
+    add sourceSets.main, 'mixins.hud.refmap.json'
+}
+
+
+reobf {
+    shadowJar {
+        mappingType = 'SEARGE'
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'MixinConfigs': 'mixins.hud.json',
+                'tweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+                'TweakOrder': 0,
+                'FMLCorePluginContainsFMLMod': 'true',
+                'FMLCorePlugin': 'dev.px.hud.Mixin.Loader',
+                'ForceLoadAsMod': 'true',
+                'FMLAT': 'hud_at.cfg'
+        )
+    }
+}
+
+build.dependsOn(shadowJar)
+
+

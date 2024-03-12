@@ -36,7 +36,8 @@ public class CritParticles extends ToggleableElement {
     @SubscribeEvent
     public void onHit(AttackEntityEvent event) {
         if(event.target == null) return;
-        if(mc.thePlayer.getDistance(event.target.posX, event.target.posY, event.target.posZ) > 10) return;
+        if(mc.thePlayer.ticksExisted < 3) return;
+        if(mc.thePlayer.getDistance(event.target.posX, event.target.posY, event.target.posZ) > 10) { return; }
         if(event.target instanceof EntityLivingBase) {
             if(((EntityLivingBase) event.target).hurtTime >= 5) {
                 switch (particleType.getValue()) {
