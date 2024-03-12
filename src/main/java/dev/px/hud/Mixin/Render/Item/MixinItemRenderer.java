@@ -22,41 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
 public class MixinItemRenderer implements Wrapper {
-/*
-    @Inject(method = "transformFirstPersonItem", at = @At("HEAD"), cancellable = true)
-    public void onTransformPre(float equipProgress, float swingProgress, CallbackInfo ci) {
-
-    }
-
-    @Inject(method = "doBowTransformations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
-    private void preBowScale(CallbackInfo ci) {
-        if (HUDMod.elementInitalizer.isElementToggled(OldAnimations.class)) {
-            if(HUDMod.elementInitalizer.getElementByClass(OldAnimations.class).bow.getValue()) {
-                GlStateManager.rotate(-335.0F, 0.0F, 0.0F, 1.0F);
-                GlStateManager.rotate(-50.0F, 0.0F, 1.0F, 0.0F);
-                GlStateManager.translate(0.0F, 0.5F, 0.0F);
-            }
-        }
-    }
-
-    @Inject(method = "doBowTransformations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V", shift = At.Shift.AFTER))
-    private void postBowScale(CallbackInfo ci) {
-        if (HUDMod.elementInitalizer.isElementToggled(OldAnimations.class)) {
-            if (HUDMod.elementInitalizer.getElementByClass(OldAnimations.class).bow.getValue()) {
-                GlStateManager.translate(0.0F, -0.5F, 0.0F);
-                GlStateManager.rotate(50.0F, 0.0F, 1.0F, 0.0F);
-                GlStateManager.rotate(335.0F, 0.0F, 0.0F, 1.0F);
-            }
-        }
-    }
 
     /*
     @Inject(method = "transformFirstPersonItem", at = @At("HEAD"), cancellable = true)
     public void onTransformPre(float equipProgress, float swingProgress, CallbackInfo ci) {
 
-<<<<<<< Updated upstream
- */
-=======
     }
 
     @Inject(method = "func_178098_a", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/GlStateManager;scale(FFF)V"))
@@ -81,5 +51,4 @@ public class MixinItemRenderer implements Wrapper {
         }
     }
      */
->>>>>>> Stashed changes
 }
