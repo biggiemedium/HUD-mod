@@ -8,6 +8,7 @@ import dev.px.hud.Manager.FontManager;
 import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Manager.SoundManager;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
 import dev.px.hud.Util.Event.Bus.EventManager;
@@ -54,6 +55,7 @@ public class HUDMod {
     public void preinit(FMLPreInitializationEvent event) {
         playTime = System.currentTimeMillis();
         startTime = System.currentTimeMillis();
+        BindRegistry.register();
     }
 
     @EventHandler

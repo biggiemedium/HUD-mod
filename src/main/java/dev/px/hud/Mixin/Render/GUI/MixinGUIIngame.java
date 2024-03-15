@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GuiIngame.class)
 public class MixinGUIIngame {
 
-    @Inject(method = "renderTooltip", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "renderTooltip", at = @At("RETURN"))
     public void renderTooltip(ScaledResolution sr, float partialTicks, CallbackInfo ci) {
         RenderImageEvent event = new RenderImageEvent(sr, partialTicks);
         if(event.isCanceled()) {

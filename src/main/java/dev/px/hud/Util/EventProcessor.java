@@ -7,6 +7,7 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.BindRegistry;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
@@ -18,9 +19,11 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 public class EventProcessor extends Util {
@@ -64,7 +67,6 @@ public class EventProcessor extends Util {
 
     @SubscribeEvent
     public void onRenderPost(RenderGameOverlayEvent.Post event) {
-
         if(event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
             HUDMod.elementInitalizer.getElements().forEach(e -> {
                 if(e instanceof RenderElement) {
@@ -86,12 +88,12 @@ public class EventProcessor extends Util {
                     if(keyCode <= 0)
                         return;
 
-                    if(keyCode == Keyboard.KEY_RSHIFT) {
-                        mc.displayGuiScreen(HUDMod.screen);
+                    if(mc.thePlayer != null && mc.theWorld != null) {
+                        if (keyCode == BindRegistry.guiKey.getKeyCode()) {
+                            mc.displayGuiScreen(HUDMod.screen);
+                        }
                     }
-                    if(keyCode == Keyboard.KEY_U) {
-                        HUDMod.configManager.save();
-                    }
+
                     if(keyCode == Keyboard.KEY_P) {
                         HUDMod.notificationManager.Add(new Notification("Test", "Test notification" , Notification.NotificationType.INFO, 7000));
                     }
@@ -112,7 +114,8 @@ public class EventProcessor extends Util {
     @SubscribeEvent
     public void joinEvent(EntityJoinWorldEvent event) {
         if(event.entity == mc.thePlayer) {
-            Util.sendClientSideMessage("To open the GUI press RSHIFT!", true);
+            assert BindRegistry.guiKey != null;
+            Util.sendClientSideMessage("To open the GUI press " + BindRegistry.guiKey.getKeyCode() + "!", true);
         }
     }
 

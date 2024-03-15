@@ -20,6 +20,7 @@ public class TextRadarElement extends RenderElement {
     }
 
     Setting<Integer> size = create(new Setting<>("Size", 5, 3, 20));
+    Setting<Boolean> self = create(new Setting<>("Self", false));
     List<EntityPlayer> players = new ArrayList<>();
 
     @Override
@@ -33,6 +34,9 @@ public class TextRadarElement extends RenderElement {
                 continue;
             }
             if(player.isDead) {
+                continue;
+            }
+            if(!self.getValue() && player == mc.thePlayer) {
                 continue;
             }
 

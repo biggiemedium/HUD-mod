@@ -1,14 +1,14 @@
 [
 {
-  "modid": "hudmod",
-  "name": "Hud Mod",
-  "description": "Mod that displays a custom HUD",
+  "modid": "examplemod",
+  "name": "Example Mod",
+  "description": "Example placeholder mod.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
   "authorList": ["ExampleDude"],
-  "credits": "Hud Mod by PX",
+  "credits": "The Forge and FML guys, for making this example",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

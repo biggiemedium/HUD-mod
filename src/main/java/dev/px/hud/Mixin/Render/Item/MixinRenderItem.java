@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderItem.class)
 public class MixinRenderItem {
 
-    /*
     @Unique
     private EntityLivingBase lastEntityToRenderFor = null;
 
@@ -47,6 +46,4 @@ public class MixinRenderItem {
         }
     }
 
-
-     */
 }

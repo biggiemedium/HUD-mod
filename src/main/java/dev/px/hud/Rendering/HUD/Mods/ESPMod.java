@@ -36,7 +36,7 @@ public class ESPMod extends ToggleableElement {
     }
 
     Setting<Boolean> showESP = create(new Setting<>("ESP", true));
-    Setting<Mode> mode = create(new Setting<>("Mode", Mode.Box));
+    public Setting<Mode> mode = create(new Setting<>("Mode", Mode.Box));
     Setting<Integer> distance = create(new Setting<>("Distance", 35, 1, 75));
 
     /* Cirlce stuff */
@@ -46,7 +46,7 @@ public class ESPMod extends ToggleableElement {
     private Map<Entity, Timer> targetMap = new ConcurrentHashMap<>();
     private Map<Entity, org.lwjgl.util.vector.Vector4f> entityPosition = new ConcurrentHashMap<>();
 
-    private enum Mode {
+    public enum Mode {
         Box,
         R6
     }
@@ -249,6 +249,10 @@ public class ESPMod extends ToggleableElement {
         }
 
         return false;
+    }
+
+    public Setting<Mode> getMode() {
+        return mode;
     }
 
     public class ESPTarget {

@@ -69,7 +69,6 @@ public abstract class MixinMinecraft {
         }
     }
 
-
     private ByteBuffer convertImageToBuffer(BufferedImage bufferedimage) throws IOException {
         int[] aint = bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), null, 0, bufferedimage.getWidth());
         ByteBuffer bytebuffer = ByteBuffer.allocate(4 * aint.length);

@@ -19,12 +19,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
-import java.util.Objects;
 
 public class BlockHighlight extends ToggleableElement {
 
@@ -32,7 +30,7 @@ public class BlockHighlight extends ToggleableElement {
         super("Block Highlight", "", HUDType.MOD);
     }
 
-    Setting<Float> lineWidth = create(new Setting<>("Line Width", 1.0f, 0.1f, 5.0f));
+    Setting<Float> lineWidth = create(new Setting<>("Line Width", 1.0f, 5.0f, 0.1f));
     Setting<Mode> mode = create(new Setting<>("Mode", Mode.Outline));
     Setting<Color> highlightColor = create(new Setting<>("Color", new Color(255, 255, 255)));
     Setting<Color> insideColor = create(new Setting<>("Inside Color", new Color(255, 255, 255), v -> mode.getValue() == Mode.Full));
@@ -54,18 +52,116 @@ public class BlockHighlight extends ToggleableElement {
     @Override
     public void onRender(Render3dEvent event) {
 
-        MovingObjectPosition ray = mc.objectMouseOver;
-        if (ray != null && ray.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-            BlockPos blockpos = ray.getBlockPos();
-            AxisAlignedBB mouseOverBox = null;
-            mouseOverBox = mc.theWorld.getBlockState(ray.getBlockPos()).getBlock().getSelectedBoundingBox(mc.theWorld, blockpos);
+        if(player == null || world == null || mc.objectMouseOver == null) return;
 
+        if(mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK){
+            BlockPos pos = mc.objectMouseOver.getBlockPos();
+            GL11.glPushMatrix();
+            glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glShadeModel(GL11.GL_SMOOTH);
+            glDisable(GL11.GL_TEXTURE_2D);
+            glEnable(GL11.GL_LINE_SMOOTH);
+            glDisable(GL11.GL_DEPTH_TEST);
+            glDisable(GL11.GL_LIGHTING);
+            GL11.glDepthMask(false);
+            GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
+            Renderutil.color(new Color(152, 217, 0));
+            double x = pos.getX() - ((MixinRenderManager) mc).getRenderPosX();
+            double y = pos.getY() - ((MixinRenderManager) mc).getRenderPosY();
+            double z = pos.getZ() - ((MixinRenderManager) mc).getRenderPosZ();
+            double height = mc.theWorld.getBlockState(pos).getBlock().getBlockBoundsMaxY() - mc.theWorld.getBlockState(pos).getBlock().getBlockBoundsMinY();
+            GL11.glLineWidth(1);
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y,z);
+            GL11.glVertex3d(x,y + height,z);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x + 1,y,z);
+            GL11.glVertex3d(x + 1,y + height,z);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x + 1,y,z + 1);
+            GL11.glVertex3d(x + 1,y + height,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y,z + 1);
+            GL11.glVertex3d(x,y + height,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y,z);
+            GL11.glVertex3d(x + 1,y,z);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y + height,z);
+            GL11.glVertex3d(x + 1,y + height,z);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y,z);
+            GL11.glVertex3d(x,y,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y + height,z);
+            GL11.glVertex3d(x,y + height,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x + 1,y,z + 1);
+            GL11.glVertex3d(x + 1,y,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x + 1,y + height,z + 1);
+            GL11.glVertex3d(x + 1,y + height,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x + 1,y,z + 1);
+            GL11.glVertex3d(x + 1,y,z);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x + 1,y + height,z + 1);
+            GL11.glVertex3d(x + 1,y + height,z);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y,z + 1);
+            GL11.glVertex3d(x + 1,y,z + 1);
+            GL11.glEnd();
+            GL11.glBegin(GL11.GL_LINE_STRIP);
+            GL11.glVertex3d(x,y + height,z + 1);
+            GL11.glVertex3d(x + 1,y + height,z + 1);
+            GL11.glEnd();
 
+//            GL11.glBegin(GL11.GL_LINE_STRIP);
+//            GL11.glVertex3d(x,y,z);
+//            GL11.glVertex3d(x,y + 1,z);
+//            GL11.glVertex3d(x + 1,y + 1,z);
+//            GL11.glVertex3d(x + 1,y,z);
+//            GL11.glVertex3d(x,y,z);
+//            GL11.glEnd();
+//            GL11.glBegin(GL11.GL_LINE_STRIP);
+//            GL11.glVertex3d(x + 1,y,z);
+//            GL11.glVertex3d(x + 1,y,z + 1);
+//            GL11.glVertex3d(x + 1,y + 1,z + 1);
+//            GL11.glVertex3d(x + 1,y + 1,z);
+//            GL11.glEnd();
+//            GL11.glBegin(GL11.GL_LINE_STRIP);
+//            GL11.glVertex3d(x + 1,y,z + 1);
+//            GL11.glVertex3d(x, y,z + 1);
+//            GL11.glVertex3d(x,y + 1,z + 1);
+//            GL11.glVertex3d(x + 1,y + 1,z + 1);
+//            GL11.glEnd();
+//            GL11.glBegin(GL11.GL_LINE_STRIP);
+//            GL11.glVertex3d(x,y,z);
+//            GL11.glv
+
+            GL11.glDepthMask(true);
+            glEnable(GL11.GL_DEPTH_TEST);
+            glDisable(GL11.GL_LINE_SMOOTH);
+            glEnable(GL11.GL_TEXTURE_2D);
+            glDisable(GL11.GL_BLEND);
+            GL11.glPopMatrix();
+            GL11.glColor4f(1, 1, 1, 1);
         }
 
     }
-
-
 
     public static void drawOutlineBoundingBox(AxisAlignedBB boundingBox) {
 

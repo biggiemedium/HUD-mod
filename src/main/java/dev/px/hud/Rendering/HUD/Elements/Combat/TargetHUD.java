@@ -1,8 +1,11 @@
 package dev.px.hud.Rendering.HUD.Elements.Combat;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Animation.Animation;
+import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Entity.Entityutil;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Timer;
@@ -33,89 +36,34 @@ public class TargetHUD extends RenderElement {
         setTextElement(false);
     }
 
-    /* Target checking */
-    private EntityPlayer target;
-    private boolean combatCheck;
-    private Timer timer = new Timer();
-    private Timer scaleTimer = new Timer();
-
-    private double scale = 1;
-    private float health;
+    private EntityPlayer currentTarget = null;
+    private Renderutil.ScissorStack scissorStack = new Renderutil.ScissorStack();
+    private Animation openAnimation = new Animation(200, false, Easing.LINEAR);
 
     @Override
     public void render2D(Render2DEvent event) {
 
-
-        if(mc.currentScreen instanceof PanelGUIScreen) {
-            if(PanelGUIScreen.INSTANCE.getCurrentPanel().getClass() == ClickGUI.class) {
-                this.target = mc.thePlayer;
-            }
-        } else {
-            if(!timer.passed(7)) {
-                target = (EntityPlayer) Entityutil.getTarget(15, true);
-            }
+        if(mc.currentScreen == HUDMod.screen) {
+            openAnimation.setState(true);
+            currentTarget = mc.thePlayer;
+        } else if (mc.currentScreen != HUDMod.screen && currentTarget == mc.thePlayer) {
+            currentTarget = null;
         }
 
-        if(scale == 0) return;
+        if(currentTarget != null) {
+            openAnimation.setState(true);
+        } else {
+            openAnimation.setState(false);
+        }
 
-        if(target != null) {
-
-            GL11.glPushMatrix();
-
-            GlStateManager.enableTexture2D();
-            GL11.glPushMatrix();
-            GlStateManager.translate((getX() + 38 + 2 + 129 / 2f) * (1 - scale), (getY() - 34 + 48 / 2f) * (1 - scale), 0);
-            GlStateManager.scale(scale, scale, 0);
-            RoundedShader.drawRound(getX(), getY(), getWidth(), getHeight(), 3f, new Color(35, 33, 33, 200));
-            GL11.glPopMatrix();
-
-            GL11.glPushMatrix();
-            GlStateManager.translate((getX() + 38 + 2 + 129 / 2f) * (1 - scale), (getY() - 34 + 48 / 2f) * (1 - scale), 0);
-            GlStateManager.scale(scale, scale, 0);
-            int scaleOffset = (int) (((EntityPlayer) target).hurtTime * 0.35f);
-            if (target instanceof AbstractClientPlayer) {
-                double offset = -(((AbstractClientPlayer) target).hurtTime * 23);
-                Renderutil.color(new Color(255, (int) (255 + offset), (int) (255 + offset)));
-                renderPlayerModelTexture(getX() + 5 + scaleOffset / 2f, getY() + 4 + scaleOffset / 2f, 3, 3, 3, 3, (30 - scaleOffset), (30 - scaleOffset), 24, 24.5f, (AbstractClientPlayer) target);
-                renderPlayerModelTexture(getX() + 5 + scaleOffset / 2f, getY() + 4 + scaleOffset / 2f, 15, 3, 3, 3, 30 - scaleOffset, 30 - scaleOffset, 24, 24.5f, (AbstractClientPlayer) target);
-                Renderutil.color(Color.WHITE);
-            }
-            GL11.glPopMatrix();
-
-            if (!String.valueOf(((EntityPlayer) target).getHealth()).equals("NaN")) {
-                health = (float) Math.random() * 20;
-            } else {
-                health = Math.min(20,Entityutil.getHealth(target));
-            }
-
-            /* Held item */
-            if(target.getHeldItem() != null) {
-                renderItemStack(target.getHeldItem(), getX() + 6, getY() + 40);
-            }
-
-            /* armor */
-            int offset = 0;
-            for(int i = 4 - 1; i >= 0; i--) {
-                renderItemStack(mc.thePlayer.getCurrentArmor(i), getX() + (getWidth() - 16), getY() + offset);
-                offset += 15;
-            }
-
-            /* Display Info */
-            GlStateManager.pushMatrix();
-            GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            //    Renderutil.scissor(getX() + 32, getY() + 4 - Fontutil.getHeight() * 4, 91, 30);
-
-            renderText(target.getName(), getX() + 32, getY() + 4, -1);
-            renderText("Health: " + health, getX() + 32, getY() + (int) (4 + Fontutil.getHeight()), -1);
-
-            GL11.glDisable(GL11.GL_SCISSOR_TEST);
-            GlStateManager.popMatrix();
+        if(openAnimation.getAnimationFactor() > 0) {
+            scissorStack.pushScissor(getX(), getY(), (int) (getWidth() * openAnimation.getAnimationFactor()), getHeight());
 
 
-            GlStateManager.enableDepth();
-            GlStateManager.disableLighting();
-            GL11.glPopMatrix();
-            scaleTimer.reset();
+            RoundedShader.drawRound((float) getX(), (float) getY(), (float) (getWidth() * openAnimation.getAnimationFactor()), (float) getHeight(), 6, new Color(26, 26, 26, 120));
+            Renderutil.drawBlurredShadow(getX(), getY(), (float) (getWidth() * openAnimation.getAnimationFactor()), getHeight(), 4,  new Color(26, 26, 26, 100));
+
+            scissorStack.popScissor();
         }
     }
 
@@ -180,14 +128,7 @@ public class TargetHUD extends RenderElement {
 
     @SubscribeEvent
     public void attack(AttackEntityEvent event) {
-        if(event.entity instanceof EntityPlayer) {
-            if(event.target != mc.thePlayer) {
-                timer.reset();
-            }
-        }
-        if(event.target == mc.thePlayer) {
-            timer.reset();
-        }
+
     }
 
 }
