@@ -115,7 +115,7 @@ public class EventProcessor extends Util {
     public void joinEvent(EntityJoinWorldEvent event) {
         if(event.entity == mc.thePlayer) {
             assert BindRegistry.guiKey != null;
-            Util.sendClientSideMessage("To open the GUI press " + BindRegistry.guiKey.getKeyCode() + "!", true);
+            Util.sendClientSideMessage("To open the GUI press " + Keyboard.getKeyName(BindRegistry.guiKey.getKeyCode()) + "!", true);
         }
     }
 
