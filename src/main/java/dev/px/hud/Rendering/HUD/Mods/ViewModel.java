@@ -17,7 +17,4 @@ public class ViewModel extends ToggleableElement {
     public Setting<Float> rightRoll = create(new Setting<>("RightRoll", -180F, 0F, 180F));
     public Setting<Float> rightScale = create(new Setting<>("RightScale", -180F, 0F, 180F));
 
-
-
-
 }

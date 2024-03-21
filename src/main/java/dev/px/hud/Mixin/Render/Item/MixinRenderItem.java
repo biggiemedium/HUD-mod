@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderItem.class)
 public class MixinRenderItem {
 
-    /*
     @Unique
     private EntityLivingBase lastEntityToRenderFor = null;
 
@@ -29,14 +28,15 @@ public class MixinRenderItem {
 
     @Inject(method = "renderItemModelTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/RenderItem;renderItem(" + "Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
     public void renderItemModelForEntity_renderItem(ItemStack stack, IBakedModel model, ItemCameraTransforms.TransformType cameraTransformType, CallbackInfo ci) {
+
         if (cameraTransformType == ItemCameraTransforms.TransformType.THIRD_PERSON && lastEntityToRenderFor instanceof EntityPlayer) {
             EntityPlayer p = (EntityPlayer) lastEntityToRenderFor;
             ItemStack heldStack = p.getHeldItem();
-            if (heldStack != null && p.getItemInUseCount() > 0 &&
-                    heldStack.getItemUseAction() == EnumAction.BLOCK) {
+            if (heldStack != null && p.getItemInUseCount() > 0 && heldStack.getItemUseAction() == EnumAction.BLOCK) {
                 renderSwordTransformation();
             }
         }
+
     }
 
     private void renderSwordTransformation() {
@@ -47,6 +47,4 @@ public class MixinRenderItem {
         }
     }
 
-
-     */
 }

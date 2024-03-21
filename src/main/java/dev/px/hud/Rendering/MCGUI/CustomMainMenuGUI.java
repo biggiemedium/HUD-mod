@@ -1,5 +1,6 @@
 package dev.px.hud.Rendering.MCGUI;
 
+import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,7 +19,8 @@ public class CustomMainMenuGUI extends GuiScreen {
 
     private PanoramaGUI panorama = new PanoramaGUI(width, height);
 
-    private ResourceLocation title = new ResourceLocation("textures/gui/title/minecraft.png");
+    private static ResourceLocation title = new ResourceLocation("textures/gui/title/minecraft.png");
+    private ResourceLocation title2 = new ResourceLocation("minecraft", "Textures/title.png");
 
     private GuiButton modButton;
     private GuiButton hudButton;
@@ -53,23 +55,12 @@ public class CustomMainMenuGUI extends GuiScreen {
         GlStateManager.enableAlpha();
 
         GL11.glPushMatrix();
-
-        float titleX = width / 2 - 150;
+        float titleX = width / 2 - (100);
         float titleY = 20;
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        renderT(titleX, titleY + 10, 300, 100);
-
+        renderT(titleX, titleY + 30, 200, 100);
         GL11.glPopMatrix();
-        /*
-        java.util.List<String> brandings = com.google.common.collect.Lists.reverse(net.minecraftforge.fml.common.FMLCommonHandler.instance().getBrandings(true));
-        for (int brdline = 0; brdline < brandings.size(); brdline++) {
-            String brd = brandings.get(brdline);
-            if (!com.google.common.base.Strings.isNullOrEmpty(brd)) {
-                this.drawString(this.mc.fontRendererObj, brd, 2, this.height - (10 + brdline * (this.mc.fontRendererObj.FONT_HEIGHT + 1)), 16777215);
-            }
-        }
 
-         */
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -145,7 +136,7 @@ public class CustomMainMenuGUI extends GuiScreen {
     }
 
     private void bindTexture() {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(title);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(title2);
         GlStateManager.enableTexture2D();
     }
 }

@@ -23,6 +23,9 @@ public class AutoSprint extends ToggleableElement {
 
     public void onUpdate() {
         if(Util.isNull()) return;
+        // These return statements are so that I dont get banned while playing
+        if(mc.thePlayer.moveForward <= 0 && mc.thePlayer.moveStrafing > 0) return; // if only moving to side
+        if(mc.thePlayer.moveForward < 0) return; // backwards
         mc.thePlayer.setSprinting(Playerutil.isMoving());
     }
 }

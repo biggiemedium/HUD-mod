@@ -264,7 +264,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleBoolean.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Boolean) {
                             String v = (Boolean) set.getValue() ? "true" : "false";
@@ -281,7 +281,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleFloat.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Float) {
                             // String v = (Boolean) set.getValue() ? "true" : "false";
@@ -299,7 +299,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleDouble.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Double) {
                             // String v = (Boolean) set.getValue() ? "true" : "false";
@@ -317,7 +317,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleInteger.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Integer) {
                             // String v = (Boolean) set.getValue() ? "true" : "false";
@@ -335,7 +335,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleEnum.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Enum) {
                             // String v = (Boolean) set.getValue() ? "true" : "false";
@@ -353,7 +353,7 @@ public class ConfigManager {
             File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "ToggleColor.txt");
             BufferedWriter writer = new BufferedWriter(new FileWriter(f));
             for(Element s : HUDMod.elementInitalizer.getElements()) {
-                if(s instanceof ToggleableElement) {
+                if(s instanceof RenderElement) {
                     for(Setting set : s.getSettings()) {
                         if(set.getValue() instanceof Color) {
                             // String v = (Boolean) set.getValue() ? "true" : "false";
@@ -828,7 +828,4 @@ public class ConfigManager {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    public void saveClientSettings() {
-
-    }
 }

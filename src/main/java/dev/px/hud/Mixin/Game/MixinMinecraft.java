@@ -33,16 +33,18 @@ public abstract class MixinMinecraft {
     @Inject(method = "createDisplay", at = @At("TAIL"), cancellable = true)
     public void setDisplay(CallbackInfo ci) {
         Display.setTitle(HUDMod.NAME + " | " + HUDMod.VERSION);
+        Display.setResizable(true);
     }
 
     @Inject(method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I", at = @At("HEAD"), cancellable = true)
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
-            if (HUDMod.elementInitalizer.isElementToggled(UnfocusedCPU.class) && !Display.isActive()) {
-                callbackInfoReturnable.setReturnValue(5);
+            if (HUDMod.elementInitalizer.isElementToggled(UnfocusedCPU.class)) {
+                if(!Display.isActive() && !(currentScreen instanceof GuiMainMenu)) {
+                    callbackInfoReturnable.setReturnValue(5);
+                }
             }
-        } catch (NullPointerException e) {
-        }
+        } catch (NullPointerException e) {}
     }
 
     @Inject(method = "shutdown", at = @At("HEAD"), cancellable = true)
@@ -68,7 +70,6 @@ public abstract class MixinMinecraft {
             this.displayGuiScreen(new CustomMainMenuGUI());
         }
     }
-
 
     private ByteBuffer convertImageToBuffer(BufferedImage bufferedimage) throws IOException {
         int[] aint = bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), null, 0, bufferedimage.getWidth());

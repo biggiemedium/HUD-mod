@@ -25,4 +25,13 @@ public class MixinLayerArmorBase {
         }
 
     }
+
+    @Inject(method = "doRenderLayer", at = @At("HEAD"), cancellable = true)
+    public void doRenderLayer(final EntityLivingBase entitylivingbaseIn, final float limbSwing, final float limbSwingAmount, final float partialTicks, final float ageInTicks, final float netHeadYaw, final float headPitch, final float scale, final CallbackInfo ci) {
+        NoRender nr = HUDMod.elementInitalizer.getElementByClass(NoRender.class);
+        if(nr.isToggled() && nr.armor.getValue()) {
+            ci.cancel();
+        }
+    }
+
 }

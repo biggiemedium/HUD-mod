@@ -1,5 +1,6 @@
 package dev.px.hud.Rendering.MCGUI;
 
+import dev.px.hud.Util.API.BindRegistry;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,6 +13,7 @@ import java.io.IOException;
 public class HUDMenuGUI extends GuiScreen {
 
     private GuiButton blurButton;
+    private GuiButton keybindButton;
     private GuiButton doneButton;
 
     private String title = "HUD Mod";
@@ -36,6 +38,8 @@ public class HUDMenuGUI extends GuiScreen {
 
         this.buttonList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done", new Object[0])));
         this.buttonList.add(this.blurButton = new GuiButton(101, this.width / 2 - 155, this.height / 6 + 96 - 6, 150, 20, "Blur"));
+        this.buttonList.add(this.keybindButton = new GuiButton(90, this.width / 2 - 155, this.height / 6 + 96 - 6 - 25, 150, 20, BindRegistry.guiKey == null ? "Keybinds" : "Keybind: " + Keyboard.getKeyName(BindRegistry.guiKey.getKeyCode())));
+
      //   buttonList.add(doneButton);
      //   buttonList.add(blurButton);
         super.initGui();
@@ -49,6 +53,10 @@ public class HUDMenuGUI extends GuiScreen {
         if(button.id == 200) {
             mc.displayGuiScreen(new CustomMainMenuGUI());
         }
+        if(button.id == 90) {
+            mc.displayGuiScreen(new GuiControls(this, mc.gameSettings));
+        }
+
         super.actionPerformed(button);
     }
 

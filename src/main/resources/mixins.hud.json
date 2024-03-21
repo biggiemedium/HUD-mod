@@ -6,6 +6,7 @@
   "mixins": [
     "Render.MixinEntityRenderer",
     "Network.MixinNetworkManager",
+    "Render.GUI.MixinGui",
     "Render.GUI.MixinGUIIngame",
     "Render.Item.IEntityRenderer",
     "Render.MixinGuiControls",
@@ -25,6 +26,7 @@
     "Render.Model.MixinLayerArmorBase",
     "Render.GUI.MixinGuiNewChat",
     "Render.GUI.MixinSplashProgress",
-    "Render.GUI.MixinGuiControls"
+    "Render.GUI.MixinGuiControls",
+    "Render.MixinRenderGlobals"
   ]
 }

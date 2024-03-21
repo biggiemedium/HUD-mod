@@ -1,11 +1,19 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
+import dev.px.hud.Rendering.Notification.Notification;
+import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.World.PlayerPotionEvent;
 import dev.px.hud.Util.Settings.Setting;
+import net.minecraft.potion.Potion;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT) // does this rain strength thing send server packets ???
 public class NoRender extends ToggleableElement {
 
     public NoRender() {
@@ -18,6 +26,7 @@ public class NoRender extends ToggleableElement {
     public Setting<Boolean> fog = create(new Setting<>("Fog", true));
     public Setting<Boolean> armor = create(new Setting<>("Armor", false));
     public Setting<Boolean> weather = create(new Setting<>("Weather", false));
+
 
 
     @SubscribeEvent
@@ -39,15 +48,13 @@ public class NoRender extends ToggleableElement {
 
     @Override
     public void onUpdate() {
-        if(player == null || world == null) return;
-
+        if(mc.thePlayer == null || mc.theWorld == null) return;
         if(weather.getValue()) {
-            if(world.isRaining() || world.isThundering()) {
-                world.setRainStrength(0.0f);
-                world.setThunderStrength(0.0f);
+            if(mc.theWorld.isRaining() || mc.theWorld.isThundering()) {
+                mc.theWorld.setRainStrength(0.0f);
+               // mc.theWorld.setThunderStrength(0);
             }
         }
-
     }
 
     public static NoRender INSTANCE;

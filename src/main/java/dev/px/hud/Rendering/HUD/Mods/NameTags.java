@@ -61,7 +61,7 @@ public class NameTags extends ToggleableElement {
         if(mc.getRenderManager() == null || mc.getRenderManager().options == null) return;
         for(EntityPlayer e : mc.theWorld.playerEntities) {
             if(e == null) { continue; }
-       //     if(e == mc.thePlayer) { continue; }
+            if(e == mc.thePlayer) { continue; }
             if(!e.isEntityAlive()) { continue; }
             if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) { continue; }
             double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
@@ -76,10 +76,12 @@ public class NameTags extends ToggleableElement {
 
     @SubscribeEvent
     public void onNameTagRender(RenderLivingEvent.Specials.Pre<EntityPlayer> event) {
+        if(event.entity != mc.thePlayer) {
         if(event.entity instanceof EntityPlayer) {
-            if(event.entity instanceof EntityLivingBase) {
+            if (event.entity instanceof EntityLivingBase) {
                 event.setCanceled(true);
             }
+        }
         }
     }
 

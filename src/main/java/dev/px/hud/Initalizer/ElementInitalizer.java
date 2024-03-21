@@ -23,6 +23,7 @@ public class ElementInitalizer {
         Add(new CPS());
         Add(new HitInfoElement());
         Add(new InventoryElement());
+        Add(new ItemStackElement());
         Add(new Radar());
         Add(new TargetHUD());
 
@@ -31,6 +32,7 @@ public class ElementInitalizer {
         Add(new FPSElement());
         Add(new PlaytimeElement());
         Add(new RotationElement());
+        Add(new ServerElement());
         Add(new SneakInfoElement());
         Add(new SpeedElement());
         Add(new TextRadarElement());
@@ -41,11 +43,12 @@ public class ElementInitalizer {
         // Render
 
         // Mod
-        Add(new AdditionalInfo());
+     //   Add(new AdditionalInfo());
         Add(new AutoSprint());
         Add(new BlockHighlight());
+        Add(new ChatModifications());
         Add(new ChunkAnimator());
-        Add(new CritParticles());
+      //  Add(new CritParticles());
         Add(new ESPMod());
         Add(new FakePlayer());
         Add(new FullBright());
@@ -54,9 +57,10 @@ public class ElementInitalizer {
         Add(new NameTags());
         Add(new NoRender());
         Add(new OldAnimations());
+        Add(new Tracers());
         Add(new Trajectories());
         Add(new UnfocusedCPU());
-        Add(new ViewModel());
+      //  Add(new ViewModel());
     }
 
     private void Add(Element element) {
