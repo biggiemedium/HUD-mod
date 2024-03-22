@@ -10,6 +10,8 @@ public class ChatModifications extends ToggleableElement {
     }
 
     public Setting<Boolean> clearChat = create(new Setting<>("Clear Chat", true));
-   // public Setting<Boolean> infChat = create(new Setting<>("Infinite length", true));
+    public Setting<Boolean> fade = create(new Setting<>("Fade", true));
+    public Setting<Integer> speed = create(new Setting<>("Fade speed", 4, 1, 10, v -> fade.getValue()));
+    // public Setting<Boolean> infChat = create(new Setting<>("Infinite length", true));
 
 }

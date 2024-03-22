@@ -112,6 +112,9 @@ public class EventProcessor extends Util {
                             mc.displayGuiScreen(HUDMod.screen);
                         }
                     }
+                    if(keyCode == Keyboard.KEY_U) {
+                        Util.sendClientSideMessage("Test", true);
+                    }
 
                     for(Element e : HUDMod.elementInitalizer.getElements()) {
                         if(e instanceof ToggleableElement) {

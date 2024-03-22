@@ -72,6 +72,10 @@ public class PotionsElement extends RenderElement {
         }
         Collections.sort(effects, comparator);
 
+        if(mc.thePlayer.getActivePotionEffects().isEmpty()) {
+            this.longestText = 118;
+            this.adjustedHeight = 40;
+        }
         for (PotionEffect potionEffect : effects) {
             Potion potion = Potion.potionTypes[potionEffect.getPotionID()];
             String power = "";
@@ -96,9 +100,13 @@ public class PotionsElement extends RenderElement {
             offsetY += getFontHeight() + 1;
             if(getFontWidth(potionEffect.getEffectName()) > 118) {
                 longestText = getFontWidth(potionEffect.getEffectName());
+            } else {
+                longestText = 118;
             }
-            if(20 + offsetY > getHeight()) {
+            if(20 + offsetY > 40) {
                 adjustedHeight = (int) ((20 + offsetY) * toggleAnimation.getAnimationFactor());
+            } else {
+                adjustedHeight = 40;
             }
             setWidth(longestText);
             setHeight(adjustedHeight);
@@ -107,7 +115,8 @@ public class PotionsElement extends RenderElement {
 
         GL11.glPopMatrix();
 
-
+        setWidth(longestText);
+        setHeight(adjustedHeight);
     }
 
     public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height) {

@@ -54,6 +54,7 @@ public class ElementInitalizer {
         Add(new FakePlayer());
         Add(new FullBright());
         Add(new ItemPhysics());
+        Add(new MotionBlur());
         Add(new NoHurtCam());
         Add(new NameTags());
         Add(new NoRender());

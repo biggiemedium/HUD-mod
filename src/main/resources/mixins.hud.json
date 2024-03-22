@@ -27,6 +27,8 @@
     "Render.GUI.MixinGuiNewChat",
     "Render.GUI.MixinSplashProgress",
     "Render.GUI.MixinGuiControls",
-    "Render.MixinRenderGlobals"
+    "Render.MixinRenderGlobals",
+    "Render.Model.MixinTNTPrimed",
+    "Render.MixinShaderGroup"
   ]
 }
