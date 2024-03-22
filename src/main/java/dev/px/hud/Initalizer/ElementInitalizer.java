@@ -30,7 +30,8 @@ public class ElementInitalizer {
         // Info
         Add(new CoordinateElement());
         Add(new FPSElement());
-        Add(new PlaytimeElement());
+        //Add(new PlaytimeElement());
+        Add(new PotionsElement());
         Add(new RotationElement());
         Add(new ServerElement());
         Add(new SneakInfoElement());

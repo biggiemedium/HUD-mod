@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL32;
 
@@ -33,7 +34,7 @@ public class Tracers extends ToggleableElement {
 
     @Override
     public void onRender(Render3dEvent event) {
-        for(Entity e : mc.theWorld.playerEntities) {
+        for(EntityPlayer e : mc.theWorld.playerEntities) {
             if (e == null || e == mc.thePlayer) {
                 continue;
             }
@@ -48,6 +49,10 @@ public class Tracers extends ToggleableElement {
             if (mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
                 continue;
             }
+            if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue()
+                    && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e))
+            { continue; }
+
             Vec3 vec = Entityutil.getInterpolatedPos(e, event.getPartialTicks())
                     .subtract(new Vec3(
                             ((MixinRenderManager) mc.getRenderManager()).getRenderPosX(),

@@ -150,6 +150,14 @@ public class Frame {
         }
     }
 
+    public void keyTyped(char key, int keyCode) {
+        if(open) {
+            this.buttons.forEach(button -> {
+                button.keyTyped(key, keyCode);
+            });
+        }
+    }
+
     public void mouseReleased(int mouseX, int mouseY) {
         this.dragging = false;
         this.expanding = false;

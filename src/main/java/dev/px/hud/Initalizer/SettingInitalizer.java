@@ -7,24 +7,16 @@ import java.util.List;
 
 public class SettingInitalizer {
 
-    public ArrayList<Setting> settings;
+    private ArrayList<Setting> clientPreferences = new ArrayList<>();
+
+    public Setting<Boolean> NCPCluster;
 
     public SettingInitalizer() {
-        this.settings = new ArrayList<>();
+        this.NCPCluster = create(new Setting<>("NCP Cluster", true));
     }
 
-    public Setting Build(Setting setting) {
-        this.settings.add(setting);
-        return setting;
+    public <T> Setting<T> create(Setting<T> hudSetting) {
+        this.clientPreferences.add(hudSetting);
+        return hudSetting;
     }
-
-    public <T> Setting BuildValue(Setting<T> value) {
-        this.settings.add(value);
-        return value;
-    }
-
-    public ArrayList<Setting> getSettingsArrayList() {
-        return settings;
-    }
-
 }

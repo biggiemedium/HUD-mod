@@ -7,6 +7,7 @@ import dev.px.hud.Rendering.Panel.Panel;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -72,7 +73,18 @@ public class ClickGUI extends Panel {
             }
         }
 
-        HUDMod.soundInitalizer.playSound("click");
+  //      HUDMod.soundInitalizer.playSound("click");
+    }
+
+    @Override
+    public void keyTyped(char typedChar, int keyCode) throws IOException {
+        if(keyCode == Keyboard.KEY_ESCAPE || keyCode == Keyboard.KEY_BACK) {
+            mc.currentScreen = null;
+        }
+
+        for(Frame f : this.frames) {
+            f.keyTyped(typedChar, keyCode);
+        }
     }
 
     @Override

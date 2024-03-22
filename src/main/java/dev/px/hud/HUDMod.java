@@ -3,10 +3,8 @@ package dev.px.hud;
 import dev.px.hud.Initalizer.CommandInitalizer;
 import dev.px.hud.Initalizer.ConfigInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
-import dev.px.hud.Manager.ColorManager;
-import dev.px.hud.Manager.FontManager;
-import dev.px.hud.Manager.NotificationManager;
-import dev.px.hud.Manager.SoundManager;
+import dev.px.hud.Initalizer.SettingInitalizer;
+import dev.px.hud.Manager.*;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
@@ -37,6 +35,7 @@ public class HUDMod {
     public static ElementInitalizer elementInitalizer;
     public static EventProcessor clazz;
     public static ConfigManager configManager;
+    public static SettingInitalizer clientSettingsInitalizer;
     public static CommandInitalizer commandInitalizer;
 
     // Manager
@@ -44,6 +43,7 @@ public class HUDMod {
     public static ColorManager colorManager;
     public static FontManager fontManager;
     public static NotificationManager notificationManager;
+    public static ServerManager serverManager;
 
     private static Minecraft mc = Wrapper.mc;
     public static PanelGUIScreen screen;
@@ -60,12 +60,14 @@ public class HUDMod {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        ProgressManager.ProgressBar progressManager = ProgressManager.push("HUD Mod", 8);
+        ProgressManager.ProgressBar progressManager = ProgressManager.push("HUD Mod", 10);
 
         colorManager = new ColorManager();
         progressManager.step("Loading Color Manager");
         clazz = new EventProcessor();
         progressManager.step("Loading Event Processor");
+        clientSettingsInitalizer = new SettingInitalizer();
+        progressManager.step("Loading Client Settings...");
         notificationManager = new NotificationManager();
         progressManager.step("Loading Notification Manager");
         elementInitalizer = new ElementInitalizer();
@@ -73,6 +75,8 @@ public class HUDMod {
         commandInitalizer = new CommandInitalizer();
         progressManager.step("Loading Command Initializer");
 
+        serverManager = new ServerManager();
+        progressManager.step("Loading server Manager...");
         soundInitalizer = new SoundManager();
         progressManager.step("Setting up the dua lipa...");
         fontManager = new FontManager();

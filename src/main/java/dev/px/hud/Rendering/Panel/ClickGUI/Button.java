@@ -155,6 +155,18 @@ public class Button {
         }
     }
 
+    public void keyTyped(char typedChar, int keyCode) {
+        if (open) {
+            settingButtons.forEach(settingButton -> {
+                try {
+                    settingButton.keyTyped(typedChar, keyCode);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
     public void mouseReleased(int mouseX, int mouseY) {
         if(this.element != null) {
             if (open) {

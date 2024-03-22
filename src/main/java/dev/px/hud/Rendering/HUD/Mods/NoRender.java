@@ -26,6 +26,7 @@ public class NoRender extends ToggleableElement {
     public Setting<Boolean> fog = create(new Setting<>("Fog", true));
     public Setting<Boolean> armor = create(new Setting<>("Armor", false));
     public Setting<Boolean> weather = create(new Setting<>("Weather", false));
+    public Setting<Boolean> cluster = create(new Setting<>("Cluster", true));
 
 
 

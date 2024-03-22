@@ -122,7 +122,7 @@ public class ESPMod extends ToggleableElement {
 
         /* Box 2d */
         if(mode.getValue() == Mode.Box || mode.getValue() == Mode.R6) {
-                for(Entity e : mc.theWorld.playerEntities) {
+                for(EntityPlayer e : mc.theWorld.playerEntities) {
                     if(e == null || e == mc.thePlayer) {
                         continue;
                     }
@@ -132,6 +132,9 @@ public class ESPMod extends ToggleableElement {
                     if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
                         continue;
                     }
+                    if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue()
+                            && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e))
+                    { continue; }
 
                     double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
                     double y = (e.lastTickPosY + (e.posY - e.lastTickPosY) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY());

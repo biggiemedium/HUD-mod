@@ -9,6 +9,7 @@ import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.BindRegistry;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Client.ChatReceiveEvent;
 import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Event.ReceivePacketEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
@@ -45,6 +46,12 @@ public class EventProcessor extends Util {
     }
 
      */
+
+
+    @SubscribeEvent
+    public void onChatRecieve(ChatReceiveEvent event) {
+
+    }
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent event) {

@@ -3,6 +3,9 @@ package dev.px.hud.Util.API.Entity;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiPlayerTabOverlay;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -16,9 +19,32 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.Vector3d;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Entityutil implements Wrapper {
 
     private static final Frustum frustum = new Frustum();
+
+    public static boolean isHypixelNPC(Entity entity) {
+        String formattedName = entity.getDisplayName().getFormattedText();
+        String customName = entity.getCustomNameTag();
+        if (!formattedName.startsWith("\247") && formattedName.endsWith("\247r")) {
+            return true;
+        }
+        if (formattedName.contains("[NPC]")) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isPlayerFake(EntityPlayer entity) {
+        if(entity.getName().toLowerCase().contains("[ncp]") || entity.getDisplayName().getFormattedText().contains("\u00A78[NPC]")) {
+            return true;
+        }
+
+        return false;
+    }
 
     public static boolean isInView(Entity ent) {
         frustum.setPosition(mc.getRenderViewEntity().posX, mc.getRenderViewEntity().posY, mc.getRenderViewEntity().posZ);
