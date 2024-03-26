@@ -5,6 +5,7 @@ import dev.px.hud.Initalizer.ConfigInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
 import dev.px.hud.Initalizer.SettingInitalizer;
 import dev.px.hud.Manager.*;
+import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
@@ -47,6 +48,7 @@ public class HUDMod {
 
     private static Minecraft mc = Wrapper.mc;
     public static PanelGUIScreen screen;
+    public static CSGOGui screen2;
     public static EventBus EVENT_BUS = new EventManager();
     public static long playTime = -1;
     private long startTime = -1;
@@ -82,6 +84,7 @@ public class HUDMod {
         fontManager = new FontManager();
         progressManager.step("Setting up fonts...");
         screen = new PanelGUIScreen();
+        screen2 = new CSGOGui();
         configManager = new ConfigManager();
         progressManager.step("Loading Configs");
 

@@ -1,26 +1,27 @@
 package dev.px.hud.Rendering.NewGUI.Screens;
 
-public class SubComponent {
+import java.io.IOException;
 
-    private int x, y, width, height;
+public class ModuleScreen extends Screen {
 
-    public SubComponent(int x, int y, int width, int height) {
+    public int x, y, width, height;
+
+    public ModuleScreen(int x, int y, int width, int height) {
+        super("Mods");
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
 
-    public void draw(int mouseX, int mouseY, float partialTicks) {
-
+    @Override
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        super.render(mouseX, mouseY, partialTicks);
     }
 
-    public void mouseClick(int state, int mouseX, int mouseY) {
-
-    }
-
-    public void mouseRelease(int state, int mouseX, int mouseY) {
-
+    @Override
+    public void onClick(int mouseX, int mouseY, int button) throws IOException {
+        super.onClick(mouseX, mouseY, button);
     }
 
     public int getX() {

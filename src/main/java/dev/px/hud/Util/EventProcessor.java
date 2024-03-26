@@ -111,6 +111,9 @@ public class EventProcessor extends Util {
                         if (keyCode == BindRegistry.guiKey.getKeyCode()) {
                             mc.displayGuiScreen(HUDMod.screen);
                         }
+                        if(keyCode == BindRegistry.newGui.getKeyCode()) {
+                            mc.displayGuiScreen(HUDMod.screen2);
+                        }
                     }
                     if(keyCode == Keyboard.KEY_U) {
                         Util.sendClientSideMessage("Test", true);

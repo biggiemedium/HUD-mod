@@ -4,13 +4,6 @@ public class Dimension<T extends Number> {
 
     private T x, y, width, height;
 
-    public Dimension(T x, T y) {
-        this.x = x;
-        this.y = y;
-        this.width = null;
-        this.height = null;
-    }
-
     public Dimension(T x, T y, T width, T height) {
         this.x = x;
         this.y = y;

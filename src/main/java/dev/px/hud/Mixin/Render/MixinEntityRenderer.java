@@ -83,6 +83,7 @@ public class MixinEntityRenderer {
     @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/shader" + "/Framebuffer;bindFramebuffer(Z)V", shift = At.Shift.BEFORE))
     public void updateCameraAndRender(float partialTicks, long nanoTime, CallbackInfo ci) {
 
+        /*
         List<ShaderGroup> shaders = new ArrayList<ShaderGroup>();
 
         if (this.theShaderGroup != null && this.useShader) {
@@ -102,11 +103,13 @@ public class MixinEntityRenderer {
                 GlStateManager.popMatrix();
             }
         }
+
+         */
     }
 
     @Inject(method = "updateShaderGroupSize", at = @At("RETURN"))
     public void updateShaderGroupSize(int width, int height, CallbackInfo ci) {
-
+        /*
         if(Minecraft.getMinecraft().theWorld == null) {
             return;
         }
@@ -118,5 +121,7 @@ public class MixinEntityRenderer {
                 motionBlur.createBindFramebuffers(width, height);
             }
         }
+
+         */
     }
 }
