@@ -1,14 +1,22 @@
 package dev.px.hud.Rendering.NewGUI.Screens;
 
+import net.minecraft.util.ResourceLocation;
+
 import java.io.IOException;
 
 public class Screen {
 
     private String name;
+    private ResourceLocation resourceLocation;
     public int x, y, width, height;
 
     public Screen(String name) {
         this.name = name;
+        this.resourceLocation = null;
+        this.x = 0;
+        this.y = 0;
+        this.width = 0;
+        this.height = 0;
     }
 
     public Screen(String name, int x, int y, int width, int height) {
@@ -17,6 +25,15 @@ public class Screen {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.resourceLocation = null;
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return resourceLocation;
+    }
+
+    public void setResourceLocation(ResourceLocation resourceLocation) {
+        this.resourceLocation = resourceLocation;
     }
 
     public int getX() {

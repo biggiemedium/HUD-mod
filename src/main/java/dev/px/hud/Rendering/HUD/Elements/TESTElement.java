@@ -9,6 +9,7 @@ import dev.px.hud.Util.API.Entity.Entityutil;
 import dev.px.hud.Util.API.Entity.Playerutil;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.API.SpotifyAPI;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
@@ -36,11 +37,7 @@ public class TESTElement extends RenderElement {
         UP, SIDE
     }
 
-
-    private final ArrayList<Float> speeds = new ArrayList<>();
-    private double lastVertices;
-    private float currentSpeed;
-
+   // private SpotifyAPI api = new SpotifyAPI();
 
 
     @Override

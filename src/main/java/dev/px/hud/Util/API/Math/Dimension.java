@@ -11,6 +11,13 @@ public class Dimension<T extends Number> {
         this.height = height;
     }
 
+    public void update(T x, T y, T width, T height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     public T getX() {
         return x;
     }

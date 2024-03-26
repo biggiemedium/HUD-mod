@@ -8,6 +8,7 @@ import dev.px.hud.Util.API.Math.Dimension;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.GlUtils;
 import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.API.Render.Texture;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -15,6 +16,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainScreen {
@@ -27,21 +29,26 @@ public class MainScreen {
     public boolean dragging = false;
     private int dragX, dragY;
 
-    private Animation startupAnimation = new Animation(800, false, Easing.ELASTIC_IN_OUT);
+    private Animation startupAnimation = new Animation(200, false, Easing.LINEAR);
     private boolean close = false;
 
     private Minecraft mc = Minecraft.getMinecraft();
     private ArrayList<Screen> screens = new ArrayList<>();
     private Screen currentScreen = null;
 
+    private Dimension<Integer> screenPanels;
+    private Dimension<Integer> GUIButton;
+
     public MainScreen(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        screenPanels = new Dimension<>(x + 75, y + 20, width - 75, height - 20);
 
-        this.screens.add(new ModuleScreen(x + 75, y, width - 75, height));
-        this.screens.add(new ClientSettingsScreen(x + 75, y, width - 75, height));
+        this.screens.add(new ModuleScreen(screenPanels.getX(), screenPanels.getY(), screenPanels.getWidth(), screenPanels.getHeight()));
+        this.screens.add(new ClientSettingsScreen(screenPanels.getX(), screenPanels.getY(), screenPanels.getWidth(), screenPanels.getHeight()));
+        this.screens.add(new HUDEditorScreen());
 
         if(currentScreen == null) {
             currentScreen = screens.get(0);
@@ -55,6 +62,15 @@ public class MainScreen {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         ScaledResolution sr = new ScaledResolution(mc);
+
+        if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
+            GUIButton = new Dimension<>(sr.getScaledWidth() / 2 - 25 , sr.getScaledHeight() / 2 - 12, 35, 20);
+            RoundedShader.drawRound(GUIButton.getX() , GUIButton.getY(), GUIButton.getWidth(), GUIButton.getHeight(), 6, new Color(30, 30, 30));
+            Fontutil.drawText("GUI", (int) (GUIButton.getX() + (GUIButton.getWidth() / 2 - (Fontutil.getWidth("GUI") / 2))), (int) GUIButton.getY() + (int) (GUIButton.getHeight() / 2 - (Fontutil.getHeight() / 2)), -1);
+
+            return;
+        }
+
         if(dragging) {
             x = mouseX - dragX;
             y = mouseY - dragY;
@@ -93,6 +109,7 @@ public class MainScreen {
             GL11.glPushMatrix();
             // bar
             RoundedShader.drawRound(x, y, 75, height, 3, new Color(40, 40, 40));
+            RoundedShader.drawRound(x, y, width, 15, 3, new Color(40, 40, 40));
 
             // title
             Fontutil.drawTextShadow(HUDMod.NAME, x + 7, y + 6, -1);
@@ -103,15 +120,32 @@ public class MainScreen {
             int offsetY = y + 40;
             int buttonHeight = 20;
             for(Screen s : screens) {
+                Texture t = new Texture(s.getResourceLocation());
+                if(currentScreen == null) {
+                    currentScreen = screens.get(0);
+                }
+
                 if(s == currentScreen) {
                     //RoundedShader.drawRound(x + 2, offsetY - 1, 72, 19, 1, Colorutil.interpolateColorsBackAndForth(15, 1, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true));
-                    RoundedShader.drawRound(x, offsetY, 74, 17, 1.5f, new Color(38, 38, 38));
-                    RoundedShader.drawRound(x + 1, offsetY, 0.8f, 17, 1, new Color(255, 255, 255));
+                    RoundedShader.drawRound(x + 1, offsetY, 74, 17, 1.5f, new Color(38, 38, 38));
+                    RoundedShader.drawRound(x, offsetY, 0.8f, 17, 1, new Color(255, 255, 255));
+
+                    screenPanels.update(x + 75, y + 20, width - 75, height - 20);
+                    currentScreen.setX(screenPanels.getX());
+                    currentScreen.setY(screenPanels.getY());
+                    currentScreen.setWidth(screenPanels.getWidth());
+                    currentScreen.setHeight(screenPanels.getHeight());
+                    currentScreen.render(mouseX, mouseY, partialTicks);
                 } else {
                     RoundedShader.drawRound(x + 1, offsetY, 74, 17, 1, new Color(38, 38, 38));
                 }
 
-                Fontutil.drawTextShadow(s.getName(), x + 25, (int) (offsetY + (Fontutil.getHeight() / 2)), -1);
+                if(t.getLocation() != null) { // im so confused
+                    t.renderT((int) (x + 4), offsetY + 2, 14, 14);
+                }
+
+
+                Fontutil.drawTextShadow(s.getName(), x + 23, (int) (offsetY + (Fontutil.getHeight() / 2)), -1);
                 offsetY += 17;
             }
             GL11.glPopMatrix();
@@ -122,13 +156,25 @@ public class MainScreen {
     }
 
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + 25) {
+        if(mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + 20) {
             this.dragging = true;
             dragX = mouseX - x;
             dragY = mouseY - y;
         }
 
+        if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
+            if(this.GUIButton != null) {
+                if(isHovered(GUIButton.getX(), GUIButton.getY(), GUIButton.getWidth(), GUIButton.getHeight(), mouseX, mouseY)) {
+
+                    this.currentScreen = screens.get(0); // Mod
+                }
+            }
+        }
+
         if(startupAnimation.getAnimationFactor() > 0) {
+            try {
+                currentScreen.onClick(mouseX, mouseY, button);
+            } catch (IOException e) {e.printStackTrace();}
             int offset = y + 40;
             for(Screen s : screens) {
                 if(isHovered(x, offset, 74, 17, mouseX, mouseY) && button == 0) {

@@ -20,6 +20,18 @@ public class RoundedShader implements Wrapper {
         drawRound(x, y, width, height, radius, false, color);
     }
 
+    public static void drawGradientHorizontal(float x, float y, float width, float height, float radius, Color left, Color right) {
+        drawGradientRound(x, y, width, height, radius, left, left, right, right);
+    }
+    public static void drawGradientVertical(float x, float y, float width, float height, float radius, Color top, Color bottom) {
+        drawGradientRound(x, y, width, height, radius, bottom, top, bottom, top);
+    }
+
+    public static void drawGradientCornerRL(float x, float y, float width, float height, float radius, Color bottomLeft, Color topRight) {
+        Color mixedColor = Colorutil.interpolateColorC(topRight, bottomLeft, .5f);
+        drawGradientRound(x, y, width, height, radius, bottomLeft, mixedColor, mixedColor, topRight);
+    }
+
     public static void drawGradientRound(float x, float y, float width, float height, float radius, Color bottomLeft, Color topLeft, Color bottomRight, Color topRight) {
         GlStateManager.resetColor();
         GlStateManager.enableBlend();
