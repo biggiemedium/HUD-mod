@@ -14,7 +14,9 @@ public class RoundedShader implements Wrapper {
 
     private static final Shaderutil roundedGradientShader = new Shaderutil("roundedRectGradient");
     public static Shaderutil roundedShader = new Shaderutil("roundedRect");
-    public static Shaderutil roundedOutlineShader = new Shaderutil("textures/roundrectoutline.frag");
+    public static Shaderutil roundedOutlineShader = new Shaderutil("ModShaders/roundrectoutline.frag");
+    public static Shaderutil roundedTexture = new Shaderutil("ModShaders/roundrecttexture.frag");
+
 
     public static void drawRound(float x, float y, float width, float height, float radius, Color color) {
         drawRound(x, y, width, height, radius, false, color);

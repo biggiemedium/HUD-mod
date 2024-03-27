@@ -21,10 +21,6 @@ public class SplashManager extends Util {
         drawSplash(mc.getTextureManager());
     }
 
-    public static void setProgress() {
-        update();
-    }
-
     public static void drawSplash(TextureManager mcTextureManager) {
         if (textureManager == null)
             textureManager = mcTextureManager;

@@ -67,7 +67,7 @@ public class MainScreen {
             GUIButton = new Dimension<>(sr.getScaledWidth() / 2 - 25 , sr.getScaledHeight() / 2 - 12, 35, 20);
             RoundedShader.drawRound(GUIButton.getX() , GUIButton.getY(), GUIButton.getWidth(), GUIButton.getHeight(), 6, new Color(30, 30, 30));
             Fontutil.drawText("GUI", (int) (GUIButton.getX() + (GUIButton.getWidth() / 2 - (Fontutil.getWidth("GUI") / 2))), (int) GUIButton.getY() + (int) (GUIButton.getHeight() / 2 - (Fontutil.getHeight() / 2)), -1);
-
+            currentScreen.render(mouseX, mouseY, partialTicks);
             return;
         }
 
@@ -128,7 +128,7 @@ public class MainScreen {
                 if(s == currentScreen) {
                     //RoundedShader.drawRound(x + 2, offsetY - 1, 72, 19, 1, Colorutil.interpolateColorsBackAndForth(15, 1, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true));
                     RoundedShader.drawRound(x + 1, offsetY, 74, 17, 1.5f, new Color(38, 38, 38));
-                    RoundedShader.drawRound(x, offsetY, 0.8f, 17, 1, new Color(255, 255, 255));
+                    RoundedShader.drawRound(x, offsetY, 0.8f, 17, 1, HUDMod.colorManager.getAlternativeColor()); //new Color(255, 255, 255)
 
                     screenPanels.update(x + 75, y + 20, width - 75, height - 20);
                     currentScreen.setX(screenPanels.getX());
@@ -148,6 +148,8 @@ public class MainScreen {
                 Fontutil.drawTextShadow(s.getName(), x + 23, (int) (offsetY + (Fontutil.getHeight() / 2)), -1);
                 offsetY += 17;
             }
+
+            RoundedShader.drawRound(x + 75, y + 15, 1.5f, height - 14.5f, 2, HUDMod.colorManager.getAlternativeColor());
             GL11.glPopMatrix();
 
             GlUtils.stopScale();
@@ -155,20 +157,23 @@ public class MainScreen {
 
     }
 
-    public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + 20) {
-            this.dragging = true;
-            dragX = mouseX - x;
-            dragY = mouseY - y;
-        }
+    public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
 
         if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
             if(this.GUIButton != null) {
                 if(isHovered(GUIButton.getX(), GUIButton.getY(), GUIButton.getWidth(), GUIButton.getHeight(), mouseX, mouseY)) {
-
                     this.currentScreen = screens.get(0); // Mod
+                    //return;
                 }
             }
+            currentScreen.onClick(mouseX, mouseY, button);
+            return;
+        }
+
+        if(mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + 20) {
+            this.dragging = true;
+            dragX = mouseX - x;
+            dragY = mouseY - y;
         }
 
         if(startupAnimation.getAnimationFactor() > 0) {
@@ -179,6 +184,14 @@ public class MainScreen {
             for(Screen s : screens) {
                 if(isHovered(x, offset, 74, 17, mouseX, mouseY) && button == 0) {
                     this.currentScreen = s;
+                }
+
+                if(s == currentScreen) {
+                    try {
+                        currentScreen.onClick(mouseX, mouseY, button);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 offset += 17;
             }
@@ -191,7 +204,21 @@ public class MainScreen {
     }
 
     public void mouseReleased(int mouseX, int mouseY, int state) {
+
         this.dragging = false;
+
+        if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
+            dragging = false;
+            currentScreen.onRelease(mouseX, mouseY, state);
+            return;
+        }
+
+        for(Screen s : screens) {
+            if(s == currentScreen) {
+                currentScreen.onRelease(mouseX, mouseY, state);
+            }
+        }
+
     }
 
     public void keyPressed(char typedChar, int keyCode) {

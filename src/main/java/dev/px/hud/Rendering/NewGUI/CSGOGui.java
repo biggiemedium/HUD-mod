@@ -2,6 +2,9 @@ package dev.px.hud.Rendering.NewGUI;
 
 import dev.px.hud.Rendering.NewGUI.Screens.MainScreen;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
@@ -9,6 +12,7 @@ public class CSGOGui extends GuiScreen {
 
     private int x, y, width, height;
     private MainScreen screen;
+    private ResourceLocation shaders = new ResourceLocation("minecraft", "shaders/post/blur" + ".json");
 
     public CSGOGui() {
         this.x = 100;
@@ -24,9 +28,30 @@ public class CSGOGui extends GuiScreen {
     }
 
     @Override
+    public void onGuiClosed() {
+        if(mc.theWorld != null) {
+            mc.entityRenderer.getShaderGroup().deleteShaderGroup();
+        }
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if(screen == null) return;
         screen.drawScreen(mouseX, mouseY, partialTicks);
+
+        if(mc.theWorld != null) {
+            if(OpenGlHelper.shadersSupported && mc.getRenderViewEntity() instanceof EntityPlayer) {
+                if(mc.entityRenderer.getShaderGroup() != null) {
+                    mc.entityRenderer.getShaderGroup().deleteShaderGroup();
+                }
+
+                mc.entityRenderer.loadShader(shaders);
+
+            }
+            if(mc.currentScreen == null || mc.currentScreen != this) {
+                mc.entityRenderer.getShaderGroup().deleteShaderGroup();
+            }
+        }
     }
 
     @Override

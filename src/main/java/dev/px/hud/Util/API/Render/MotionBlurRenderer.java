@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class MotionBlurRenderer {
 
-    private static ResourceLocation location = new ResourceLocation("minecraft:shaders/post/motion_blur.json");
+    private static ResourceLocation location = new ResourceLocation("minecraft", "ModShaders/post/motion_blur.json");
     private static final Logger logger = LogManager.getLogger();
 
     private Minecraft mc = Minecraft.getMinecraft();

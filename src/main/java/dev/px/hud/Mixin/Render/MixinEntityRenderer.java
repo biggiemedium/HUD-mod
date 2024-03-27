@@ -82,7 +82,6 @@ public class MixinEntityRenderer {
     // Taken from soar client
     @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/shader" + "/Framebuffer;bindFramebuffer(Z)V", shift = At.Shift.BEFORE))
     public void updateCameraAndRender(float partialTicks, long nanoTime, CallbackInfo ci) {
-
         /*
         List<ShaderGroup> shaders = new ArrayList<ShaderGroup>();
 
@@ -110,7 +109,7 @@ public class MixinEntityRenderer {
     @Inject(method = "updateShaderGroupSize", at = @At("RETURN"))
     public void updateShaderGroupSize(int width, int height, CallbackInfo ci) {
         /*
-        if(Minecraft.getMinecraft().theWorld == null) {
+        if(Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) {
             return;
         }
 
@@ -121,6 +120,7 @@ public class MixinEntityRenderer {
                 motionBlur.createBindFramebuffers(width, height);
             }
         }
+
 
          */
     }
