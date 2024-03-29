@@ -9,6 +9,7 @@ import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.GlUtils;
 import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.API.Render.Texture;
+import dev.px.hud.Util.API.Shader.Shaders.GradientShader;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -63,7 +64,7 @@ public class MainScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         ScaledResolution sr = new ScaledResolution(mc);
 
-        if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
+        if(currentScreen.getName().equalsIgnoreCase("Edit HUD")) {
             GUIButton = new Dimension<>(sr.getScaledWidth() / 2 - 25 , sr.getScaledHeight() / 2 - 12, 35, 20);
             RoundedShader.drawRound(GUIButton.getX() , GUIButton.getY(), GUIButton.getWidth(), GUIButton.getHeight(), 6, new Color(30, 30, 30));
             Fontutil.drawText("GUI", (int) (GUIButton.getX() + (GUIButton.getWidth() / 2 - (Fontutil.getWidth("GUI") / 2))), (int) GUIButton.getY() + (int) (GUIButton.getHeight() / 2 - (Fontutil.getHeight() / 2)), -1);
@@ -107,6 +108,7 @@ public class MainScreen {
 
             // Side panel
             GL11.glPushMatrix();
+
             // bar
             RoundedShader.drawRound(x, y, 75, height, 3, new Color(40, 40, 40));
             RoundedShader.drawRound(x, y, width, 15, 3, new Color(40, 40, 40));
@@ -114,11 +116,11 @@ public class MainScreen {
             // title
             Fontutil.drawTextShadow(HUDMod.NAME, x + 7, y + 6, -1);
             Fontutil.drawTextShadow(HUDMod.VERSION, x + (Fontutil.getWidth(HUDMod.NAME) - 2), (int) (y + 6 + Fontutil.getHeight()), new Color(255, 255, 255, 200).getRGB());
-            RoundedShader.drawRound(x + 4, (int) (y + 9 + (Fontutil.getHeight() + 9)), Fontutil.getWidth(HUDMod.NAME) + 14, 1, 2, new Color(255, 255, 255));
+            RoundedShader.drawRound(x + 4, (int) (y + 9 + (Fontutil.getHeight() + 9)), Fontutil.getWidth(HUDMod.NAME) + 17, 0.6f, 2, new Color(255, 255, 255));
 
             // Buttons
             int offsetY = y + 40;
-            int buttonHeight = 20;
+            int currentScreenY = 0; // Chat GPT :(
             for(Screen s : screens) {
                 Texture t = new Texture(s.getResourceLocation());
                 if(currentScreen == null) {
@@ -126,10 +128,13 @@ public class MainScreen {
                 }
 
                 if(s == currentScreen) {
+                    currentScreenY = offsetY;
                     //RoundedShader.drawRound(x + 2, offsetY - 1, 72, 19, 1, Colorutil.interpolateColorsBackAndForth(15, 1, HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), true));
                     RoundedShader.drawRound(x + 1, offsetY, 74, 17, 1.5f, new Color(38, 38, 38));
-                    RoundedShader.drawRound(x, offsetY, 0.8f, 17, 1, HUDMod.colorManager.getAlternativeColor()); //new Color(255, 255, 255)
-
+                   // RoundedShader.drawRound(x, offsetY, 0.8f, 17, 1, HUDMod.colorManager.getAlternativeColor()); //new Color(255, 255, 255)
+                    RoundedShader.drawGradientCornerRL(x, offsetY, 75, 17, 1, new Color(HUDMod.colorManager.getAlternativeColor().getRed(),
+                            HUDMod.colorManager.getAlternativeColor().getGreen(),
+                            HUDMod.colorManager.getAlternativeColor().getBlue(), 100), new Color(38, 38, 38));
                     screenPanels.update(x + 75, y + 20, width - 75, height - 20);
                     currentScreen.setX(screenPanels.getX());
                     currentScreen.setY(screenPanels.getY());
@@ -146,10 +151,13 @@ public class MainScreen {
 
 
                 Fontutil.drawTextShadow(s.getName(), x + 23, (int) (offsetY + (Fontutil.getHeight() / 2)), -1);
-                offsetY += 17;
+                offsetY += 17 + (2); // 2 offset
             }
 
-            RoundedShader.drawRound(x + 75, y + 15, 1.5f, height - 14.5f, 2, HUDMod.colorManager.getAlternativeColor());
+
+           // RoundedShader.drawRound(x + 75, y + 15, 1.5f, height - 14.5f, 2, new Color(HUDMod.colorManager.getAlternativeColor().getRed(),
+           //         HUDMod.colorManager.getAlternativeColor().getGreen(),
+           //         HUDMod.colorManager.getAlternativeColor().getBlue(), 180));
             GL11.glPopMatrix();
 
             GlUtils.stopScale();
@@ -159,7 +167,7 @@ public class MainScreen {
 
     public void mouseClicked(int mouseX, int mouseY, int button) throws IOException {
 
-        if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
+        if(currentScreen.getName().equalsIgnoreCase("Edit HUD")) {
             if(this.GUIButton != null) {
                 if(isHovered(GUIButton.getX(), GUIButton.getY(), GUIButton.getWidth(), GUIButton.getHeight(), mouseX, mouseY)) {
                     this.currentScreen = screens.get(0); // Mod
@@ -207,7 +215,7 @@ public class MainScreen {
 
         this.dragging = false;
 
-        if(currentScreen.getName().equalsIgnoreCase("HUD Editor")) {
+        if(currentScreen.getName().equalsIgnoreCase("Edit HUD")) {
             dragging = false;
             currentScreen.onRelease(mouseX, mouseY, state);
             return;

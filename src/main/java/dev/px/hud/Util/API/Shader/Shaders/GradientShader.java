@@ -1,6 +1,9 @@
 package dev.px.hud.Util.API.Shader.Shaders;
 
+import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Shader.FrameBufferShader;
+import dev.px.hud.Util.API.Shader.Shaderutil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -10,73 +13,89 @@ import org.lwjgl.opengl.GL20;
 import java.awt.*;
 import java.util.HashMap;
 
-public class GradientShader extends FrameBufferShader {
+public class GradientShader  {
 
-    public static final GradientShader INSTANCE;
+    private static final Shaderutil gradientMaskShader = new Shaderutil("ModShaders/gradientMask.frag");
+    private static final Shaderutil gradientShader = new Shaderutil("ModShaders/gradient.frag");
 
-    static {
-        INSTANCE = new GradientShader();
+
+
+    public static void drawGradient(float x, float y, float width, float height, float alpha, Color bottomLeft, Color topLeft, Color bottomRight, Color topRight) {
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+
+        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        gradientShader.init();
+        gradientShader.setUniformf("location", x * sr.getScaleFactor(), (Minecraft.getMinecraft().displayHeight - (height * sr.getScaleFactor())) - (y * sr.getScaleFactor()));
+        gradientShader.setUniformf("rectSize", width * sr.getScaleFactor(), height * sr.getScaleFactor());
+        gradientShader.setUniformf("alpha", alpha);
+        // Bottom Left
+        gradientShader.setUniformf("color1", bottomLeft.getRed() / 255f, bottomLeft.getGreen() / 255f, bottomLeft.getBlue() / 255f);
+        //Top left
+        gradientShader.setUniformf("color2", topLeft.getRed() / 255f, topLeft.getGreen() / 255f, topLeft.getBlue() / 255f);
+        //Bottom Right
+        gradientShader.setUniformf("color3", bottomRight.getRed() / 255f, bottomRight.getGreen() / 255f, bottomRight.getBlue() / 255f);
+        //Top Right
+        gradientShader.setUniformf("color4", topRight.getRed() / 255f, topRight.getGreen() / 255f, topRight.getBlue() / 255f);
+
+        //Apply the gradient to whatever is put here
+        Shaderutil.drawQuads(x, y, width, height);
+
+        gradientShader.unload();
+        GlStateManager.disableBlend();
     }
 
-    public float time;
-
-    public GradientShader() {
-        super("gradient.frag");
+    public static void drawGradientLR(float x, float y, float width, float height, float alpha, Color left, Color right) {
+        drawGradient(x, y, width, height, alpha, left, left, right, right);
     }
 
-    @Override
-    public void setupUniforms() {
-        this.setupUniform("resolution");
-        this.setupUniform("time");
-        this.setupUniform("moreGradient");
-        this.setupUniform("Creepy");
-        this.setupUniform("alpha");
-        this.setupUniform("NUM_OCTAVES");
+    public static void drawGradientTB(float x, float y, float width, float height, float alpha, Color top, Color bottom) {
+        drawGradient(x, y, width, height, alpha, bottom, top, bottom, top);
     }
 
-    public void updateUniforms(float duplicate, float moreGradient, float creepy, float alpha, int numOctaves) {
-        GL20.glUniform2f(getUniform("resolution"), new ScaledResolution(mc).getScaledWidth() / duplicate, new ScaledResolution(mc).getScaledHeight() / duplicate);
-        GL20.glUniform1f(getUniform("time"), time);
-        GL20.glUniform1f(getUniform("moreGradient"), moreGradient);
-        GL20.glUniform1f(getUniform("Creepy"), creepy);
-        GL20.glUniform1f(getUniform("alpha"), alpha);
-        GL20.glUniform1i(getUniform("NUM_OCTAVES"), numOctaves);
+
+    public static void applyGradientHorizontal(float x, float y, float width, float height, float alpha, Color left, Color right, Runnable content) {
+        applyGradient(x, y, width, height, alpha, left, left, right, right, content);
     }
 
-    public void stopDraw(final Color color, final float radius, final float quality, float duplicate, float moreGradient, float creepy, float alpha, int numOctaves) {
-        mc.gameSettings.entityShadows = entityShadows;
-        framebuffer.unbindFramebuffer();
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        mc.getFramebuffer().bindFramebuffer(true);
-        red = color.getRed() / 255.0f;
-        green = color.getGreen() / 255.0f;
-        blue = color.getBlue() / 255.0f;
-        this.radius = radius;
-        this.quality = quality;
-        mc.entityRenderer.disableLightmap();
-        RenderHelper.disableStandardItemLighting();
-        startShader(duplicate, moreGradient, creepy, alpha, numOctaves);
-        mc.entityRenderer.setupOverlayRendering();
-        drawFramebuffer(framebuffer);
-        stopShader();
-        mc.entityRenderer.disableLightmap();
-        GlStateManager.popMatrix();
-        GlStateManager.popAttrib();
+    public static void applyGradientVertical(float x, float y, float width, float height, float alpha, Color top, Color bottom, Runnable content) {
+        applyGradient(x, y, width, height, alpha, bottom, top, bottom, top, content);
     }
 
-    public void startShader(float duplicate, float moreGradient, float creepy, float alpha, int numOctaves) {
-        GL11.glPushMatrix();
-        GL20.glUseProgram(this.program);
-        if (this.uniformsMap == null) {
-            this.uniformsMap = new HashMap<String, Integer>();
-            this.setupUniforms();
-        }
-        this.updateUniforms(duplicate, moreGradient, creepy, alpha, numOctaves);
+
+    public static void applyGradientCornerRL(float x, float y, float width, float height, float alpha, Color bottomLeft, Color topRight, Runnable content) {
+        Color mixedColor = Colorutil.interpolateColorC(topRight, bottomLeft, .5f);
+        applyGradient(x, y, width, height, alpha, bottomLeft, mixedColor, mixedColor, topRight, content);
     }
 
-    public void update(double speed) {
-        this.time += speed;
+    public static void applyGradient(float x, float y, float width, float height, float alpha, Color bottomLeft, Color topLeft, Color bottomRight, Color topRight, Runnable content) {
+        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        gradientMaskShader.init();
+
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+
+        gradientMaskShader.setUniformf("location", x * sr.getScaleFactor(), (Minecraft.getMinecraft().displayHeight - (height * sr.getScaleFactor())) - (y * sr.getScaleFactor()));
+        gradientMaskShader.setUniformf("rectSize", width * sr.getScaleFactor(), height * sr.getScaleFactor());
+        gradientMaskShader.setUniformf("alpha", alpha);
+        gradientMaskShader.setUniformi("tex", 0);
+        // Bottom Left
+        gradientMaskShader.setUniformf("color1", bottomLeft.getRed() / 255f, bottomLeft.getGreen() / 255f, bottomLeft.getBlue() / 255f);
+        //Top left
+        gradientMaskShader.setUniformf("color2", topLeft.getRed() / 255f, topLeft.getGreen() / 255f, topLeft.getBlue() / 255f);
+        //Bottom Right
+        gradientMaskShader.setUniformf("color3", bottomRight.getRed() / 255f, bottomRight.getGreen() / 255f, bottomRight.getBlue() / 255f);
+        //Top Right
+        gradientMaskShader.setUniformf("color4", topRight.getRed() / 255f, topRight.getGreen() / 255f, topRight.getBlue() / 255f);
+
+        //Apply the gradient to whatever is put here
+        content.run();
+
+        gradientMaskShader.unload();
+        GlStateManager.disableBlend();
+
     }
 
 }

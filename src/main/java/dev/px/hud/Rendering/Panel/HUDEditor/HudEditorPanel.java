@@ -19,9 +19,11 @@ public class HudEditorPanel extends Panel {
     public void draw(int mouseX, int mouseY, float partialTicks) {
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
-                ((RenderElement) e).dragging(mouseX, mouseY);
-                ((RenderElement) e).render(partialTicks);
-                ((RenderElement) e).render2D(new Render2DEvent(partialTicks, new ScaledResolution(mc)));
+                if(e.isToggled()) {
+                    ((RenderElement) e).dragging(mouseX, mouseY);
+                    ((RenderElement) e).render(partialTicks);
+                    ((RenderElement) e).render2D(new Render2DEvent(partialTicks, new ScaledResolution(mc)));
+                }
             }
         }
     }
