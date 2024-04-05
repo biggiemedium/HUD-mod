@@ -91,8 +91,8 @@ public class AdditionalInfo extends ToggleableElement {
 
         String nameTag = "getDisplayTag(player)";
 
-        float width = mc.fontRendererObj.getStringWidth(nameTag) / 2;
-        float height = mc.fontRendererObj.FONT_HEIGHT;
+        float width = mc.fontRendererObj.getStringWidth(nameTag);
+        float height = mc.fontRendererObj.FONT_HEIGHT / 2;
 
         GlStateManager.enableBlend();
         Renderutil.drawRect(-width - 1, -(height + 1), width + 2, 2, 0x5F0A0A0A);

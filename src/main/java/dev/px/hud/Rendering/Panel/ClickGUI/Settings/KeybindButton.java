@@ -2,7 +2,7 @@ package dev.px.hud.Rendering.Panel.ClickGUI.Settings;
 
 import dev.px.hud.Rendering.Panel.ClickGUI.Button;
 import dev.px.hud.Util.API.Font.Fontutil;
-import dev.px.hud.Util.API.Keybind;
+import dev.px.hud.Util.API.Input.Keybind;
 import dev.px.hud.Util.Settings.Setting;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;

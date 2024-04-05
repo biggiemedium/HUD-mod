@@ -121,7 +121,7 @@ public class ElementInitalizer {
         ArrayList<Element> e = new ArrayList<>();
         this.elements.forEach(element -> {
             if(element instanceof ToggleableElement) {
-                if(((ToggleableElement) element).isEnabled()) {
+                if((element).isToggled()) {
                     e.add(element);
                 }
             }

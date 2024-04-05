@@ -1,4 +1,4 @@
-package dev.px.hud.Util.API;
+package dev.px.hud.Util.API.Input;
 
 import dev.px.hud.Rendering.HUD.Element;
 

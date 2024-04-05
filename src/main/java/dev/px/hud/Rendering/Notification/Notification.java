@@ -7,18 +7,18 @@ import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Math.Timer;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.API.Render.Texture;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-/*
-Taken from thunderhack
- */
+
 public class Notification implements Wrapper {
 
     private String name, message;
@@ -44,7 +44,7 @@ public class Notification implements Wrapper {
         this.sr = new ScaledResolution(mc);
 
         this.height = 28;
-        this.y = sr.getScaledHeight() - height;
+        this.y = sr.getScaledHeight() - 30;
         this.width = Fontutil.getWidth(message) + 40;
         this.xAnimation = width;
     }
@@ -60,15 +60,33 @@ public class Notification implements Wrapper {
         xAnimation = (float) (width * animation.getAnimationFactor());
         y = animate(y, getY);
 
-        int x1 = (int) ((sr.getScaledWidth() - 6) - width + xAnimation);
+        int x1 = (int) ((sr.getScaledWidth() - 10) - width + xAnimation);
         int y1 = (int) y;
 
        // Renderutil.drawBlurredShadow(x1, y1, width, height, 12, icolor);
-        RoundedShader.drawRound(x1, y1, width, height, 6f, c);
-     //   Renderutil.drawRoundedRect(x1, y1 + (height - 2), width, 2, 1, c);
+     //   RoundedShader.drawRound(x1, y1, width, height, 6f, c);
+        switch(type) {
+            case INFO:
+                Texture tex = new Texture(new ResourceLocation("minecraft", "GUI/info.png"));
+                RoundedShader.drawRoundOutline(x1, y1, width, height, 3f, 0.5f, c, new Color(35, 72, 222, (int) Mathutil.clamp(120 * (1 - animation.getAnimationFactor()), 0, 255)));
+                tex.renderT(x1 + 2, y1 + 7, 15, 15);
+                break;
+            case WARNING:
+                Texture tex2 = new Texture(new ResourceLocation("minecraft", "GUI/client.png"));
+                RoundedShader.drawRoundOutline(x1, y1, width, height, 3f, 0.5f, c, new Color(255, 224, 0, (int) Mathutil.clamp(120 * (1 - animation.getAnimationFactor()), 0, 255)));
+                tex2.renderT(x1 + 2, y1 + 7, 15, 15);
+            //    RoundedShader.drawGradientCornerRL(x1, y1+ (height - 2), width, 1.5f, 6f, new Color(255, 224, 0, 150), c);
+                break;
+            case ERROR:
+                Texture tex3 = new Texture(new ResourceLocation("minecraft", "GUI/warning.png"));
+                RoundedShader.drawRoundOutline(x1, y1, width, height, 3f, 0.5f, c, new Color(231, 0, 0, (int) Mathutil.clamp(120 * (1 - animation.getAnimationFactor()), 0, 255)));
+                tex3.renderT(x1 + 2, y1 + 7, 15, 15);
+               // RoundedShader.drawGradientCornerRL(x1, y1+ (height - 2), width, 1.5f, 6f, new Color(231, 0, 0, 150), c);
+                break;
+        }
 
-        Fontutil.drawText(name, (x1 + 6), y1 + 4, -1);
-        Fontutil.drawText(message, x1 + 6, (int) (y1 + 4 + (height - Fontutil.getHeight()) / 2f), icolor2.getRGB());
+        Fontutil.drawText(name, (x1 + 20), y1 + 4, -1);
+        Fontutil.drawText(message, x1 + 20, (int) (y1 + 4 + (height - Fontutil.getHeight()) / 2f), icolor2.getRGB());
         GL11.glPopMatrix();
     }
 

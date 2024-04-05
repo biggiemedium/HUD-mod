@@ -1,4 +1,4 @@
-package dev.px.hud.Util.API;
+package dev.px.hud.Util.API.Input;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;

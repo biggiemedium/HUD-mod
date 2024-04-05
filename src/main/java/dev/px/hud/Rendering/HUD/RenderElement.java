@@ -5,6 +5,8 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Bus.Listener.Listenable;
+import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
@@ -16,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.awt.*;
 
 @SideOnly(Side.CLIENT)
-public class RenderElement extends Element {
+public class RenderElement extends Element implements Listenable {
 
     private String name;
 
@@ -35,6 +37,8 @@ public class RenderElement extends Element {
     protected Setting<Boolean> customFont;
     protected Setting<Boolean> rainbowText;
     protected Setting<Color> fontColor;
+
+    private boolean enabled = false;
 
     public RenderElement(String name, int x, int y, int width, int height, Element.HUDType hudType) {
         super(name, hudType);
@@ -166,6 +170,10 @@ public class RenderElement extends Element {
                 }
             }
         }
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public void render(float partialTicks) {

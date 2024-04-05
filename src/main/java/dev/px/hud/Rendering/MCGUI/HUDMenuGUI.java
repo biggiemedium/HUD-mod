@@ -1,6 +1,6 @@
 package dev.px.hud.Rendering.MCGUI;
 
-import dev.px.hud.Util.API.BindRegistry;
+import dev.px.hud.Util.API.Input.BindRegistry;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.relauncher.Side;

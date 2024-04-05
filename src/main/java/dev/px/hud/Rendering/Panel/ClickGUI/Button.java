@@ -1,15 +1,12 @@
 package dev.px.hud.Rendering.Panel.ClickGUI;
 
-import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
-import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.ClickGUI.Settings.*;
 import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Font.Fontutil;
-import dev.px.hud.Util.API.Keybind;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
@@ -133,8 +130,10 @@ public class Button {
                 if (button == 0) {
                     element.setToggled(!element.isToggled());
                     this.toggleAnimation.setState(element.isToggled());
-                    if (element instanceof ToggleableElement) {
+                    if (element instanceof ToggleableElement) { // I WILL FIX THIS IN HUDMOD 3.0
                         ((ToggleableElement) element).setEnabled(((ToggleableElement) element).isToggled());
+                    } else if(element instanceof RenderElement) {
+                        ((RenderElement) element).setEnabled(((RenderElement) element).isToggled());
                     }
                 } else if (button == 1) {
                     this.open = !this.open;

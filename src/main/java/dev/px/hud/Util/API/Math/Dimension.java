@@ -18,6 +18,16 @@ public class Dimension<T extends Number> {
         this.height = height;
     }
 
+    @Override
+    public String toString() {
+        return "Dimension{" +
+                "x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                '}';
+    }
+
     public T getX() {
         return x;
     }

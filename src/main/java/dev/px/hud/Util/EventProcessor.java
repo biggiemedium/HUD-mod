@@ -4,29 +4,24 @@ import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
-import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.BindRegistry;
+import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Client.ChatReceiveEvent;
 import dev.px.hud.Util.Event.Client.ElementToggleEvent;
-import dev.px.hud.Util.Event.ReceivePacketEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
 public class EventProcessor extends Util {
@@ -114,9 +109,15 @@ public class EventProcessor extends Util {
                         if(keyCode == BindRegistry.newGui.getKeyCode()) {
                             mc.displayGuiScreen(HUDMod.screen2);
                         }
-                    }
-                    if(keyCode == Keyboard.KEY_U) {
-                        Util.sendClientSideMessage("Test", true);
+                        if(keyCode == Keyboard.KEY_U) {
+                            HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.INFO, 5000));
+                        }
+                        if(keyCode == Keyboard.KEY_I) {
+                            HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.WARNING, 5000));
+                        }
+                        if(keyCode == Keyboard.KEY_H) {
+                            HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.ERROR, 5000));
+                        }
                     }
 
                     for(Element e : HUDMod.elementInitalizer.getElements()) {

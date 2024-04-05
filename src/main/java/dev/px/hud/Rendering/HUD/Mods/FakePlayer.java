@@ -30,7 +30,7 @@ public class FakePlayer extends ToggleableElement {
         if(copyInventory.getValue()) {
             fakePlayer.inventory.copyInventory(mc.thePlayer.inventory);
         }
-        HUDMod.notificationManager.Add(new Notification("Fake Player", "Fake player has been summoned!", Notification.NotificationType.INFO, 5));
+
     }
 
     @Override

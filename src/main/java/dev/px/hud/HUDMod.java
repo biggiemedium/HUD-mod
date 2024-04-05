@@ -1,13 +1,12 @@
 package dev.px.hud;
 
 import dev.px.hud.Initalizer.CommandInitalizer;
-import dev.px.hud.Initalizer.ConfigInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
 import dev.px.hud.Initalizer.SettingInitalizer;
 import dev.px.hud.Manager.*;
 import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.BindRegistry;
+import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
 import dev.px.hud.Util.Event.Bus.EventManager;
@@ -23,6 +22,10 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SideOnly(Side.CLIENT)
 @Mod(modid = HUDMod.MODID, version = HUDMod.VERSION)
@@ -50,6 +53,8 @@ public class HUDMod {
     public static PanelGUIScreen screen;
     public static CSGOGui screen2;
     public static EventBus EVENT_BUS = new EventManager();
+    public static org.apache.logging.log4j.Logger LOG = LogManager.getLogger("[" + NAME + "]"); //"[" + NAME + "]"
+    private static ExecutorService executorService = Executors.newSingleThreadExecutor();
     public static long playTime = -1;
     private long startTime = -1;
 
@@ -58,6 +63,7 @@ public class HUDMod {
         playTime = System.currentTimeMillis();
         startTime = System.currentTimeMillis();
         BindRegistry.register();
+
     }
 
     @EventHandler
@@ -70,8 +76,6 @@ public class HUDMod {
         progressManager.step("Loading Event Processor");
         clientSettingsInitalizer = new SettingInitalizer();
         progressManager.step("Loading Client Settings...");
-        notificationManager = new NotificationManager();
-        progressManager.step("Loading Notification Manager");
         elementInitalizer = new ElementInitalizer();
         progressManager.step("Loading Element Initializer");
         commandInitalizer = new CommandInitalizer();
@@ -80,9 +84,11 @@ public class HUDMod {
         serverManager = new ServerManager();
         progressManager.step("Loading server Manager...");
         soundInitalizer = new SoundManager();
-        progressManager.step("Setting up the dua lipa...");
+        progressManager.step("Queueing up the dua lipa...");
         fontManager = new FontManager();
         progressManager.step("Setting up fonts...");
+        notificationManager = new NotificationManager();
+        progressManager.step("Loading Notification Manager");
         screen = new PanelGUIScreen();
         screen2 = new CSGOGui();
         configManager = new ConfigManager();
@@ -94,7 +100,11 @@ public class HUDMod {
     @EventHandler
     public void postinit(FMLPostInitializationEvent event) {
         long initializeTime = System.currentTimeMillis() - startTime;
-        System.out.println("Started client in " + initializeTime + " ms");
+        LOG.info("Started client in " + initializeTime + " ms");
+    }
+
+    public static ExecutorService getExecutorService() {
+        return executorService;
     }
 
     public <T> void subscribe(T object) {

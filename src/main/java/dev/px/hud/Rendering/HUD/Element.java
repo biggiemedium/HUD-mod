@@ -1,12 +1,16 @@
 package dev.px.hud.Rendering.HUD;
 
+import dev.px.hud.HUDMod;
+import dev.px.hud.Util.Event.Bus.Listener.Listenable;
+import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Settings.Setting;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 
-public class Element implements Wrapper {
+public class Element implements Wrapper, Listenable {
 
     private String name;
     private HUDType hudType;
@@ -27,7 +31,48 @@ public class Element implements Wrapper {
         return hudSetting;
     }
 
+    public void enable() {
+        MinecraftForge.EVENT_BUS.register(this);
+        //   HUDMod.notificationManager.Add(new Notification("Enabled", this.name + " was enabled!", Notification.NotificationType.INFO, 5));
+        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementEnableEvent(this));
+        HUDMod.EVENT_BUS.subscribe(this);
+    }
 
+    public void disable() {
+        MinecraftForge.EVENT_BUS.unregister(this);
+        // HUDMod.notificationManager.Add(new Notification("Disabled", this.name + " was disabled!", Notification.NotificationType.INFO, 5));
+        MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementDisableEvent(this));
+        HUDMod.EVENT_BUS.unsubscribe(this);
+    }
+
+    public void setEnabled(boolean toggled) {
+        setToggled(toggled);
+        this.toggled = toggled;
+
+
+        if(isToggled()) {
+            enable();
+            MinecraftForge.EVENT_BUS.register(this);
+            MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementEnableEvent(this));
+            HUDMod.EVENT_BUS.subscribe(this);
+        } else {
+            disable();
+            MinecraftForge.EVENT_BUS.unregister(this);
+            MinecraftForge.EVENT_BUS.post(new ElementToggleEvent.ElementDisableEvent(this));
+            HUDMod.EVENT_BUS.unsubscribe(this);
+        }
+    }
+
+    public void toggle() {
+        this.toggled = !toggled;
+        setToggled(toggled);
+
+        if(isToggled()) {
+            enable();
+        } else {
+            disable();
+        }
+    }
 
     public String getName() {
         return name;

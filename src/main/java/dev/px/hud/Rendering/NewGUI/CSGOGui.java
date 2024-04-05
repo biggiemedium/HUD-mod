@@ -29,9 +29,11 @@ public class CSGOGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
+
         if(mc.theWorld != null) {
             mc.entityRenderer.getShaderGroup().deleteShaderGroup();
         }
+
     }
 
     @Override
@@ -74,12 +76,6 @@ public class CSGOGui extends GuiScreen {
     @Override
     public boolean doesGuiPauseGame() {
         return false;
-    }
-
-    public enum DisplayMode {
-        Modules,
-        Settings,
-        Profile
     }
 
 }
