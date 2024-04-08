@@ -4,9 +4,13 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.Panel;
+import dev.px.hud.Util.API.Animation.Animation;
+import dev.px.hud.Util.API.Animation.Easing;
+import dev.px.hud.Util.API.Render.Texture;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -41,7 +45,6 @@ public class ClickGUI extends Panel {
                 focusedFrame.handleScroll(scroll);
             }
         }
-
 
         for(Frame f : this.frames) {
             f.draw(mouseX, mouseY, partialTicks);

@@ -3,10 +3,9 @@ package dev.px.hud.Rendering.HUD;
 import com.mojang.realmsclient.gui.ChatFormatting;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Util.API.Font.Fontutil;
-import dev.px.hud.Util.API.Render.Colorutil;
+import dev.px.hud.Util.API.Render.Color.Colorutil;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Bus.Listener.Listenable;
-import dev.px.hud.Util.Event.Client.ElementToggleEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
@@ -150,7 +149,6 @@ public class RenderElement extends Element implements Listenable {
     protected int getFontHeight() {
         return customFont.getValue() ? (int) Fontutil.getHeight() : mc.fontRendererObj.FONT_HEIGHT;
     }
-
 
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if(isHovered(mouseX, mouseY)) {

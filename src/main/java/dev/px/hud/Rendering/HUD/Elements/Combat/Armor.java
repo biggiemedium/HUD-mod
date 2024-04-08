@@ -20,7 +20,7 @@ public class Armor extends RenderElement {
 
     @Override
     public void render2D(Render2DEvent event) {
-
+        
     }
 
     public static float calculatePercentage(ItemStack stack) {

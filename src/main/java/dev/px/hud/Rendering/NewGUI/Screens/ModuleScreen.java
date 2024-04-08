@@ -23,6 +23,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -91,7 +92,7 @@ public class ModuleScreen extends Screen {
                 b.setY(this.y + 35 + offsetY);
                 b.setX(x + 5);
                 b.render(mouseX, mouseY, partialTicks);
-                offsetY += b.getHeight() + 2 + (b.openAnimation.getState() ? (b.featureHeight * b.openAnimation.getAnimationFactor()) : 0 * b.openAnimation.getAnimationFactor()); // idk why im animating this but whatever
+                offsetY += b.getHeight() + 2 + (b.featureHeight * (int) b.openAnimation.getAnimationFactor());
             }
         }
 
@@ -116,7 +117,6 @@ public class ModuleScreen extends Screen {
             if(b.element.getHudType() == currentType) {
                 if (isHovered(b.getX(), b.getY(), b.getWidth(), b.getHeight(), mouseX, mouseY)) {
                     b.onClick(mouseX, mouseY, button);
-                    Util.sendClientSideMessage("click" + b.element.getName());
                 }
             }
         }
@@ -242,6 +242,8 @@ public class ModuleScreen extends Screen {
         private Animation toggleAnimation;
         private Element element;
         private float featureHeight = 0;
+        private Map<Dimension<Integer>, Setting<?>> settingMap;
+        private List<Component> settingList;
 
         public ModuleButton(int x, int y, int width, int height, Element element) {
             this.x = x;
@@ -250,6 +252,8 @@ public class ModuleScreen extends Screen {
             this.height = height;
             this.element = element;
             this.toggleAnimation = new Animation(300, element.isToggled(), Easing.LINEAR);
+            this.settingMap = new ConcurrentHashMap<>();
+            this.settingList = new ArrayList<>();
         }
 
         public void render(int mouseX, int mouseY, float partialTicks) {
@@ -273,16 +277,30 @@ public class ModuleScreen extends Screen {
             for(Setting<?> s : this.element.getSettings()) {
                 if(s != null) {
                     if(s.getValue() instanceof Boolean) {
-                        Fontutil.drawTextShadow(s.getName(), x + 2, y + featureHeight, Color.WHITE.getRGB());
+                        Dimension<Integer> xyz = new Dimension<>(x + 2, y + height + (int) featureHeight, width, 15);
+                        Fontutil.drawTextShadow(s.getName(), xyz.getX(), xyz.getY(), Color.WHITE.getRGB());
+                        if(isHovered(xyz.getX(), xyz.getY(), xyz.getWidth(), xyz.getHeight(), mouseX, mouseY)) {
+                            RoundedShader.drawRound(xyz.getX(), xyz.getY(), xyz.getWidth(), xyz.getHeight(), 4, new Color(205, 24, 225, 50));
+                        }
+                        this.settingMap.put(xyz, s);
                         featureHeight += 16;
                     }
                 }
             }
-
             stack.popScissor();
         }
 
         public void onClick(int mouseX, int mouseY, int button) {
+
+            this.settingMap.forEach((k, v) -> {
+                if(isHovered(k.getX(), k.getY(), k.getWidth(), k.getHeight(), mouseX, mouseY)) {
+                    if(button == 0) {
+                        if(this.openAnimation.getState()) {
+                            Util.sendClientSideMessage("Setting " + v.getName());
+                        }
+                    }
+                }
+            });
 
             switch (button) {
                 case 0:
@@ -292,7 +310,10 @@ public class ModuleScreen extends Screen {
                     openAnimation.setState(!openAnimation.getState());
                     break;
             }
+        }
 
+        public boolean isHovered(int x, int y, int width, int height, int mouseX, int mouseY) {
+            return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
         }
 
         public int getX() {

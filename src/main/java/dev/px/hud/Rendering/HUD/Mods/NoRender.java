@@ -4,6 +4,7 @@ import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Util.API.Util;
+import dev.px.hud.Util.Event.Render.RenderArmorEvent;
 import dev.px.hud.Util.Event.World.PlayerPotionEvent;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.potion.Potion;
@@ -28,7 +29,31 @@ public class NoRender extends ToggleableElement {
     public Setting<Boolean> weather = create(new Setting<>("Weather", false));
     public Setting<Boolean> cluster = create(new Setting<>("Cluster", true));
 
-
+    @SubscribeEvent
+    public void onArmorRender(RenderArmorEvent event) {
+        if(armor.getValue()) {
+            switch (event.getSlot())
+            {
+                case 1:
+                    event.model.bipedRightLeg.showModel = true;
+                    event.model.bipedLeftLeg.showModel = true;
+                    break;
+                case 2:
+                    event.model.bipedBody.showModel = true;
+                    event.model.bipedRightLeg.showModel = true;
+                    event.model.bipedLeftLeg.showModel = true;
+                    break;
+                case 3:
+                    event.model.bipedBody.showModel = true;
+                    event.model.bipedRightArm.showModel = true;
+                    event.model.bipedLeftArm.showModel = true;
+                    break;
+                case 4:
+                    event.model.bipedHead.showModel = true;
+                    event.model.bipedHeadwear.showModel = true;
+            }
+        }
+    }
 
     @SubscribeEvent
     public void onFogDensity(final EntityViewRenderEvent.FogDensity event) {

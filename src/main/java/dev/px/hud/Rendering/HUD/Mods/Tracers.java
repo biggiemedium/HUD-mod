@@ -2,7 +2,7 @@ package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Mixin.Render.Item.IEntityRenderer;
-import dev.px.hud.Mixin.Render.MixinRenderManager;
+import dev.px.hud.Mixin.Render.IMixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Entityutil;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
@@ -50,14 +49,13 @@ public class Tracers extends ToggleableElement {
                 continue;
             }
             if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue()
-                    && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e))
-            { continue; }
+                    && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e)) { continue; }
 
             Vec3 vec = Entityutil.getInterpolatedPos(e, event.getPartialTicks())
                     .subtract(new Vec3(
-                            ((MixinRenderManager) mc.getRenderManager()).getRenderPosX(),
-                            ((MixinRenderManager) mc.getRenderManager()).getRenderPosY(),
-                            ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ())
+                            ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX(),
+                            ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY(),
+                            ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ())
                     );
             if(vec != null) {
                 boolean bobbing = mc.gameSettings.viewBobbing;

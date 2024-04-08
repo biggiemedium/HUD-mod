@@ -1,14 +1,18 @@
 package dev.px.hud.Rendering.NewGUI.Components;
 
-public class Component {
+import dev.px.hud.Util.Settings.Setting;
+
+public class Component<T> {
 
     public int x, y, width, height;
+    private Setting<T> setting;
 
-    public Component(int x, int y, int width, int height) {
+    public Component(int x, int y, int width, int height, Setting<T> setting) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.setting = setting;
     }
 
     public void update(int x, int y, int width, int height) {

@@ -26,7 +26,6 @@ interface SpotifyCallbackHandler {
     void handleCallback(String code);
 }
 
-// Tenacity Client
 public class SpotifyAPIClient {
     /*
     private SpotifyApi api;

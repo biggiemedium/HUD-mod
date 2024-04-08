@@ -11,7 +11,9 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Util;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,6 +35,15 @@ public abstract class MixinMinecraft {
 
     @Shadow public GuiIngame ingameGUI;
 
+    @Shadow
+    private boolean fullscreen;
+
+    @Shadow
+    public int displayWidth;
+
+    @Shadow
+    public int displayHeight;
+
     @Inject(method = "createDisplay", at = @At("TAIL"), cancellable = true)
     public void setDisplayPost(CallbackInfo ci) {
         Display.setTitle(HUDMod.NAME + " | " + HUDMod.VERSION);
@@ -51,8 +62,10 @@ public abstract class MixinMinecraft {
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
             if (HUDMod.elementInitalizer.isElementToggled(UnfocusedCPU.class)) {
-                if(!Display.isActive() && !(currentScreen instanceof GuiMainMenu)) {
-                    callbackInfoReturnable.setReturnValue(5);
+                if(!Display.isActive()) {
+                    if(!(currentScreen instanceof CustomMainMenuGUI)) {
+                        callbackInfoReturnable.setReturnValue(5);
+                    }
                 }
             }
         } catch (NullPointerException e) {}
@@ -82,6 +95,16 @@ public abstract class MixinMinecraft {
         }
     }
 
+    @Inject(method = "setInitialDisplayMode", at = @At(value = "HEAD"), cancellable = true)
+    private void setInitialDisplayMode(CallbackInfo ci) throws LWJGLException {
+        displayFix(ci, fullscreen, displayWidth, displayHeight);
+    }
+
+    @Inject(method = "toggleFullscreen", at = @At(value = "INVOKE", remap = false, target = "Lorg/lwjgl/opengl/Display;setVSyncEnabled(Z)V", shift = At.Shift.AFTER))
+    private void toggleFullscreen(CallbackInfo ci) throws LWJGLException {
+        fullScreenFix(fullscreen, displayWidth, displayHeight);
+    }
+
     private ByteBuffer convertImageToBuffer(BufferedImage bufferedimage) throws IOException {
         int[] aint = bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), null, 0, bufferedimage.getWidth());
         ByteBuffer bytebuffer = ByteBuffer.allocate(4 * aint.length);
@@ -92,5 +115,50 @@ public abstract class MixinMinecraft {
 
         bytebuffer.flip();
         return bytebuffer;
+    }
+
+    public void displayFix(CallbackInfo ci, boolean fullscreen, int displayWidth, int displayHeight) throws LWJGLException {
+        Display.setFullscreen(false);
+        if (fullscreen) {
+            if (HUDMod.clientSettingsInitalizer != null && HUDMod.clientSettingsInitalizer.windowModifications.getValue()) {
+                System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+            } else {
+                Display.setFullscreen(true);
+                DisplayMode displaymode = Display.getDisplayMode();
+                Minecraft.getMinecraft().displayWidth = Math.max(1, displaymode.getWidth());
+                Minecraft.getMinecraft().displayHeight = Math.max(1, displaymode.getHeight());
+            }
+        } else {
+            if (HUDMod.clientSettingsInitalizer != null && HUDMod.clientSettingsInitalizer.windowModifications.getValue()) {
+                System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
+            } else {
+                Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
+            }
+        }
+
+        Display.setResizable(false);
+        Display.setResizable(true);
+
+        ci.cancel();
+    }
+
+    public void fullScreenFix(boolean fullscreen, int displayWidth, int displayHeight) throws LWJGLException {
+        if (HUDMod.clientSettingsInitalizer != null && HUDMod.clientSettingsInitalizer.windowModifications.getValue()) {
+            if (fullscreen) {
+                System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+                Display.setDisplayMode(Display.getDesktopDisplayMode());
+                Display.setLocation(0, 0);
+                Display.setFullscreen(false);
+            } else {
+                System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
+                Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
+            }
+        } else {
+            Display.setFullscreen(fullscreen);
+            System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
+        }
+
+        Display.setResizable(false);
+        Display.setResizable(true);
     }
 }

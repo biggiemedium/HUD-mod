@@ -1,7 +1,7 @@
 package dev.px.hud.Util;
 
 import dev.px.hud.Mixin.Game.IMixinMinecraft;
-import dev.px.hud.Mixin.Render.MixinRenderManager;
+import dev.px.hud.Mixin.Render.IMixinRenderManager;
 import dev.px.hud.Util.API.Shader.GaussianBlur.GaussianFilter;
 import dev.px.hud.Util.API.Util;
 import net.minecraft.client.Minecraft;
@@ -251,9 +251,9 @@ public class Renderutil extends Util {
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
 
-        final double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks  - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
-        final double y = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY()) + Math.sin(System.currentTimeMillis() / 2E+2) + 1;
-        final double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
+        final double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks  - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX();
+        final double y = (entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY()) + Math.sin(System.currentTimeMillis() / 2E+2) + 1;
+        final double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * ((IMixinMinecraft) Minecraft.getMinecraft()).timer().renderPartialTicks - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ();
 
         Color c;
 

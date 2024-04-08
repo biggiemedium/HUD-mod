@@ -7,11 +7,15 @@
     "Render.MixinEntityRenderer",
     "Network.MixinNetworkManager",
     "Render.GUI.MixinGui",
+    "Render.GUI.MixinGuiChat",
     "Render.GUI.MixinGUIIngame",
     "Render.Item.IEntityRenderer",
     "Render.MixinGuiControls",
+    "Render.IMixinRenderManager",
     "Render.MixinRenderManager",
     "Game.IMixinMinecraft",
+    "Game.MixinScoreboard",
+    "Render.GUI.MixinGuiMultiplayer",
     "Game.MixinPlayer",
     "Render.MixinFontRenderer",
     "Render.MixinRenderPlayer",
@@ -29,6 +33,7 @@
     "Render.GUI.MixinGuiControls",
     "Render.MixinRenderGlobals",
     "Render.Model.MixinTNTPrimed",
-    "Render.MixinShaderGroup"
+    "Render.MixinShaderGroup",
+    "Render.Model.MixinLayerBipedArmor"
   ]
 }

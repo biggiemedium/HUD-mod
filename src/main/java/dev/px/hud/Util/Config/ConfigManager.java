@@ -1,12 +1,11 @@
 package dev.px.hud.Util.Config;
 
 import dev.px.hud.HUDMod;
+import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.Frame;
-import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 
@@ -15,7 +14,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ConfigManager {
 
@@ -24,6 +22,7 @@ public class ConfigManager {
     private File settingsPath;
     private File elementPath;
     private File guiPath;
+    private File socialPath;
 
     public ConfigManager() {
         mainFile = new File(mc.mcDataDir + File.separator + HUDMod.MODID);
@@ -46,12 +45,18 @@ public class ConfigManager {
             guiPath.mkdirs();
         }
 
+        socialPath = new File(mainFile + File.separator + "Social");
+        if(!socialPath.exists()) {
+            socialPath.mkdirs();
+        }
+
         loadRenderElements();
         loadToggleElements();
         loadRenderElementPositions();
         loadGUI();
         loadRenderElementSetting();
         loadToggleElementSetting();
+        loadSocials();
     }
 
     public void save() {
@@ -61,9 +66,25 @@ public class ConfigManager {
         saveGUI();
         saveRenderElementSetting();
         saveToggleElementSetting();
+        saveSocials();
     }
 
     public void load() {
+
+    }
+
+    public void saveSocials() {
+            try {
+                File file = new File(this.socialPath, "Socials.txt");
+                BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                HUDMod.socialManager.getSocialMap().forEach((n, r) -> {
+                    try {
+                        writer.write(n + ":" + r.name());
+                        writer.write("\r\n");
+                    } catch (IOException e) {e.printStackTrace();}
+                });
+                writer.close();
+            } catch (Exception ignored) {}
 
     }
 
@@ -79,6 +100,24 @@ public class ConfigManager {
             writer.close();
         } catch (Exception ignored) {}
 
+    }
+
+    public void loadSocials() {
+        try {
+            File f = new File(this.socialPath, "Socials.txt");
+            FileInputStream inputStream = new FileInputStream(f);
+            DataInputStream dis = new DataInputStream(inputStream);
+            BufferedReader writer = new BufferedReader(new InputStreamReader(dis));
+            String line;
+            while ((line = writer.readLine()) != null) {
+                String cl = line.trim();
+                String name = cl.split(":")[0];
+                String relationShip = cl.split(":")[1];
+
+                HUDMod.socialManager.getSocialMap().put(name, SocialManager.SocialState.valueOf(relationShip));
+            }
+
+        } catch (Exception ignored) {}
     }
 
     public void loadGUI() {
@@ -106,7 +145,6 @@ public class ConfigManager {
             }
 
         } catch (Exception ignored) {}
-
     }
 
     public void loadRenderElements() {

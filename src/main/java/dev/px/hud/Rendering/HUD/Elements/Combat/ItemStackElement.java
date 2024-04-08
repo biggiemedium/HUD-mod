@@ -9,6 +9,7 @@ import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -39,7 +40,8 @@ public class ItemStackElement extends RenderElement {
         }
 
         if (mc.currentScreen instanceof PanelGUIScreen) {
-
+            ItemStack stack = new ItemStack(Blocks.wool, 64);
+            this.lastStack = stack;
         }
 
         if(mc.thePlayer.getHeldItem() != null) {

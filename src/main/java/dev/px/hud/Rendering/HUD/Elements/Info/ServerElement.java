@@ -1,6 +1,7 @@
 package dev.px.hud.Rendering.HUD.Elements.Info;
 
 import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Util.API.Render.Texture;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 
 public class ServerElement extends RenderElement {

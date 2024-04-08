@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,28 +16,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(RendererLivingEntity.class)
-public abstract class MixinRenderLivingEntity<T extends Entity> extends Render<T> {
+public abstract class MixinRenderLivingEntity <T extends EntityLivingBase> {
 
-    protected MixinRenderLivingEntity(RenderManager renderManager) {
-        super(renderManager);
+
+    @Redirect(method = "canRenderName", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/entity/RenderManager;livingPlayer:Lnet/minecraft/entity/Entity;"))
+    public Entity canRenderName(RenderManager renderManager) {
+        if(HUDMod.elementInitalizer.getElementByClass(NameTags.class).isToggled()) {
+            return null;
+        }
+        return renderManager.livingPlayer;
     }
-
-    /*
-
-    @Inject(method = "canRenderName(Lnet/minecraft/entity/EntityLivingBase;)Z", at = @At("HEAD"), cancellable = true)
-    private void handleBetterF1AndShowOwnNametag(T entity, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(!HUDMod.elementInitalizer.isElementToggled(NameTags.class));
-    }
-
-     */
-
-    /*
-    @Redirect(method = "renderName(Lnet/minecraft/entity/EntityLivingBase;DDD)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Ljava/lang/String;III)I"))
-    private void patcher$useShadowedNametagRendering(T entity, int x, int y, int color) {
-
-
-    }
-
-     */
 
 }

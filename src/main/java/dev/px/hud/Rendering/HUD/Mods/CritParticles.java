@@ -18,6 +18,7 @@ public class CritParticles extends ToggleableElement {
 
     private Setting<Integer> amount = create(new Setting<>("Amount", 5, 1, 10));
     private Setting<Particle> particleType = create(new Setting<>("Particle", Particle.Magic));
+
     private enum Particle {
         Crit,
         Magic,
@@ -32,33 +33,31 @@ public class CritParticles extends ToggleableElement {
     public void disable() {
     }
 
-
     @SubscribeEvent
-    public void onHit(AttackEntityEvent event) {
-        if(event.target == null) return;
-        if(mc.thePlayer.getDistance(event.target.posX, event.target.posY, event.target.posZ) > 10) return;
-        if(event.target instanceof EntityLivingBase) {
-            if(((EntityLivingBase) event.target).hurtTime >= 5) {
+    public void onPlayerHit(dev.px.hud.Util.Event.Entity.AttackEntityEvent event) {
+        if(event.entity == null) return;
+        if(mc.thePlayer.getDistance(event.entity.posX, event.entity.posY, event.entity.posZ) > 10) return;
+        if(event.entity instanceof EntityLivingBase) {
+            if(((EntityLivingBase) event.entity).hurtTime >= 5) {
                 switch (particleType.getValue()) {
                     case Crit:
                         for (int i = 0; i < amount.getValue(); i++) {
-                            mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT);
+                            mc.effectRenderer.emitParticleAtEntity(event.entity, EnumParticleTypes.CRIT);
                         }
                         break;
                     case Flame:
                         for (int i = 0; i < amount.getValue(); i++) {
-                            mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.FLAME);
+                            mc.effectRenderer.emitParticleAtEntity(event.entity, EnumParticleTypes.FLAME);
                         }
                         break;
                     case Magic:
                         for (int i = 0; i < amount.getValue(); i++) {
-                            mc.effectRenderer.emitParticleAtEntity(event.target, EnumParticleTypes.CRIT_MAGIC);
+                            mc.effectRenderer.emitParticleAtEntity(event.entity, EnumParticleTypes.CRIT_MAGIC);
                         }
                         break;
                 }
             }
         }
-
     }
 
 }

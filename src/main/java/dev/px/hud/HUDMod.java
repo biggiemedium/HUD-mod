@@ -6,6 +6,7 @@ import dev.px.hud.Initalizer.SettingInitalizer;
 import dev.px.hud.Manager.*;
 import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Alt.AltManager;
 import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
@@ -37,7 +38,7 @@ public class HUDMod {
 
     // Initalizers
     public static ElementInitalizer elementInitalizer;
-    public static EventProcessor clazz;
+    public static EventProcessor eventProcessor;
     public static ConfigManager configManager;
     public static SettingInitalizer clientSettingsInitalizer;
     public static CommandInitalizer commandInitalizer;
@@ -48,6 +49,8 @@ public class HUDMod {
     public static FontManager fontManager;
     public static NotificationManager notificationManager;
     public static ServerManager serverManager;
+    public static AltManager altManager;
+    public static SocialManager socialManager;
 
     private static Minecraft mc = Wrapper.mc;
     public static PanelGUIScreen screen;
@@ -60,10 +63,12 @@ public class HUDMod {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
+        //System.setProperty("devauth.enabled", "true");
+        //System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth");
+        //System.setProperty("devauth.account", "main");
         playTime = System.currentTimeMillis();
         startTime = System.currentTimeMillis();
         BindRegistry.register();
-
     }
 
     @EventHandler
@@ -72,7 +77,7 @@ public class HUDMod {
 
         colorManager = new ColorManager();
         progressManager.step("Loading Color Manager");
-        clazz = new EventProcessor();
+        eventProcessor = new EventProcessor();
         progressManager.step("Loading Event Processor");
         clientSettingsInitalizer = new SettingInitalizer();
         progressManager.step("Loading Client Settings...");
@@ -93,6 +98,8 @@ public class HUDMod {
         screen2 = new CSGOGui();
         configManager = new ConfigManager();
         progressManager.step("Loading Configs");
+        altManager = new AltManager();
+        socialManager = new SocialManager();
 
         ProgressManager.pop(progressManager);
     }

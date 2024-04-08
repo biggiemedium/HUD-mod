@@ -1,34 +1,21 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.Mixin.Game.IMixinMinecraft;
-import dev.px.hud.Mixin.Render.MixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
-import dev.px.hud.Util.API.Entity.Entityutil;
-import dev.px.hud.Util.API.Math.Mathutil;
-import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
-import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
-import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
 

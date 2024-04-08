@@ -1,17 +1,13 @@
 package dev.px.hud.Util.API.Shader.Shaders;
 
-import dev.px.hud.Util.API.Render.Colorutil;
-import dev.px.hud.Util.API.Shader.FrameBufferShader;
+import dev.px.hud.Util.API.Render.Color.Colorutil;
 import dev.px.hud.Util.API.Shader.Shaderutil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import java.awt.*;
-import java.util.HashMap;
 
 public class GradientShader  {
 

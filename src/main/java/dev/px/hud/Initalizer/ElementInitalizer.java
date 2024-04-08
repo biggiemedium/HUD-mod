@@ -28,8 +28,10 @@ public class ElementInitalizer {
         Add(new TargetHUD());
 
         // Info
+        Add(new CompassElement());
         Add(new CoordinateElement());
         Add(new FPSElement());
+        Add(new PingElement());
         //Add(new PlaytimeElement());
         Add(new PotionsElement());
         Add(new RotationElement());
@@ -49,11 +51,13 @@ public class ElementInitalizer {
         Add(new BlockHighlight());
         Add(new ChatModifications());
         Add(new ChunkAnimator());
-      //  Add(new CritParticles());
+        Add(new CritParticles());
+        Add(new EntityTrails());
         Add(new ESPMod());
         Add(new FakePlayer());
         Add(new FullBright());
         Add(new ItemPhysics());
+        Add(new MiddleClickFriend());
         Add(new MotionBlur());
         Add(new NoHurtCam());
         Add(new NameTags());

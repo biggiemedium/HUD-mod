@@ -5,18 +5,14 @@ import dev.px.hud.Util.API.Animation.Easing;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Math.Timer;
-import dev.px.hud.Util.API.Render.Colorutil;
 import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.API.Render.Texture;
-import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Wrapper;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 
 public class Notification implements Wrapper {

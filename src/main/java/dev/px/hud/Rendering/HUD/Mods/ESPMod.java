@@ -1,13 +1,14 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
 import dev.px.hud.HUDMod;
+import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Mixin.Game.IMixinMinecraft;
 import dev.px.hud.Mixin.Render.Item.IEntityRenderer;
-import dev.px.hud.Mixin.Render.MixinRenderManager;
+import dev.px.hud.Mixin.Render.IMixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Entityutil;
 import dev.px.hud.Util.API.Math.Timer;
-import dev.px.hud.Util.API.Render.Colorutil;
+import dev.px.hud.Util.API.Render.Color.Colorutil;
 import dev.px.hud.Util.API.Render.ESPutil;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
@@ -15,7 +16,6 @@ import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -129,6 +129,9 @@ public class ESPMod extends ToggleableElement {
                     if(!(e instanceof EntityLivingBase)) {
                         continue;
                     }
+                    if(HUDMod.clientSettingsInitalizer.ESPCluster.getValue() && mc.theWorld.playerEntities.size() > 40 && mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > 20) {
+                        continue;
+                    }
                     if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
                         continue;
                     }
@@ -136,9 +139,9 @@ public class ESPMod extends ToggleableElement {
                             && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e))
                     { continue; }
 
-                    double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
-                    double y = (e.lastTickPosY + (e.posY - e.lastTickPosY) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY());
-                    double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
+                    double x = e.lastTickPosX + (e.posX - e.lastTickPosX) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX();
+                    double y = (e.lastTickPosY + (e.posY - e.lastTickPosY) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY());
+                    double z = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * ((IMixinMinecraft) mc).timer().renderPartialTicks - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ();
                     GL11.glPushMatrix();
                     GL11.glTranslated(x, y - 0.2, z);
                     GlStateManager.disableDepth();
@@ -150,15 +153,16 @@ public class ESPMod extends ToggleableElement {
 
                     float lineWidth = mode.getValue() == Mode.Box ? 0.07f : 0.04f;
 
+                    Color pColor = HUDMod.socialManager.getState(e.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238) : new Color(255, 30, 30, 255);
+                    Color pColor2 = HUDMod.socialManager.getState(e.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238) : Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 15);
                     if(mode.getValue() == Mode.R6) {
-                        draw2DBox(width, height, lineWidth, 0, new Color(255, 30, 30, 255));
-
+                        draw2DBox(width, height, lineWidth, 0, pColor);// new Color(255, 30, 30, 255)
                     } else if(mode.getValue() == Mode.Box) {
                         draw2DBox(width, height, lineWidth, 0.04f, new Color(0, 0, 0, 165));
                         if (((EntityLivingBase) e).hurtTime > 0)
-                            draw2DBox(width, height, lineWidth, 0, new Color(255, 30, 30, 255));
+                            draw2DBox(width, height, lineWidth, 0, new Color(255, 30, 30, 255)); // new Color(255, 30, 30, 255)
                         else
-                            draw2DBox(width, height, lineWidth, 0, Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 15));
+                            draw2DBox(width, height, lineWidth, 0, pColor2); // Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 15)
                     }
                     GlStateManager.enableDepth();
                     GL11.glPopMatrix();
@@ -178,9 +182,9 @@ public class ESPMod extends ToggleableElement {
                 }
                 Vec3 vec = Entityutil.getInterpolatedPos(e, event.getPartialTicks())
                         .subtract(new Vec3(
-                                        ((MixinRenderManager) mc.getRenderManager()).getRenderPosX(),
-                                        ((MixinRenderManager) mc.getRenderManager()).getRenderPosY(),
-                                        ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ())
+                                        ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX(),
+                                        ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY(),
+                                        ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ())
                         );
                 if(vec != null) {
                     boolean bobbing = mc.gameSettings.viewBobbing;
@@ -194,38 +198,6 @@ public class ESPMod extends ToggleableElement {
                 }
 
             }
-        }
-    }
-
-
-    private void drawHealthBarTenacity(Entity entity) {
-        if(entity instanceof EntityLivingBase) {
-
-            GL11.glPushMatrix();
-            Vector4f v = ESPutil.getEntityPositionsOn2D(entity);;
-            mc.entityRenderer.setupOverlayRendering();
-            double posX = v.x;
-            double posY = v.y;
-            double endPosX = v.z;
-            double endPosY = v.w;
-
-            float w = 0.5f;
-
-            //Drawing box
-            Color c = HUDMod.colorManager.getMainColor();
-
-            /*
-            Renderutil.lineNoGl(posX - w, posY, posX + w - w, endPosY, c);
-            Renderutil.lineNoGl(posX, endPosY - w, endPosX, endPosY, c);
-            Renderutil.lineNoGl(posX - w, posY, endPosX, posY + w, c);
-            Renderutil.lineNoGl(endPosX - w, posY, endPosX, endPosY, c);
-             */
-            double percentage = (endPosY - posY) * ((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth();
-            double distance = 2;
-            float progress = ((EntityLivingBase) entity).getHealth() / ((EntityLivingBase) entity).getMaxHealth();
-            Color healthColor = progress > .75 ? new Color(66, 246, 123) : progress > .5 ? new Color(228, 255, 105) : progress > .35 ? new Color(236, 100, 64) : new Color(255, 65, 68);
-            Renderutil.lineNoGl(posX - w - distance, endPosY - percentage, posX + w - w - distance, endPosY, healthColor);
-            GL11.glPopMatrix();
         }
     }
 

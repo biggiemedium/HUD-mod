@@ -2,13 +2,11 @@ package dev.px.hud.Rendering.HUD.Mods;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import dev.px.hud.HUDMod;
-import dev.px.hud.Mixin.Render.MixinRenderManager;
+import dev.px.hud.Manager.SocialManager;
+import dev.px.hud.Mixin.Render.IMixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Entity.Entityutil;
-import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Math.Mathutil;
-import dev.px.hud.Util.API.Render.Colorutil;
-import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
@@ -21,16 +19,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NameTags extends ToggleableElement {
 
@@ -61,13 +55,13 @@ public class NameTags extends ToggleableElement {
         if(mc.getRenderManager() == null || mc.getRenderManager().options == null) return;
         for(EntityPlayer e : mc.theWorld.playerEntities) {
             if(e == null) { continue; }
-            if(e == mc.thePlayer) { continue; }
+            //if(e == mc.thePlayer) { continue; }
             if(!e.isEntityAlive()) { continue; }
             if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue() && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e)) { continue; }
             if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) { continue; }
-            double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
-            double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY();
-            double pZ = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
+            double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX();
+            double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY();
+            double pZ = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ();
             Vec3 pos = new Vec3(pX, pY, pZ);
 
             renderNameTag(e, pX, pY, pZ, event.getPartialTicks());
@@ -127,7 +121,7 @@ public class NameTags extends ToggleableElement {
             Renderutil.drawRect(-width - 1, -(height + 1), width + 2, 2, 0x5F0A0A0A);
         }
         GlStateManager.disableBlend();
-        mc.fontRendererObj.drawStringWithShadow(nameTag, -width+1, -height+3, -1);
+        mc.fontRendererObj.drawStringWithShadow(nameTag, -width+1, -height+3, HUDMod.socialManager.getState(target.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238).getRGB() : -1);
 
         GlStateManager.pushMatrix();
 

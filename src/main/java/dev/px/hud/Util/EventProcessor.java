@@ -1,18 +1,24 @@
 package dev.px.hud.Util;
 
+import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.HackDetector.DetectionCheck;
 import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Client.ChatReceiveEvent;
 import dev.px.hud.Util.Event.Client.ElementToggleEvent;
+import dev.px.hud.Util.Event.ReceivePacketEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -31,16 +37,14 @@ public class EventProcessor extends Util {
     }
 
     private ResourceLocation shaders = new ResourceLocation("minecraft", "shaders/post/blur" + ".json");
+    public DetectionCheck check = new DetectionCheck();
 
-    /*
     @SubscribeEvent
     public void onRubberBand(ReceivePacketEvent event) {
         if(event.getPacket() instanceof S08PacketPlayerPosLook) {
-            HUDMod.notificationManager.Add(new Notification("Anti-Cheat", "Anti-Cheat has been flagged! Be careful!", Notification.NotificationType.WARNING, 5000));
+            HUDMod.notificationManager.Add(new Notification("Rubberband", "Rubber banding detected", Notification.NotificationType.ERROR, 4000));
         }
     }
-
-     */
 
 
     @SubscribeEvent
@@ -109,6 +113,7 @@ public class EventProcessor extends Util {
                         if(keyCode == BindRegistry.newGui.getKeyCode()) {
                             mc.displayGuiScreen(HUDMod.screen2);
                         }
+
                         if(keyCode == Keyboard.KEY_U) {
                             HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.INFO, 5000));
                         }
@@ -155,6 +160,7 @@ public class EventProcessor extends Util {
             }
             });
 
+            check.onUpdate();
         }
 
     }
@@ -166,52 +172,14 @@ public class EventProcessor extends Util {
         }
 
         mc.mcProfiler.startSection("hudmod");
-        /*
-        mc.mcProfiler.startSection("setup");
-
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        GlStateManager.disableDepth();
-        GL11.glLineWidth(1f);
-  */
         Render3dEvent render3dEvent = new Render3dEvent(event.partialTicks);
-       // renderEvent.resetTranslation();
-      //  mc.mcProfiler.endSection();
-
-
-
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof ToggleableElement) {
                 if(((ToggleableElement) e).isToggled()) {
-                  //  mc.mcProfiler.startSection(e.getName());
                     ((ToggleableElement) e).onRender(render3dEvent);
-                 //   mc.mcProfiler.endSection();
                 }
             }
         }
-        /*
-        mc.mcProfiler.startSection("release");
-
-        GL11.glLineWidth(1f);
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableDepth();
-        GlStateManager.enableCull();
-
-        GlStateManager.enableCull();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.enableDepth();
-
-        mc.mcProfiler.endSection();
-
-         */
         mc.mcProfiler.endSection();
     }
 

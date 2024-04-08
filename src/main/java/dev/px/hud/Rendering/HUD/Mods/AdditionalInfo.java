@@ -1,10 +1,9 @@
 package dev.px.hud.Rendering.HUD.Mods;
 
-import dev.px.hud.Mixin.Render.MixinRenderManager;
+import dev.px.hud.Mixin.Render.IMixinRenderManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Util.API.Math.Mathutil;
 import dev.px.hud.Util.API.Math.Timer;
-import dev.px.hud.Util.API.Render.ESPutil;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import dev.px.hud.Util.Renderutil;
 import dev.px.hud.Util.Settings.Setting;
@@ -13,7 +12,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
-import org.lwjgl.util.vector.Vector4f;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,9 +46,9 @@ public class AdditionalInfo extends ToggleableElement {
             if(e == mc.thePlayer) { continue; }
             if(!e.isEntityAlive()) { continue; }
             //        if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) { continue; }
-            double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosX();
-            double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosY();
-            double pZ = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * event.getPartialTicks() - ((MixinRenderManager) mc.getRenderManager()).getRenderPosZ();
+            double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX();
+            double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY();
+            double pZ = e.lastTickPosZ + (e.posZ - e.lastTickPosZ) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ();
             Vec3 pos = new Vec3(pX, pY, pZ);
 
             renderNameTag(e, pX, pY, pZ, event.getPartialTicks());

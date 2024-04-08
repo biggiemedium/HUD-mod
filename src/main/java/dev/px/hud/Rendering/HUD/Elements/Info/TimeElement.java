@@ -15,6 +15,7 @@ public class TimeElement extends RenderElement {
         setTextElement(true);
     }
     Setting<Boolean> tfHour = create(new Setting<>("24 Hr", false));
+    Setting<Boolean> date = create(new Setting<>("Date", false));
 
     @Override
     public void render2D(Render2DEvent event) {

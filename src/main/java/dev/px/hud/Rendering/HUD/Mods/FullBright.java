@@ -14,6 +14,11 @@ public class FullBright extends ToggleableElement {
     }
 
     @Override
+    public void onUpdate() {
+        mc.gameSettings.gammaSetting = 100;
+    }
+
+    @Override
     public void disable() {
         mc.gameSettings.gammaSetting = 0;
     }

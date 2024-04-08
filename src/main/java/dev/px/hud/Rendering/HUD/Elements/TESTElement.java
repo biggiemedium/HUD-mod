@@ -1,16 +1,11 @@
 package dev.px.hud.Rendering.HUD.Elements;
 
 import dev.px.hud.Rendering.HUD.RenderElement;
-import dev.px.hud.Util.API.Render.Colorutil;
-import dev.px.hud.Util.API.Render.RoundedShader;
-import dev.px.hud.Util.API.SpotifyAPIClient;
-import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
-import java.util.concurrent.TimeUnit;
 
 public class TESTElement extends RenderElement {
 
