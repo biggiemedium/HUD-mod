@@ -1,7 +1,6 @@
 package dev.px.hud.Util.API.HackDetector;
 
 import dev.px.hud.HUDMod;
-import dev.px.hud.Manager.NotificationManager;
 import dev.px.hud.Rendering.Notification.Notification;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -23,7 +22,7 @@ public class DetectionCheck {
                 if(entityPlayer != mc.thePlayer) {
                     for(Detection d : detector.getDetections()) {
                             if(d.runCheck(entityPlayer) && System.currentTimeMillis() > d.getLastViolated() + 500) {
-                                HUDMod.notificationManager.Add(new Notification("Hacker", entityPlayer.getName() + " could be hacking!", Notification.NotificationType.WARNING, 4000));
+                                HUDMod.notificationManager.AddPushNotification(new Notification("Hacker", entityPlayer.getName() + " could be hacking!", Notification.NotificationType.WARNING, 4000));
                         //        entityPlayer.VL++;
                                 d.setLastViolated(System.currentTimeMillis());
                             }

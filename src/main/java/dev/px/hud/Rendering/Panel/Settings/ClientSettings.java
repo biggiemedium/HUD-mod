@@ -121,7 +121,7 @@ public class ClientSettings extends Panel {
                 Colorutil.interpolateColorsBackAndForth(15, 180, HUDMod.colorManager.currentColor.getMainColor(), HUDMod.colorManager.currentColor.getAlternativeColor(), false),
                 Colorutil.interpolateColorsBackAndForth(15, 270, HUDMod.colorManager.currentColor.getMainColor(), HUDMod.colorManager.currentColor.getAlternativeColor(), false));
 
-        Fontutil.drawTextShadow(HUDMod.colorManager.currentColor.getName(), x + 25 + 65, y + 178, -1);
+        Fontutil.drawTextShadow(HUDMod.colorManager.currentColor.getName(), x + 25 + 65, y + 155, -1);
 
         int scroll = Mouse.getDWheel();
         if(scroll > 0) { // up

@@ -22,6 +22,7 @@ public class RotationElement extends RenderElement {
 
         String y = yaw.getValue() ? "Yaw: " + Mathutil.round(mc.thePlayer.rotationYaw, 2) : "";
         String p = pitch.getValue() ? "Pitch: " + Mathutil.round(mc.thePlayer.rotationPitch, 2) : "";
+        drawBackground();
 
         if(mode.getValue() == Mode.Side) {
             renderText(getRotations(), getX(), getY(), fontColor.getValue().getRGB());
@@ -29,7 +30,7 @@ public class RotationElement extends RenderElement {
             renderText(y, getX(), getY(), fontColor.getValue().getRGB());
             renderText(p, getX(), getY() + getFontHeight(), fontColor.getValue().getRGB());
         }
-        setWidth(getFontWidth(mode.getValue() == Mode.Side ? getRotations() : y + p));
+        setWidth(getFontWidth(mode.getValue() == Mode.Side ? y + p : "Pitch: 111111"));
         setHeight(mode.getValue() == Mode.Side ? getFontHeight() : getFontHeight() * 2);
     }
 

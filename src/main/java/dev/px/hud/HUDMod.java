@@ -31,13 +31,7 @@ public class HUDMod {
 
     /* TODO ORDER
      *
-     *  - Redo Setting System
-     *  - Fix HUDMod Main menu GUI
      *  - fix Grid system
-     *  - fix renderElement background
-     *  - Add client setting GUI
-     *  - Redo server manager
-     *  - Redo Color manager
      *  - Redo Notifications
      */
     public static final String NAME = "HUD Mod";

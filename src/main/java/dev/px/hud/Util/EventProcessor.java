@@ -1,10 +1,10 @@
 package dev.px.hud.Util;
 
-import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.HUDMod;
+import dev.px.hud.Rendering.Notification.DropdownNotification;
 import dev.px.hud.Rendering.Notification.Notification;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.HackDetector.DetectionCheck;
@@ -17,10 +17,7 @@ import dev.px.hud.Util.Event.ReceivePacketEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -45,7 +42,7 @@ public class EventProcessor extends Util {
     @SubscribeEvent
     public void onRubberBand(ReceivePacketEvent event) {
         if(event.getPacket() instanceof S08PacketPlayerPosLook) {
-            HUDMod.notificationManager.Add(new Notification("Rubberband", "Rubber banding detected", Notification.NotificationType.ERROR, 4000));
+            HUDMod.notificationManager.AddPushNotification(new Notification("Rubberband", "Rubber banding detected", Notification.NotificationType.ERROR, 4000));
         }
     }
 
@@ -119,6 +116,10 @@ public class EventProcessor extends Util {
                         }
                         if(keyCode == Keyboard.KEY_PERIOD) {
                             mc.displayGuiScreen(new GuiChat());
+                        }
+
+                        if (keyCode == Keyboard.KEY_U) {
+                            HUDMod.notificationManager.AddDropdownNotification(new DropdownNotification("Example text", 2));
                         }
                     }
 

@@ -33,7 +33,6 @@ public class ServerManager extends Util {
     private Server server;
     public boolean isHypixelScoreboard = false;
 
-
     public ServerManager() {
         timer.reset();
         this.server = Server.Unknown;
@@ -114,19 +113,6 @@ public class ServerManager extends Util {
     private void fakeRenderScoreboard(ScoreObjective objective) {
         Scoreboard scoreboard = objective.getScoreboard();
         Collection collection = scoreboard.getSortedScores(objective);
-        /*
-        ArrayList arraylist = Lists.newArrayList(Iterables.filter(collection, new Predicate() {
-
-            public boolean apply(Score p_apply_1_) {
-                return p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#");
-            }
-
-            public boolean apply(Object p_apply_1_) {
-                return this.apply((Score) p_apply_1_);
-            }
-        }));
-
-         */
 
         List<Score> filteredList = (List<Score>) collection.stream()
                 .filter(score -> {

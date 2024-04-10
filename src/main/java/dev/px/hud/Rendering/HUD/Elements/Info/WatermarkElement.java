@@ -16,6 +16,7 @@ public class WatermarkElement extends RenderElement {
 
     @Override
     public void render(float partialTicks) {
+        drawBackground();
         renderText(display(), getX(), getY(), fontColor.getValue().getRGB());
         setHeight(getFontHeight());
         setWidth(getFontWidth(display()));

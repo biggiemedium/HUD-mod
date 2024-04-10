@@ -20,6 +20,8 @@ public class PingElement extends RenderElement {
             ping = responseTime;
         } catch (Exception responseTime) {}
 
+        drawBackground();
         renderText("Ping: " + ping, getX(), getY(), fontColor.getValue().getRGB());
+        setWidth(getFontWidth("Ping: " + ping));
     }
 }

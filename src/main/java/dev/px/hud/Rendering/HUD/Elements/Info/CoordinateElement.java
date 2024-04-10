@@ -20,6 +20,7 @@ public class CoordinateElement extends RenderElement {
 
     @Override
     public void render(float partialTicks) {
+        drawBackground();
         switch (mode.getValue()) {
             case Up:
                 String x = "X: " + Mathutil.round(mc.thePlayer.posX, round.getValue() ? 0 : 1);

@@ -18,6 +18,7 @@ public class WelcomeElement extends RenderElement {
 
     @Override
     public void render(float partialTicks) {
+        drawBackground();
         renderText(getWelcomeMessage(), getX(), getY(), fontColor.getValue().getRGB());
         setWidth(getFontWidth(getWelcomeMessage()));
         setHeight(getFontHeight());

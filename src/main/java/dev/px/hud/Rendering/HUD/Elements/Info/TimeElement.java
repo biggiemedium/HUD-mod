@@ -21,6 +21,7 @@ public class TimeElement extends RenderElement {
     public void render2D(Render2DEvent event) {
         DateFormat dateFormat = tfHour.getValue() ? new SimpleDateFormat("kk:mm") : new SimpleDateFormat("hh:mm a");
 
+        drawBackground();
         renderText(dateFormat.format(new Date()), getX(), getY());
         setWidth(getFontWidth(dateFormat.format(new Date())));
     }

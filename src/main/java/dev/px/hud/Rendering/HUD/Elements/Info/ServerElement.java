@@ -12,6 +12,7 @@ public class ServerElement extends RenderElement {
 
     @Override
     public void render2D(Render2DEvent event) {
+        drawBackground();
         renderText(getIP(), getX(), getY(), fontColor.getValue().getRGB());
         setWidth(getFontWidth(getIP()));
         setHeight(getFontHeight());

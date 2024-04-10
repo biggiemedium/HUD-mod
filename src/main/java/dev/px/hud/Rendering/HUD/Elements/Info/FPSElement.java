@@ -12,6 +12,7 @@ public class FPSElement extends RenderElement {
 
     @Override
     public void render(float partialTicks) {
+        drawBackground();
         renderText("FPS: " + Minecraft.getDebugFPS(), getX(), getY(), fontColor.getValue().getRGB());
         setWidth(getFontWidth("FPS: " + Minecraft.getDebugFPS()));
         setHeight(getFontHeight());
