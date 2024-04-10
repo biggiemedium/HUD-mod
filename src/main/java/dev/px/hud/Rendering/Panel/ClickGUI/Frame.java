@@ -98,8 +98,6 @@ public class Frame {
             this.featureOffset = 0;
         }
 
-
-
         if(openAnimation.getAnimationFactor() > 0) {
             this.getClickGUI().getScissorStack().pushScissor(x, getY() + height, width, (int) (fullheight * getOpenAnimation().getAnimationFactor()));
             this.featureOffset = 0;

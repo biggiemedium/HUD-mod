@@ -29,7 +29,7 @@ public class CompassElement extends RenderElement {
         for (final Direction dir : Direction.values()) {
             final double rad = getPosOnCompass(dir);
             if(customFont.getValue()) {
-                Fontutil.drawTextShadow(dir.name(), (getX() - 15 + (int) getXX(rad)), getY() - 15 + (int) getYY(rad), fontColor.getValue().getRGB());
+                Fontutil.drawTextShadow(dir.name(), (getX() + 15 + (int) getXX(rad)), getY() + 15 + (int) getYY(rad), fontColor.getValue().getRGB());
             } else {
                 mc.fontRendererObj.drawStringWithShadow(dir.name(), (getX() + (int) getXX(rad)), getY() + (int) getYY(rad), fontColor.getValue().getRGB());
             }

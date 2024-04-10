@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+@SideOnly(Side.CLIENT)
 public class FontImage {
 
     // font info

@@ -44,7 +44,7 @@ public class Radar extends RenderElement {
             double playerPosZ = mc.thePlayer.posZ;
 
 
-            Renderutil.drawBlurredShadow(xOffset, getY(), sizeRect, sizeRect, 17, new Color(0x3D3939));
+            Renderutil.drawBlurredShadow(xOffset, getY(), sizeRect, sizeRect, 17, new Color(61, 57, 57, 150));
         GL11.glPushMatrix();
             RoundedShader.drawRound(xOffset, getY(), sizeRect, sizeRect, 7f, backgroundColor.getValue());
         GL11.glPopMatrix();

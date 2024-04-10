@@ -48,7 +48,7 @@ public class Tracers extends ToggleableElement {
             if (mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
                 continue;
             }
-            if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue()
+            if(HUDMod.preferenceManager.NCPCluster.getValue()
                     && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e)) { continue; }
 
             Vec3 vec = Entityutil.getInterpolatedPos(e, event.getPartialTicks())
@@ -57,6 +57,7 @@ public class Tracers extends ToggleableElement {
                             ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY(),
                             ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ())
                     );
+
             if(vec != null) {
                 boolean bobbing = mc.gameSettings.viewBobbing;
                 mc.gameSettings.viewBobbing = false;

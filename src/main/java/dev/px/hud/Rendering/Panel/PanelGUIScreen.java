@@ -2,7 +2,6 @@ package dev.px.hud.Rendering.Panel;
 
 import dev.px.hud.HUDMod;
 import dev.px.hud.Rendering.Panel.ClickGUI.ClickGUI;
-import dev.px.hud.Rendering.Panel.Commands.CommandGUI;
 import dev.px.hud.Rendering.Panel.HUDEditor.HudEditorPanel;
 import dev.px.hud.Rendering.Panel.Settings.ClientSettings;
 import dev.px.hud.Util.Renderutil;
@@ -21,7 +20,7 @@ public class PanelGUIScreen extends GuiScreen {
         this.currentPanel = CLICKGUI;
         this.panels.add(CLICKGUI);
         this.panels.add(HUDEDITOR);
-    //    this.panels.add(CLIENTSETTINGS);
+        this.panels.add(CLIENTSETTINGS);
     //    this.panels.add(COMMANDGUI);
 
     }
@@ -33,7 +32,6 @@ public class PanelGUIScreen extends GuiScreen {
     private ClickGUI CLICKGUI = new ClickGUI();
     private HudEditorPanel HUDEDITOR = new HudEditorPanel();
     private ClientSettings CLIENTSETTINGS = new ClientSettings();
-    private CommandGUI COMMANDGUI = new CommandGUI();
 
     /*
     We must make visuals for panels
@@ -47,12 +45,10 @@ public class PanelGUIScreen extends GuiScreen {
             int renderX = (new ScaledResolution(Wrapper.mc).getScaledWidth() / 2) + x - (panels.size() * mc.fontRendererObj.FONT_HEIGHT);
             if(p == this.currentPanel) {
                 // highlight current selected panel
-                //Renderutil.drawRect(renderX - 2, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15, baseColor.darker().getRGB());
                 Renderutil.drawRoundedRect(renderX - 3, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15,1, baseColor.darker().getRGB());
             }
 
             if(p != this.currentPanel) {
-             //   Renderutil.drawRect(renderX - 2, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15, baseColor.getRGB());
                 Renderutil.drawRoundedRect(renderX - 3, 3, renderX + mc.fontRendererObj.getStringWidth(p.getName()) + 5, 15,1, baseColor.getRGB());
             }
             mc.fontRendererObj.drawStringWithShadow(p.getName(), renderX, 5, -1);

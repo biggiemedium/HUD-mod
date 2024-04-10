@@ -1,8 +1,15 @@
 package dev.px.hud.Rendering.HUD.Elements;
 
 import dev.px.hud.Rendering.HUD.RenderElement;
+import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
@@ -20,7 +27,10 @@ public class TESTElement extends RenderElement {
         UP, SIDE
     }
 
- //   private SpotifyAPIClient api= new SpotifyAPIClient();
+    private int offset = 13;
+    protected float zLevelFloat;
+
+    //   private SpotifyAPIClient api= new SpotifyAPIClient();
  //   private Track currentTrack;
  //   private CurrentlyPlayingContext currentPlayingContext;
     private boolean playing = false;
@@ -116,6 +126,76 @@ public class TESTElement extends RenderElement {
         this.stack.popScissor();
 
          */
+
+        if(mc.currentScreen instanceof PanelGUIScreen) {
+            renderDammy();
+        } else {
+            renderT();
+        }
+        this.setWidth(182);
+        this.setHeight(18);
+    }
+
+    private void renderT() {
+        if (BossStatus.bossName != null && BossStatus.statusBarTime > 0){
+            this.mc.getTextureManager().bindTexture(Gui.icons);
+            --BossStatus.statusBarTime;
+            this.mc.getTextureManager().bindTexture(Gui.icons);
+            int j = 182;
+            this.mc.getTextureManager().bindTexture(Gui.icons);
+            int l = (int)(BossStatus.healthScale * (float)(j + 1));
+            drawTexturedModalRect(this.getX(), this.getY() + offset, 0, 74, j, 5);
+            drawTexturedModalRect(this.getX(), this.getY() + offset, 0, 74, j, 5);
+
+            if (l > 0)
+            {
+                drawTexturedModalRect(this.getX(), this.getY() + offset, 0, 79, l, 5);
+            }
+
+            this.mc.getTextureManager().bindTexture(Gui.icons);
+
+            String s = BossStatus.bossName;
+
+            mc.fontRendererObj.drawStringWithShadow(s, (((182 / 2) - (mc.fontRendererObj.getStringWidth(s) / 2)) + this.getX()), (this.getY() - 10) + offset, 16777215);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            this.mc.getTextureManager().bindTexture(Gui.icons);
+        }
+    }
+
+    public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height){
+        float f = 0.00390625F;
+        float f1 = 0.00390625F;
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        worldrenderer.pos((double)(x + 0), (double)(y + height), (double) Renderutil.itemRender.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1)).endVertex();
+        worldrenderer.pos((double)(x + width), (double)(y + height), (double)Renderutil.itemRender.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1)).endVertex();
+        worldrenderer.pos((double)(x + width), (double)(y + 0), (double)Renderutil.itemRender.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1)).endVertex();
+        worldrenderer.pos((double)(x + 0), (double)(y + 0), (double)Renderutil.itemRender.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1)).endVertex();
+        tessellator.draw();
+    }
+
+
+    private void renderDammy() {
+        this.mc.getTextureManager().bindTexture(Gui.icons);
+        --BossStatus.statusBarTime;
+        this.mc.getTextureManager().bindTexture(Gui.icons);
+        int j = 182;
+        this.mc.getTextureManager().bindTexture(Gui.icons);
+        int l = (int)(BossStatus.healthScale * (float)(j + 1));
+        drawTexturedModalRect(this.getX(), this.getY() + offset + 1, 0, 74, j, 5);
+        drawTexturedModalRect(this.getX(), this.getY() + offset + 1, 0, 74, j, 5);
+        if (l > 0)
+        {
+            drawTexturedModalRect(this.getX(), this.getY() + offset + 1, 0, 79, l, 5);
+        }
+        this.mc.getTextureManager().bindTexture(Gui.icons);
+
+        String s = "Bossbar";
+
+        mc.fontRendererObj.drawStringWithShadow(s, (((182 / 2) - (mc.fontRendererObj.getStringWidth(s) / 2)) + this.getX()), (this.getY() - 10) + offset, 16777215);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.getTextureManager().bindTexture(Gui.icons);
     }
 
 }

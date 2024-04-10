@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConfigManager {
+public class ConfigManager { // I dont care if this code is messy I actually fucking hate writing config files
 
     private Minecraft mc = Minecraft.getMinecraft();
     private File mainFile;
@@ -82,6 +82,11 @@ public class ConfigManager {
                         writer.write(n + ":" + r.name());
                         writer.write("\r\n");
                     } catch (IOException e) {e.printStackTrace();}
+                    try { // bruh
+                        writer.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 });
                 writer.close();
             } catch (Exception ignored) {}
@@ -866,4 +871,28 @@ public class ConfigManager {
         } catch (IOException e) { e.printStackTrace(); }
     }
 
+
+    public Minecraft getMc() {
+        return mc;
+    }
+
+    public File getMainFile() {
+        return mainFile;
+    }
+
+    public File getSettingsPath() {
+        return settingsPath;
+    }
+
+    public File getElementPath() {
+        return elementPath;
+    }
+
+    public File getGuiPath() {
+        return guiPath;
+    }
+
+    public File getSocialPath() {
+        return socialPath;
+    }
 }

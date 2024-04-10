@@ -13,6 +13,7 @@ public class AccentColor {
     private Color alternativeColor;
 
     public SimpleAnimation opactiy = new SimpleAnimation(0.0f);
+    public SimpleAnimation zoom = new SimpleAnimation(0.0f);
 
     public AccentColor(String name, Color mainColor, Color alternativeColor) {
         this.name = name;

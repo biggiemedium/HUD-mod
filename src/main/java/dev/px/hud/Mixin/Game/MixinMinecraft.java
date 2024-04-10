@@ -1,7 +1,6 @@
 package dev.px.hud.Mixin.Game;
 
 import dev.px.hud.HUDMod;
-import dev.px.hud.Manager.SplashManager;
 import dev.px.hud.Rendering.HUD.Mods.UnfocusedCPU;
 import dev.px.hud.Rendering.MCGUI.CustomMainMenuGUI;
 import dev.px.hud.Util.Renderutil;
@@ -9,13 +8,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.Util;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -50,14 +47,6 @@ public abstract class MixinMinecraft {
         Display.setResizable(true);
     }
 
-    /*
-    @Overwrite
-    public void drawSplashScreen(TextureManager textureManagerInstance) {
-        SplashManager.drawSplash(textureManagerInstance);
-    }
-
-     */
-
     @Inject(method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I", at = @At("HEAD"), cancellable = true)
     public void preGetLimitFramerate(CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         try {
@@ -88,10 +77,10 @@ public abstract class MixinMinecraft {
         }
     }
 
-    @Inject(method = "runTick()V", at = @At("RETURN"))
-    public void customGUIScreen(CallbackInfo ci) {
-        if(this.currentScreen instanceof GuiMainMenu) {
-            this.displayGuiScreen(new CustomMainMenuGUI());
+    @Inject(method = "displayGuiScreen", at = @At("RETURN"), cancellable = true)
+    public void displayGuiScreenInject(GuiScreen guiScreenIn, CallbackInfo ci) {
+        if(guiScreenIn instanceof GuiMainMenu) {
+            displayGuiScreen(new CustomMainMenuGUI());
         }
     }
 
@@ -120,7 +109,7 @@ public abstract class MixinMinecraft {
     public void displayFix(CallbackInfo ci, boolean fullscreen, int displayWidth, int displayHeight) throws LWJGLException {
         Display.setFullscreen(false);
         if (fullscreen) {
-            if (HUDMod.clientSettingsInitalizer != null && HUDMod.clientSettingsInitalizer.windowModifications.getValue()) {
+            if (HUDMod.preferenceManager != null && HUDMod.preferenceManager.windowModifications.getValue()) {
                 System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
             } else {
                 Display.setFullscreen(true);
@@ -129,7 +118,7 @@ public abstract class MixinMinecraft {
                 Minecraft.getMinecraft().displayHeight = Math.max(1, displaymode.getHeight());
             }
         } else {
-            if (HUDMod.clientSettingsInitalizer != null && HUDMod.clientSettingsInitalizer.windowModifications.getValue()) {
+            if (HUDMod.preferenceManager != null && HUDMod.preferenceManager.windowModifications.getValue()) {
                 System.setProperty("org.lwjgl.opengl.Window.undecorated", "false");
             } else {
                 Display.setDisplayMode(new DisplayMode(displayWidth, displayHeight));
@@ -143,7 +132,7 @@ public abstract class MixinMinecraft {
     }
 
     public void fullScreenFix(boolean fullscreen, int displayWidth, int displayHeight) throws LWJGLException {
-        if (HUDMod.clientSettingsInitalizer != null && HUDMod.clientSettingsInitalizer.windowModifications.getValue()) {
+        if (HUDMod.preferenceManager != null && HUDMod.preferenceManager.windowModifications.getValue()) {
             if (fullscreen) {
                 System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
                 Display.setDisplayMode(Display.getDesktopDisplayMode());

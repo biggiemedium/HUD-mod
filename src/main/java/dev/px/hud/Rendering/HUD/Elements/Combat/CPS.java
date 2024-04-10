@@ -31,6 +31,7 @@ public class CPS extends RenderElement {
 
         setWidth(getFontWidth("CPS: " + CPS()));
         setHeight(getFontHeight());
+        drawBackground();
         renderText("CPS: " + CPS(), getX(), getY(), fontColor.getValue().getRGB());
     }
 

@@ -129,13 +129,13 @@ public class ESPMod extends ToggleableElement {
                     if(!(e instanceof EntityLivingBase)) {
                         continue;
                     }
-                    if(HUDMod.clientSettingsInitalizer.ESPCluster.getValue() && mc.theWorld.playerEntities.size() > 40 && mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > 20) {
+                    if(HUDMod.preferenceManager.ESPCluster.getValue() && mc.theWorld.playerEntities.size() > 40 && mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > 20) {
                         continue;
                     }
                     if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) {
                         continue;
                     }
-                    if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue()
+                    if(HUDMod.preferenceManager.NCPCluster.getValue()
                             && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e))
                     { continue; }
 

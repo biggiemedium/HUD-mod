@@ -57,7 +57,7 @@ public class NameTags extends ToggleableElement {
             if(e == null) { continue; }
             //if(e == mc.thePlayer) { continue; }
             if(!e.isEntityAlive()) { continue; }
-            if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue() && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e)) { continue; }
+            if(HUDMod.preferenceManager.NCPCluster.getValue() && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e)) { continue; }
             if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) { continue; }
             double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX();
             double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY();

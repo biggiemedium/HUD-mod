@@ -51,7 +51,7 @@ public class TextRadarElement extends RenderElement {
         }
 
         setHeight(getFontHeight() + off);
-        setWidth((25));
+        setWidth((35));
     }
 
     private String health(EntityPlayer player) {

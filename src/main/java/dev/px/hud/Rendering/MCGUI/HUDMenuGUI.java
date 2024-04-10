@@ -36,12 +36,11 @@ public class HUDMenuGUI extends GuiScreen {
         this.width = sr.getScaledWidth();
         this.height = sr.getScaledHeight();
 
-        this.buttonList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.done", new Object[0])));
-        this.buttonList.add(this.blurButton = new GuiButton(101, this.width / 2 - 155, this.height / 6 + 96 - 6, 150, 20, "Blur"));
-        this.buttonList.add(this.keybindButton = new GuiButton(90, this.width / 2 - 155, this.height / 6 + 96 - 6 - 25, 150, 20, BindRegistry.guiKey == null ? "Keybinds" : "Keybind: " + Keyboard.getKeyName(BindRegistry.guiKey.getKeyCode())));
+        this.buttonList.add(new GuiButton(200, this.width / 2, this.height / 6 + 168, I18n.format("gui.done", new Object[0])));
 
-     //   buttonList.add(doneButton);
-     //   buttonList.add(blurButton);
+        this.buttonList.add(this.blurButton = new GuiButton(101, this.width / 2, this.height / 6 + 25, 150, 20, "Blur"));
+        this.buttonList.add(this.keybindButton = new GuiButton(90, this.width / 2, this.height / 6, 150, 20, BindRegistry.guiKey == null ? "Keybinds" : "Keybind: " + Keyboard.getKeyName(BindRegistry.guiKey.getKeyCode())));
+
         super.initGui();
     }
 

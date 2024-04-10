@@ -47,7 +47,7 @@ public class KeybindButton extends SettingButton<Keybind> {
 
     @Override
     public void mouseReleased(int mouseX, int mouseY) {
-
+        this.listening = false;
     }
 
     public void keyTyped(char key, int keyCode) {

@@ -18,8 +18,6 @@ public class Setting<T> {
     private T max;
 
     private Predicate<T> visibility;
-
-    // Taken from cosmos client
     private List<T> exclusions = new ArrayList<>();
 
     public Setting(String name, T value) {

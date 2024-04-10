@@ -4,6 +4,8 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Util.API.Font.Fontutil;
 import dev.px.hud.Util.API.Render.Color.Colorutil;
+import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.API.Shader.Shaderutil;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Bus.Listener.Listenable;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
@@ -33,7 +35,7 @@ public class RenderElement extends Element implements Listenable {
     private Element.HUDType hudType;
     private boolean textElement;
 
-    protected Setting<Boolean> customFont;
+    public Setting<Boolean> customFont;
     protected Setting<Boolean> rainbowText;
     protected Setting<Color> fontColor;
 
@@ -181,6 +183,18 @@ public class RenderElement extends Element implements Listenable {
     // I added this after Render method but im too lazy to refactor every render element
     public void render2D(Render2DEvent event) {
 
+    }
+
+    public void drawBackground() {
+        Color gradientColor1 = Color.WHITE, gradientColor2 = Color.WHITE, gradientColor3 = Color.WHITE, gradientColor4 = Color.WHITE;
+        gradientColor1 = Colorutil.interpolateColorsBackAndForth(15, 0, HUDMod.colorManager.currentColor.getMainColor(), HUDMod.colorManager.currentColor.getAlternativeColor(), false);
+        gradientColor2 = Colorutil.interpolateColorsBackAndForth(15, 90, HUDMod.colorManager.currentColor.getMainColor(), HUDMod.colorManager.currentColor.getAlternativeColor(), false);
+        gradientColor3 = Colorutil.interpolateColorsBackAndForth(15, 180, HUDMod.colorManager.currentColor.getMainColor(), HUDMod.colorManager.currentColor.getAlternativeColor(), false);
+        gradientColor4 = Colorutil.interpolateColorsBackAndForth(15, 270, HUDMod.colorManager.currentColor.getMainColor(), HUDMod.colorManager.currentColor.getAlternativeColor(), false);
+
+        if(HUDMod.preferenceManager.BACKGROUND.getValue()) {
+            RoundedShader.drawGradientRound(x - 2, y - 2, width + 2, height + 2, 4, Colorutil.applyOpacity(gradientColor4, .85f), gradientColor1, gradientColor3, gradientColor2);
+        }
     }
 
     public void mouseRelease(int mouseX, int mouseY, int state) {

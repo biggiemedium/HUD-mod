@@ -2,18 +2,15 @@ package dev.px.hud;
 
 import dev.px.hud.Initalizer.CommandInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
-import dev.px.hud.Initalizer.SettingInitalizer;
 import dev.px.hud.Manager.*;
-import dev.px.hud.Rendering.NewGUI.CSGOGui;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
-import dev.px.hud.Util.API.Alt.AltManager;
 import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
 import dev.px.hud.Util.Event.Bus.EventManager;
 import dev.px.hud.Util.EventProcessor;
-import dev.px.hud.Util.Wrapper;
-import net.minecraft.client.Minecraft;
+import dev.px.hud.Util.Settings.ClientSettings.PreferenceManager;
+import jline.internal.Log;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -32,6 +29,17 @@ import java.util.concurrent.Executors;
 @Mod(modid = HUDMod.MODID, version = HUDMod.VERSION)
 public class HUDMod {
 
+    /* TODO ORDER
+     *
+     *  - Redo Setting System
+     *  - Fix HUDMod Main menu GUI
+     *  - fix Grid system
+     *  - fix renderElement background
+     *  - Add client setting GUI
+     *  - Redo server manager
+     *  - Redo Color manager
+     *  - Redo Notifications
+     */
     public static final String NAME = "HUD Mod";
     public static final String MODID = "hudmod";
     public static final String VERSION = "2.1";
@@ -40,7 +48,7 @@ public class HUDMod {
     public static ElementInitalizer elementInitalizer;
     public static EventProcessor eventProcessor;
     public static ConfigManager configManager;
-    public static SettingInitalizer clientSettingsInitalizer;
+    public static PreferenceManager preferenceManager;
     public static CommandInitalizer commandInitalizer;
 
     // Manager
@@ -49,40 +57,43 @@ public class HUDMod {
     public static FontManager fontManager;
     public static NotificationManager notificationManager;
     public static ServerManager serverManager;
-    public static AltManager altManager;
     public static SocialManager socialManager;
+    public static TimeManager timeManager;
 
-    private static Minecraft mc = Wrapper.mc;
     public static PanelGUIScreen screen;
-    public static CSGOGui screen2;
     public static EventBus EVENT_BUS = new EventManager();
     public static org.apache.logging.log4j.Logger LOG = LogManager.getLogger("[" + NAME + "]"); //"[" + NAME + "]"
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
-    public static long playTime = -1;
     private long startTime = -1;
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        //System.setProperty("devauth.enabled", "true");
-        //System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth");
-        //System.setProperty("devauth.account", "main");
-        playTime = System.currentTimeMillis();
+        System.setProperty("devauth.enabled", "true");
+        System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth");
+        System.setProperty("devauth.account", "main");
+        Log.info(System.getProperty("devauth.enabled", "true"));
+        Log.info(System.getProperty("devauth.configDir", "/Users/jameskemp/Devauth"));
+        Log.info(System.getProperty("devauth.account", "main"));
+        Log.info("Account stuff");
+
         startTime = System.currentTimeMillis();
         BindRegistry.register();
+        fontManager = new FontManager();
+        timeManager = new TimeManager();
+        timeManager.setTotalElapsed(System.currentTimeMillis());
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        ProgressManager.ProgressBar progressManager = ProgressManager.push("HUD Mod", 10);
+        ProgressManager.ProgressBar progressManager = ProgressManager.push("HUD Mod", 9);
 
         colorManager = new ColorManager();
         progressManager.step("Loading Color Manager");
         eventProcessor = new EventProcessor();
         progressManager.step("Loading Event Processor");
-        clientSettingsInitalizer = new SettingInitalizer();
-        progressManager.step("Loading Client Settings...");
         elementInitalizer = new ElementInitalizer();
         progressManager.step("Loading Element Initializer");
+        preferenceManager = new PreferenceManager();
         commandInitalizer = new CommandInitalizer();
         progressManager.step("Loading Command Initializer");
 
@@ -90,16 +101,13 @@ public class HUDMod {
         progressManager.step("Loading server Manager...");
         soundInitalizer = new SoundManager();
         progressManager.step("Queueing up the dua lipa...");
-        fontManager = new FontManager();
-        progressManager.step("Setting up fonts...");
         notificationManager = new NotificationManager();
         progressManager.step("Loading Notification Manager");
         screen = new PanelGUIScreen();
-        screen2 = new CSGOGui();
         configManager = new ConfigManager();
         progressManager.step("Loading Configs");
-        altManager = new AltManager();
         socialManager = new SocialManager();
+        progressManager.step("Initializing Friend System");
 
         ProgressManager.pop(progressManager);
     }

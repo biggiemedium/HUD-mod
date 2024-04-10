@@ -32,7 +32,7 @@ public class HitInfoElement extends RenderElement {
         if(mc.objectMouseOver.entityHit != null) {
             Entity name = mc.objectMouseOver.entityHit;
             if(name instanceof EntityPlayer) {
-                if(HUDMod.clientSettingsInitalizer.NCPCluster.getValue() && Entityutil.isHypixelNPC(name)) { return ""; }
+                if(HUDMod.preferenceManager.NCPCluster.getValue() && Entityutil.isHypixelNPC(name)) { return ""; }
                 String s = ogTheme.getValue() ?
                         name.getName() + " " + ChatFormatting.GOLD + Entityutil.getHealth((EntityPlayer) name) + ChatFormatting.RESET :
                         name.getName() + " " + Entityutil.getHealth((EntityPlayer) name);

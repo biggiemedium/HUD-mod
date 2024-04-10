@@ -12,9 +12,12 @@ import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Client.ChatReceiveEvent;
 import dev.px.hud.Util.Event.Client.ElementToggleEvent;
+import dev.px.hud.Util.Event.Client.SettingUpdateEvent;
 import dev.px.hud.Util.Event.ReceivePacketEvent;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +52,11 @@ public class EventProcessor extends Util {
 
     @SubscribeEvent
     public void onChatRecieve(ChatReceiveEvent event) {
+        if(event.getMessage().getUnformattedText().toLowerCase().contains("players remain")) {
+            if(HUDMod.serverManager.isOnHypixel()) {
 
+            }
+        }
     }
 
     @SubscribeEvent
@@ -110,18 +117,8 @@ public class EventProcessor extends Util {
                         if (keyCode == BindRegistry.guiKey.getKeyCode()) {
                             mc.displayGuiScreen(HUDMod.screen);
                         }
-                        if(keyCode == BindRegistry.newGui.getKeyCode()) {
-                            mc.displayGuiScreen(HUDMod.screen2);
-                        }
-
-                        if(keyCode == Keyboard.KEY_U) {
-                            HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.INFO, 5000));
-                        }
-                        if(keyCode == Keyboard.KEY_I) {
-                            HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.WARNING, 5000));
-                        }
-                        if(keyCode == Keyboard.KEY_H) {
-                            HUDMod.notificationManager.Add(new Notification("NOTIFICAITON", "TESTING A NOTIFICATION BLAHHH", Notification.NotificationType.ERROR, 5000));
+                        if(keyCode == Keyboard.KEY_PERIOD) {
+                            mc.displayGuiScreen(new GuiChat());
                         }
                     }
 
@@ -190,6 +187,18 @@ public class EventProcessor extends Util {
 
     @SubscribeEvent
     public void onEnableMod(ElementToggleEvent.ElementEnableEvent event) {
+
+    }
+
+    @SubscribeEvent
+    public void onSettingUpdate(SettingUpdateEvent event) {
+        for(Element e : HUDMod.elementInitalizer.getElements()) {
+            if(e instanceof RenderElement) {
+                if(event.getSetting() == HUDMod.preferenceManager.CUSTOMFONT) {
+                    ((RenderElement) e).customFont.setValue(HUDMod.preferenceManager.CUSTOMFONT.getValue());
+                }
+            }
+        }
 
     }
 

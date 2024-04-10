@@ -1,7 +1,6 @@
 package dev.px.hud.Util.API.Font;
 
 import dev.px.hud.HUDMod;
-import dev.px.hud.Util.Config.Configs.FontFile;
 
 import java.awt.*;
 import java.io.File;

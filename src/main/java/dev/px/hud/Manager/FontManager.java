@@ -1,8 +1,9 @@
 package dev.px.hud.Manager;
 
+import dev.px.hud.HUDMod;
 import dev.px.hud.Util.API.Font.FontRenderer;
 import dev.px.hud.Util.API.Util;
-import dev.px.hud.Util.Config.Config;
+import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.FileInputStream;
@@ -42,7 +43,7 @@ public class FontManager {
         try {
 
             // font stream
-            InputStream fontStream = new FileInputStream(new Config().getMainFile());
+            InputStream fontStream = new FileInputStream(new ResourceLocation("minecraft", "Fonts/").getResourcePath());
 
             // if the client font exists
             if (fontStream != null) {

@@ -3,6 +3,9 @@ package dev.px.hud.Util.API.HackDetector;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import jdk.nashorn.internal.objects.annotations.Setter;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S14PacketEntity;
+import net.minecraftforge.common.MinecraftForge;
 
 // Idea from tenacity - I fucking hate skywars so I wanna know if someones hacking
 
@@ -16,6 +19,7 @@ public abstract class Detection {
     public Detection(String name, HackType type) {
         this.name = name;
         this.type = type;
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public abstract boolean runCheck(EntityPlayer player);
@@ -30,6 +34,17 @@ public abstract class Detection {
 
     protected boolean isFalseFlaggable(EntityPlayer player) {
         return player.isInWater() || player.isInLava() || player.isOnLadder() || player.ticksExisted < 10;
+    }
+
+    public boolean isRelMove(Packet<?> p) {
+        return p instanceof S14PacketEntity.S15PacketEntityRelMove
+                || p instanceof S14PacketEntity.S17PacketEntityLookMove
+                || p instanceof S14PacketEntity.S16PacketEntityLook;
+    }
+
+    public boolean isLook(Packet<?> p) {
+        return p instanceof S14PacketEntity.S17PacketEntityLookMove
+                || p instanceof S14PacketEntity.S16PacketEntityLook;
     }
 
     public String getName() {
