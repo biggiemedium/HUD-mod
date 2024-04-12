@@ -5,9 +5,11 @@ import dev.px.hud.Util.API.HackDetector.Detection;
 import dev.px.hud.Util.Event.Entity.AttackEntityEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,18 +18,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityPlayer.class)
-public class MixinEntityPlayer {
+public abstract class MixinEntityPlayer extends EntityLivingBase {
+    public MixinEntityPlayer(World worldIn) {
+        super(worldIn);
+    }
 
-    @Shadow
-    public double posX;
-
-    @Shadow
-    public double posY;
-
-    @Shadow
-    public double posZ;
-
-    //public int airTicks;
+        //public int airTicks;
 
     @Inject(method = "onUpdate", at = @At("HEAD"), cancellable = true)
     public void detectHacker(CallbackInfo ci) {
@@ -41,6 +37,7 @@ public class MixinEntityPlayer {
             }
         }
     }
+
 
     @Inject(method = "attackTargetEntityWithCurrentItem", at = @At("HEAD"))
     public void attackEntity(Entity entity, CallbackInfo ci) {

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-// Taken from Flux b39 client
 public class ScoreboardElement extends RenderElement {
 
     private Scoreboard scoreboard;

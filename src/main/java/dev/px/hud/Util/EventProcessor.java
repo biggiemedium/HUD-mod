@@ -1,5 +1,6 @@
 package dev.px.hud.Util;
 
+import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
@@ -18,6 +19,8 @@ import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Event.Render.Render3dEvent;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -118,9 +121,6 @@ public class EventProcessor extends Util {
                             mc.displayGuiScreen(new GuiChat());
                         }
 
-                        if (keyCode == Keyboard.KEY_U) {
-                            HUDMod.notificationManager.AddDropdownNotification(new DropdownNotification("Example text", 2));
-                        }
                     }
 
                     for(Element e : HUDMod.elementInitalizer.getElements()) {
@@ -142,6 +142,7 @@ public class EventProcessor extends Util {
             assert BindRegistry.guiKey != null;
             Util.sendClientSideMessage("To open the GUI press " + Keyboard.getKeyName(BindRegistry.guiKey.getKeyCode()) + "!", true);
         }
+
     }
 
     @SubscribeEvent
@@ -193,13 +194,6 @@ public class EventProcessor extends Util {
 
     @SubscribeEvent
     public void onSettingUpdate(SettingUpdateEvent event) {
-        for(Element e : HUDMod.elementInitalizer.getElements()) {
-            if(e instanceof RenderElement) {
-                if(event.getSetting() == HUDMod.preferenceManager.CUSTOMFONT) {
-                    ((RenderElement) e).customFont.setValue(HUDMod.preferenceManager.CUSTOMFONT.getValue());
-                }
-            }
-        }
 
     }
 

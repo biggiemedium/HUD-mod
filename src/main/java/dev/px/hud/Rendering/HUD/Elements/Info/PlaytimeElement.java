@@ -29,7 +29,7 @@ public class PlaytimeElement extends RenderElement {
         GL11.glPopMatrix();
 
         renderText("Session", getX() + 2, getY() + 2, -1);
-        renderText("Total Elapsed " + HUDMod.timeManager.getTotalDuration(HUDMod.timeManager.getTotalElapsed()), getX() + 2, getY() + 3 + getFontHeight());
+        //renderText("Total Elapsed " + HUDMod.timeManager.getTotalDuration(HUDMod.timeManager.getTotalElapsed()), getX() + 2, getY() + 3 + getFontHeight());
         renderText("Playtime ", getX() + 2, getY() + 3 + (getFontHeight() * 2));
     }
 }

@@ -3,6 +3,7 @@ package dev.px.hud.Rendering.HUD.Mods;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
+import dev.px.hud.Rendering.Notification.DropdownNotification;
 import dev.px.hud.Util.API.Input.Keybind;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.entity.Entity;
@@ -14,7 +15,12 @@ import org.lwjgl.input.Mouse;
 public class MiddleClickFriend extends ToggleableElement {
 
     public MiddleClickFriend() {
-        super("Friend", HUDType.MOD);
+        super("Add Friend", HUDType.MOD);
+    }
+
+    @Override
+    public void enable() {
+        HUDMod.notificationManager.AddDropdownNotification(new DropdownNotification("Press middle click on a player to add themn to your friends list!", 4));
     }
 
     @SubscribeEvent

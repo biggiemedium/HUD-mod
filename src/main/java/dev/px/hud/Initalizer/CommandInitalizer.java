@@ -24,9 +24,6 @@ public class CommandInitalizer extends HashMapManager<String, Command> {
     private String prefix = ".";
 
     public CommandInitalizer() {
-        Add(new AutoCope());
-        Add(new AutoGG());
-        Add(new AutoInsult());
     }
 
     public void Add(Command command) {

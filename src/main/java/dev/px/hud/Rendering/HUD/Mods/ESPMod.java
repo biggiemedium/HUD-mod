@@ -153,8 +153,8 @@ public class ESPMod extends ToggleableElement {
 
                     float lineWidth = mode.getValue() == Mode.Box ? 0.07f : 0.04f;
 
-                    Color pColor = HUDMod.socialManager.getState(e.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238) : new Color(255, 30, 30, 255);
-                    Color pColor2 = HUDMod.socialManager.getState(e.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238) : Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 15);
+                    Color pColor = HUDMod.socialManager.getState(e.getName()) == SocialManager.SocialState.FRIEND && HUDMod.preferenceManager.FRIENDS.getValue() ? new Color(18, 150, 238) : new Color(255, 30, 30, 255);
+                    Color pColor2 = HUDMod.socialManager.getState(e.getName()) == SocialManager.SocialState.FRIEND && HUDMod.preferenceManager.FRIENDS.getValue() ? new Color(18, 150, 238) : Colorutil.interpolateColorC(HUDMod.colorManager.getMainColor(), HUDMod.colorManager.getAlternativeColor(), 15);
                     if(mode.getValue() == Mode.R6) {
                         draw2DBox(width, height, lineWidth, 0, pColor);// new Color(255, 30, 30, 255)
                     } else if(mode.getValue() == Mode.Box) {

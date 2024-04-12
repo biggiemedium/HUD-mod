@@ -39,11 +39,6 @@ public class ItemStackElement extends RenderElement {
             horizontalAnimation = new Animation(300, false, Easing.LINEAR);
         }
 
-        if (mc.currentScreen instanceof PanelGUIScreen) {
-            ItemStack stack = new ItemStack(Blocks.wool, 64);
-            this.lastStack = stack;
-        }
-
         if(mc.thePlayer.getHeldItem() != null) {
             if (mc.thePlayer.getHeldItem().getItem() instanceof ItemBlock) {
                 horizontalAnimation.setState(true);
@@ -55,6 +50,12 @@ public class ItemStackElement extends RenderElement {
             }
         } else {
             horizontalAnimation.setState(false);
+        }
+
+        if (mc.currentScreen instanceof PanelGUIScreen) {
+            ItemStack stack = new ItemStack(Blocks.wool, 64);
+            this.lastStack = stack;
+            horizontalAnimation.setState(true);
         }
 
         if(horizontalAnimation.getAnimationFactor() > 0) {

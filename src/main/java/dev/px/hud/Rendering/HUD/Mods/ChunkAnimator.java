@@ -17,7 +17,7 @@ public class ChunkAnimator extends ToggleableElement {
         super("Chunk Animator", "Animates chunks at edge of render distance", HUDType.MOD);
     }
 
-    Setting<Integer> animation = create(new Setting<>("Animation time", 1000, 250, 25000));
+    Setting<Integer> animation = create(new Setting<>("Animation time", 1000, 250, 10000));
     Setting<Boolean> easing = create(new Setting<>("Easing", true));
 
     private WeakHashMap<RenderChunk, AtomicLong> lifespans = new WeakHashMap<>();

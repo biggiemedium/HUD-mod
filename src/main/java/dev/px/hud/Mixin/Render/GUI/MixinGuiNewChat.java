@@ -45,6 +45,13 @@ public abstract class MixinGuiNewChat extends Gui {
     private float animationPercent;
     private int lineBeingDrawn;
 
+    private void updatePercentage(long diff) {
+        if (percentComplete < 1) {
+            percentComplete += (HUDMod.elementInitalizer.getElementByClass(ChatModifications.class).speed.getValue() / 1000) * (float) diff;
+        }
+        percentComplete = clamp(percentComplete, 0, 1);
+    }
+
     @Inject(method = "printChatMessage", at = @At("TAIL"), cancellable = true)
     public void onChatReceive(IChatComponent chatComponent, CallbackInfo ci) {
         ChatReceiveEvent event = new ChatReceiveEvent(chatComponent);
@@ -58,7 +65,7 @@ public abstract class MixinGuiNewChat extends Gui {
         long current = System.currentTimeMillis();
         long diff = current - prevMillis;
         prevMillis = current;
-        updatePercentage(diff);
+        this.updatePercentage(diff);
         float t = percentComplete;
         animationPercent = clamp(1 - (--t) * t * t * t, 0, 1);
     }
@@ -118,13 +125,6 @@ public abstract class MixinGuiNewChat extends Gui {
         } else {
             Gui.drawRect(left, top, right, bottom, color);
         }
-    }
-
-    private void updatePercentage(long diff) {
-        if (percentComplete < 1) {
-            percentComplete += (HUDMod.elementInitalizer.getElementByClass(ChatModifications.class).speed.getValue() / 1000) * (float) diff;
-        }
-        percentComplete = clamp(percentComplete, 0, 1);
     }
 
     public float clamp(float number, float min, float max) {

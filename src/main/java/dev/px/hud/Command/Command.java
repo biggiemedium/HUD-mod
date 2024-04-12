@@ -12,14 +12,8 @@ public abstract class Command {
 
     protected Minecraft mc = Wrapper.mc;
 
-    public Command() {
-        if (getClass().isAnnotationPresent(CommandManifest.class)) {
-            CommandManifest moduleManifest = getClass().getAnnotation(CommandManifest.class);
-            this.name = moduleManifest.name();
-            this.alias = moduleManifest.aliases();
-            this.description = moduleManifest.description();
-            this.usage = moduleManifest.usage();
-        }
+    public Command(String name, String description) {
+
     }
 
     public void onRun(String[] args) {

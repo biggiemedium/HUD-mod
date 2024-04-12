@@ -11,7 +11,7 @@ public class ChatModifications extends ToggleableElement {
 
     public Setting<Boolean> clearChat = create(new Setting<>("Clear Chat", true));
     public Setting<Boolean> fade = create(new Setting<>("Fade", true));
-    public Setting<Integer> speed = create(new Setting<>("Fade speed", 4, 1, 10, v -> fade.getValue()));
+    public Setting<Double> speed = create(new Setting<>("Fade speed", 4d, 1d, 10d, v -> fade.getValue()));
     public Setting<Boolean> bar = create(new Setting<>("Bar", true));
 
 }

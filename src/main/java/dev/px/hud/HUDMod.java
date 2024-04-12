@@ -3,6 +3,8 @@ package dev.px.hud;
 import dev.px.hud.Initalizer.CommandInitalizer;
 import dev.px.hud.Initalizer.ElementInitalizer;
 import dev.px.hud.Manager.*;
+import dev.px.hud.Rendering.HUD.Element;
+import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Input.BindRegistry;
 import dev.px.hud.Util.Config.ConfigManager;
@@ -32,7 +34,8 @@ public class HUDMod {
     /* TODO ORDER
      *
      *  - fix Grid system
-     *  - Redo Notifications
+     *  - HUD Mod GUI main menu
+     *  - Command System
      */
     public static final String NAME = "HUD Mod";
     public static final String MODID = "hudmod";
@@ -62,13 +65,9 @@ public class HUDMod {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        System.setProperty("devauth.enabled", "true");
-        System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth");
-        System.setProperty("devauth.account", "main");
-        Log.info(System.getProperty("devauth.enabled", "true"));
-        Log.info(System.getProperty("devauth.configDir", "/Users/jameskemp/Devauth"));
-        Log.info(System.getProperty("devauth.account", "main"));
-        Log.info("Account stuff");
+        LOG.info(System.getProperty("devauth.enabled", "true"));
+        LOG.info(System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth"));
+        LOG.info(System.setProperty("devauth.account", "main"));
 
         startTime = System.currentTimeMillis();
         BindRegistry.register();

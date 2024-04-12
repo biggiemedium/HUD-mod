@@ -1,5 +1,7 @@
 package dev.px.hud.Rendering.HUD.Elements.Combat;
 
+import dev.px.hud.HUDMod;
+import dev.px.hud.Manager.SocialManager;
 import dev.px.hud.Mixin.Game.IMixinMinecraft;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Util.API.Render.RoundedShader;
@@ -24,6 +26,7 @@ public class Radar extends RenderElement {
 
     Setting<Color> backgroundColor = create(new Setting<>("Radar Color", new Color(0x3D3939)));
     Setting<Color> enemyColor = create(new Setting<>("Enemy Color", new Color(255, 50, 50, 255)));
+    Setting<Color> friendColor = create(new Setting<>("Friend Color", new Color(50, 50, 255, 255)));
 
     private CopyOnWriteArrayList<EntityPlayer> players = new CopyOnWriteArrayList<>();
     private CopyOnWriteArrayList<Entity> entityList = new CopyOnWriteArrayList<>();
@@ -77,7 +80,7 @@ public class Radar extends RenderElement {
                 }
 
                 GL11.glPushMatrix();
-                RoundedShader.drawRound((xOffset + sizeRect / 2F + rotX) - 2, (yOffset + sizeRect / 2F + rotY) - 2, 4, 4, 4f, enemyColor.getValue());
+                RoundedShader.drawRound((xOffset + sizeRect / 2F + rotX) - 2, (yOffset + sizeRect / 2F + rotY) - 2, 4, 4, 4f, HUDMod.socialManager.getState(entityPlayer.getName()) == SocialManager.SocialState.FRIEND ? friendColor.getValue() : enemyColor.getValue());
                 GL11.glPopMatrix();
             }
     }

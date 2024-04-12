@@ -55,9 +55,10 @@ public class NameTags extends ToggleableElement {
         if(mc.getRenderManager() == null || mc.getRenderManager().options == null) return;
         for(EntityPlayer e : mc.theWorld.playerEntities) {
             if(e == null) { continue; }
-            //if(e == mc.thePlayer) { continue; }
             if(!e.isEntityAlive()) { continue; }
-            if(HUDMod.preferenceManager.NCPCluster.getValue() && Entityutil.isHypixelNPC(e) || Entityutil.isPlayerFake(e)) { continue; }
+            if(HUDMod.preferenceManager.NCPCluster.getValue() && Entityutil.isHypixelNPC(e)
+                    || Entityutil.isPlayerFake(e)) { continue; }
+
             if(mc.thePlayer.getDistance(e.posX, e.posY, e.posZ) > distance.getValue()) { continue; }
             double pX = e.lastTickPosX + (e.posX - e.lastTickPosX) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX();
             double pY = e.lastTickPosY + (e.posY - e.lastTickPosY) * event.getPartialTicks() - ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY();
@@ -69,16 +70,17 @@ public class NameTags extends ToggleableElement {
 
     }
 
+    /*
     @SubscribeEvent
     public void onNameTagRender(RenderLivingEvent.Specials.Pre<EntityPlayer> event) {
-        if(event.entity != mc.thePlayer) {
         if(event.entity instanceof EntityPlayer) {
             if (event.entity instanceof EntityLivingBase) {
                 event.setCanceled(true);
             }
         }
-        }
     }
+
+     */
 
     private void renderNameTag(EntityPlayer target, double x, double y, double z, float ticks) {
         Entity camera = mc.getRenderViewEntity();
@@ -118,10 +120,11 @@ public class NameTags extends ToggleableElement {
 
         GlStateManager.enableBlend();
         if(outline.getValue()) {
-            Renderutil.drawRect(-width - 1, -(height + 1), width + 2, 2, 0x5F0A0A0A);
+            Renderutil.drawRect(-width, -(height), width, 2, 0x5F0A0A0A);
         }
         GlStateManager.disableBlend();
-        mc.fontRendererObj.drawStringWithShadow(nameTag, -width+1, -height+3, HUDMod.socialManager.getState(target.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238).getRGB() : -1);
+        Color c = (HUDMod.preferenceManager.FRIENDS.getValue() && HUDMod.socialManager.getState(target.getName()) == SocialManager.SocialState.FRIEND ? new Color(18, 150, 238) : new Color(255, 255, 255));
+        mc.fontRendererObj.drawStringWithShadow(nameTag, -width+1, -height+3, c.getRGB());
 
         GlStateManager.pushMatrix();
 

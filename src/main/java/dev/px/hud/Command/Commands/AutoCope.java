@@ -1,10 +1,8 @@
 package dev.px.hud.Command.Commands;
 
 import dev.px.hud.Command.Command;
-import dev.px.hud.Command.CommandManifest;
 
-@CommandManifest(name = "Auto Cope", description = "Insults opponent to cope with your saltiness", aliases = "cope")
-public class AutoCope extends Command {
+public class AutoCope {
 
     String[] cope = { "The sun was in my eyes",
             "Bro it was my little brother playing I wouldve clapped",

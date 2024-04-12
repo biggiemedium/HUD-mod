@@ -34,6 +34,8 @@
     "Render.MixinRenderGlobals",
     "Render.Model.MixinTNTPrimed",
     "Render.MixinShaderGroup",
-    "Render.Model.MixinLayerBipedArmor"
+    "Render.Model.MixinLayerBipedArmor",
+    "Render.MixinRenderLivingEntity",
+    "Entity.MixinEntityPlayer"
   ]
 }

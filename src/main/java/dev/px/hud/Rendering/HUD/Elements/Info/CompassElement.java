@@ -27,7 +27,7 @@ public class CompassElement extends RenderElement {
     public void render2D(Render2DEvent event) {
         GlStateManager.pushMatrix();
         for (final Direction dir : Direction.values()) {
-            final double rad = getPosOnCompass(dir);
+            double rad = getPosOnCompass(dir);
             if(customFont.getValue()) {
                 Fontutil.drawTextShadow(dir.name(), (getX() + 15 + (int) getXX(rad)), getY() + 15 + (int) getYY(rad), fontColor.getValue().getRGB());
             } else {

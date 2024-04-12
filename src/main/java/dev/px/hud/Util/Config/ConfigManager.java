@@ -6,6 +6,7 @@ import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.HUD.ToggleableElement;
 import dev.px.hud.Rendering.Panel.ClickGUI.Frame;
+import dev.px.hud.Util.API.Render.Color.AccentColor;
 import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.Minecraft;
 
@@ -50,6 +51,7 @@ public class ConfigManager { // I dont care if this code is messy I actually fuc
             socialPath.mkdirs();
         }
 
+        loadPreferences();
         loadRenderElements();
         loadToggleElements();
         loadRenderElementPositions();
@@ -57,6 +59,7 @@ public class ConfigManager { // I dont care if this code is messy I actually fuc
         loadRenderElementSetting();
         loadToggleElementSetting();
         loadSocials();
+        loadTheme();
     }
 
     public void save() {
@@ -67,9 +70,76 @@ public class ConfigManager { // I dont care if this code is messy I actually fuc
         saveRenderElementSetting();
         saveToggleElementSetting();
         saveSocials();
+        saveTheme();
+        savePreferences();
     }
 
-    public void load() {
+    public void loadPreferences() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(this.settingsPath.getAbsolutePath() + File.separator + "PreferenceBoolean.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length == 2) {
+                    String settingName = parts[0].trim();
+                    String settingValue = parts[1].trim();
+
+                    for(Setting s : HUDMod.preferenceManager.getPreferences()) {
+                        if(s.getValue() instanceof Boolean) {
+                            if(s.getName().equalsIgnoreCase(settingName)) {
+                                s.setValue(settingValue.equalsIgnoreCase("true"));
+                            }
+                        }
+                    }
+
+                }
+            }
+            reader.close();
+        } catch (IOException e) { e.printStackTrace(); }
+    }
+
+    public void savePreferences() { // oh god no
+        try {
+            File f = new File(this.settingsPath.getAbsolutePath() + File.separator + "PreferenceBoolean.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+            for(Setting s : HUDMod.preferenceManager.getPreferences()) {
+                if(s.getValue() instanceof Boolean) {
+                    String v = (Boolean) s.getValue() ? "true" : "false";
+                    writer.write(s.getName() + ":" + v + "\r\n");
+                }
+            }
+            writer.close();
+        } catch (Exception ignored) {}
+
+    }
+
+    public void saveTheme() {
+        try {
+            File file = new File(this.settingsPath, "Theme.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(HUDMod.colorManager.currentColor.getName() + "\r\n");
+            writer.close();
+        } catch (Exception ignored) {}
+    }
+
+    public void loadTheme() {
+        try {
+            File file = new File(this.settingsPath, "Theme.txt");
+            FileInputStream inputStream = new FileInputStream(file);
+            DataInputStream dis = new DataInputStream(inputStream);
+            BufferedReader writer = new BufferedReader(new InputStreamReader(dis));
+            String line;
+            while ((line = writer.readLine()) != null) {
+                String cl = line.trim();
+                String theme = cl.split(":")[0];
+                for(AccentColor c : HUDMod.colorManager.getAccentColors()) {
+                    if(c.getName().equalsIgnoreCase(theme)) {
+                        HUDMod.colorManager.setCurrentColor(c);
+                    }
+                }
+            }
+            writer.close();
+        } catch (Exception ignored) {}
 
     }
 
@@ -121,7 +191,7 @@ public class ConfigManager { // I dont care if this code is messy I actually fuc
 
                 HUDMod.socialManager.getSocialMap().put(name, SocialManager.SocialState.valueOf(relationShip));
             }
-
+            writer.close();
         } catch (Exception ignored) {}
     }
 

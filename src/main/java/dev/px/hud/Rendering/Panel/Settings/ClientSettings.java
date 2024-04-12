@@ -84,8 +84,8 @@ public class ClientSettings extends Panel {
             this.scrollY += Mouse.getDWheel() * 0.02;
         }
 
-        if(scrollY > 10) {
-            scrollY = 10;
+        if(scrollY > 1) {
+            scrollY = 1;
         } else if(scrollY < -offset + 20) {
             scrollY = (-offset + 20);
         }

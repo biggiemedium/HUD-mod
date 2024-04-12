@@ -1,18 +1,30 @@
 package dev.px.hud.Rendering.HUD.Elements;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.mojang.realmsclient.gui.ChatFormatting;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
+import dev.px.hud.Util.API.Render.RoundedShader;
+import dev.px.hud.Util.Event.Render.EventRenderScoreBoard;
 import dev.px.hud.Util.Event.Render.Render2DEvent;
 import dev.px.hud.Util.Renderutil;
+import dev.px.hud.Util.Settings.Setting;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
+import java.util.Collection;
+import java.util.List;
 
 public class TESTElement extends RenderElement {
 
@@ -30,16 +42,13 @@ public class TESTElement extends RenderElement {
     private int offset = 13;
     protected float zLevelFloat;
 
-    //   private SpotifyAPIClient api= new SpotifyAPIClient();
- //   private Track currentTrack;
- //   private CurrentlyPlayingContext currentPlayingContext;
     private boolean playing = false;
-    private Color imageColor = Color.WHITE;
     private ResourceLocation currentAlbumCover;
     public final float albumCoverSize = getHeight();
     private final float playerWidth = 135;
     private Renderutil.ScissorStack stack = new Renderutil.ScissorStack();
 
+    public Setting<Boolean> background = create(new Setting<>("Background", true));
     @Override
     public void render(float partialTicks) {
         String s = "";
@@ -47,155 +56,86 @@ public class TESTElement extends RenderElement {
 
     @Override
     public void enable() {
-        /*
-        if(mc.thePlayer == null) {
-            toggle();
-            return;
-        }
-
-        Util.sendClientSideMessage("Testing");
-
-        if(this.api == null) {
-            this.api = new SpotifyAPIClient();
-        }
-
-        api.build("3e828637c29840eeaf6a76533e2b2d40", "00ea674442454a82b749c29204f900a0");
-        api.startConnection();
-
-        super.enable();
-
-         */
     }
 
     @Override
     public void render2D(Render2DEvent event) {
-        /*
-        if(mc.thePlayer == null) {
-            toggle();
-            return;
-        }
-
-        if(this.api == null) {
-            this.api = new SpotifyAPIClient();
-        }
-
-        if(api == null) {
-            return;
-        }
-
-        if(api.getCurrentTrack() == null || api.getCurrentPlayingContext() == null) return;
-
-        Util.sendClientSideMessage(api.getCurrentTrack().getName(), true);
-
-        setWidth((int) albumCoverSize + (int) playerWidth);
-
-        if (currentTrack != api.getCurrentTrack() || currentPlayingContext != api.getCurrentPlayingContext()) {
-            this.currentTrack = api.getCurrentTrack();
-            this.currentPlayingContext = api.getCurrentPlayingContext();
-        }
-
-        playing = currentPlayingContext.getIs_playing();
-        Color color2 = Colorutil.darker(imageColor, .65f);
-
-        float[] hsb = Color.RGBtoHSB(imageColor.getRed(), imageColor.getGreen(), imageColor.getBlue(), null);
-        if (hsb[2] < .5f) {
-            color2 = Colorutil.brighter(imageColor, .65f);
-        }
-
-        RoundedShader.drawGradientVertical(getX() + (albumCoverSize - 15), getY(), getWidth() + 15, getHeight(), 6,
-                color2, imageColor);
 
 
-        int diff = currentTrack.getDurationMs() - currentPlayingContext.getProgress_ms();
-        long diffSeconds = TimeUnit.MILLISECONDS.toSeconds(diff) % 60;
-        long diffMinutes = TimeUnit.MILLISECONDS.toMinutes(diff) % 60;
-        String trackRemaining = String.format("-%s:%s", diffMinutes < 10 ? "0" +
-                diffMinutes : diffMinutes, diffSeconds < 10 ? "0" + diffSeconds : diffSeconds);
-
-
-        this.stack.pushScissor(getX() + (int) albumCoverSize, getY(), getWidth(), getHeight());
-        final StringBuilder artistsDisplay = new StringBuilder();
-
-        for (int artistIndex = 0; artistIndex < currentTrack.getArtists().length; artistIndex++) {
-            ArtistSimplified artist = currentTrack.getArtists()[artistIndex];
-            artistsDisplay.append(artist.getName()).append(artistIndex + 1 == currentTrack.getArtists().length ? '.' : ", ");
-        }
-
-
-
-        this.stack.popScissor();
-
-         */
-
-        if(mc.currentScreen instanceof PanelGUIScreen) {
-            renderDammy();
-        } else {
-            renderT();
-        }
-        this.setWidth(182);
-        this.setHeight(18);
     }
 
-    private void renderT() {
-        if (BossStatus.bossName != null && BossStatus.statusBarTime > 0){
-            this.mc.getTextureManager().bindTexture(Gui.icons);
-            --BossStatus.statusBarTime;
-            this.mc.getTextureManager().bindTexture(Gui.icons);
-            int j = 182;
-            this.mc.getTextureManager().bindTexture(Gui.icons);
-            int l = (int)(BossStatus.healthScale * (float)(j + 1));
-            drawTexturedModalRect(this.getX(), this.getY() + offset, 0, 74, j, 5);
-            drawTexturedModalRect(this.getX(), this.getY() + offset, 0, 74, j, 5);
+    public static int shadowX = 0, shadowY = 0, shadowWidth = 0, shadowHeight = 0;
 
-            if (l > 0)
-            {
-                drawTexturedModalRect(this.getX(), this.getY() + offset, 0, 79, l, 5);
+    @SubscribeEvent
+    public void onRenderScoreBoard(EventRenderScoreBoard event) {
+
+        Scoreboard scoreboard = event.getScoreboard().getScoreboard();
+        Collection<Score> collection = scoreboard.getSortedScores(event.getScoreboard());
+        List<Score> list = Lists.newArrayList(Iterables.filter(collection,
+                p_apply_1_ -> p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#")));
+
+        event.setCanceled(true);
+
+        if(list.size() > 15) {
+            collection = Lists.newArrayList(Iterables.skip(list, collection.size() - 15));
+        }
+        else {
+            collection = list;
+        }
+
+        int i = mc.fontRendererObj.getStringWidth(event.getScoreboard().getDisplayName());
+
+        for(Score score : collection) {
+            ScorePlayerTeam scoreplayerteam = scoreboard.getPlayersTeam(score.getPlayerName());
+            String s = ScorePlayerTeam.formatPlayerName(scoreplayerteam, score.getPlayerName()) + ": " + ChatFormatting.RED + score.getScorePoints();
+            i = Math.max(i, mc.fontRendererObj.getStringWidth(s));
+        }
+
+        int i1 = collection.size() * mc.fontRendererObj.FONT_HEIGHT;
+        int j1 = this.getY() + i1 / 3;
+        int k1 = 3;
+        int l1 = this.getX() - i - k1;
+        int j = 0;
+
+        for(Score score1 : collection) {
+            ++j;
+            ScorePlayerTeam scoreplayerteam1 = scoreboard.getPlayersTeam(score1.getPlayerName());
+            String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
+            String s2 = "" + ChatFormatting.RED + score1.getScorePoints();
+            int k = j1 - j * mc.fontRendererObj.FONT_HEIGHT;
+            int l = this.getX() - k1 + 2;
+
+            if(background.getValue()) {
+               // Gui.drawRect(l1 - 2, k, l - (13), k + mc.fontRendererObj.FONT_HEIGHT, 1342177280);
+                RoundedShader.drawRound(l1 - 2, k, l - (13), k + mc.fontRendererObj.FONT_HEIGHT, 4, new Color(1342177280));
             }
+            mc.fontRendererObj.drawString(s1, l1, k, 553648127);
 
-            this.mc.getTextureManager().bindTexture(Gui.icons);
 
-            String s = BossStatus.bossName;
+            if(j == collection.size()) {
+                String s3 = event.getScoreboard().getDisplayName();
 
-            mc.fontRendererObj.drawStringWithShadow(s, (((182 / 2) - (mc.fontRendererObj.getStringWidth(s) / 2)) + this.getX()), (this.getY() - 10) + offset, 16777215);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.mc.getTextureManager().bindTexture(Gui.icons);
+                if(background.getValue()) {
+                   // Gui.drawRect(l1 - 2, k - mc.fontRendererObj.FONT_HEIGHT - 1, l - (13), k - 1, 1610612736);
+                   // Gui.drawRect(l1 - 2, k - 1, l - (13), k, 1342177280);
+                    RoundedShader.drawRound(l1 - 2, k - mc.fontRendererObj.FONT_HEIGHT - 1, l - (13), k - 1, 4, new Color(1610612736));
+                    RoundedShader.drawRound(l1 - 2, k - 1, l - (13), k, 4, new Color(1342177280));
+                }
+                mc.fontRendererObj.drawString(s3, l1 + i / 2 - mc.fontRendererObj.getStringWidth(s3) / 2, k - mc.fontRendererObj.FONT_HEIGHT, 553648127);
+            }
         }
-    }
 
-    public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height){
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos((double)(x + 0), (double)(y + height), (double) Renderutil.itemRender.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + height) * f1)).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + height), (double)Renderutil.itemRender.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + height) * f1)).endVertex();
-        worldrenderer.pos((double)(x + width), (double)(y + 0), (double)Renderutil.itemRender.zLevel).tex((double)((float)(textureX + width) * f), (double)((float)(textureY + 0) * f1)).endVertex();
-        worldrenderer.pos((double)(x + 0), (double)(y + 0), (double)Renderutil.itemRender.zLevel).tex((double)((float)(textureX + 0) * f), (double)((float)(textureY + 0) * f1)).endVertex();
-        tessellator.draw();
-    }
+        String fuckme;
 
+        int top = ((j1 - j * mc.fontRendererObj.FONT_HEIGHT) - mc.fontRendererObj.FONT_HEIGHT) - 2;
 
-    private void renderDammy() {
-        this.mc.getTextureManager().bindTexture(Gui.icons);
-        --BossStatus.statusBarTime;
-        this.mc.getTextureManager().bindTexture(Gui.icons);
-        int j = 182;
-        this.mc.getTextureManager().bindTexture(Gui.icons);
-        int l = (int)(BossStatus.healthScale * (float)(j + 1));
-        drawTexturedModalRect(this.getX(), this.getY() + offset + 1, 0, 74, j, 5);
-        drawTexturedModalRect(this.getX(), this.getY() + offset + 1, 0, 74, j, 5);
-        if (l > 0)
-        {
-            drawTexturedModalRect(this.getX(), this.getY() + offset + 1, 0, 79, l, 5);
-        }
-        this.mc.getTextureManager().bindTexture(Gui.icons);
+        shadowX = l1 - 3;
+        shadowY = top;
+        shadowWidth = this.getX() - k1 + 2 - (13);
+        shadowHeight = top + mc.fontRendererObj.FONT_HEIGHT + 3 + i1;
 
-        String s = "Bossbar";
-
-        mc.fontRendererObj.drawStringWithShadow(s, (((182 / 2) - (mc.fontRendererObj.getStringWidth(s) / 2)) + this.getX()), (this.getY() - 10) + offset, 16777215);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(Gui.icons);
+        this.setWidth(shadowWidth);
+        this.setHeight(shadowHeight);
     }
 
 }

@@ -3,10 +3,14 @@ package dev.px.hud.Rendering.Panel.Settings.PreferenceButtons;
 import dev.px.hud.HUDMod;
 import dev.px.hud.Util.API.Animation.Animation;
 import dev.px.hud.Util.API.Animation.Easing;
+import dev.px.hud.Util.API.Animation.SimpleAnimation;
 import dev.px.hud.Util.API.Font.Fontutil;
+import dev.px.hud.Util.API.Render.GlUtils;
 import dev.px.hud.Util.API.Render.RoundedShader;
 import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Settings.Setting;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import org.lwjgl.util.glu.GLU;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,23 +19,19 @@ public class BooleanPreference extends PreferenceButton<Boolean> {
 
     private Setting<Boolean> setting;
     private Animation toggleAnimation;
-    private Animation hoverAnimation;
+    private SimpleAnimation hoverAnimation;
 
     public BooleanPreference(int x, int y, int width, int height, Setting<Boolean> setting) {
         super(x, y, width, height, setting);
         this.setting = setting;
         toggleAnimation = new Animation(300, setting.getValue(), Easing.LINEAR);
-        hoverAnimation = new Animation(100, false, Easing.LINEAR);
+        hoverAnimation = new SimpleAnimation(0.0f);
     }
 
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         toggleAnimation.setState(setting.getValue());
-        hoverAnimation.setState(isMouseOver(getX(), getY(), getWidth(), getHeight(), mouseX, mouseY));
-
-        if(hoverAnimation.getAnimationFactor() > 0) {
-            RoundedShader.drawRound(getX(), getY(), getWidth() * (int) hoverAnimation.getAnimationFactor(), getHeight() * (int) hoverAnimation.getAnimationFactor(), 2, new Color(40, 40, 40, 50));
-        }
+        hoverAnimation.setAnimation(isMouseOver(getX(), getY(), getWidth(), getHeight(), mouseX, mouseY) ? 1.0F : 0, 14);
 
         RoundedShader.drawRound(getX(), getY(), getWidth(), getHeight(), 2, new Color(38, 38, 38));
         Fontutil.drawTextShadow(setting.getName(), getX() + 4, (getY() + getHeight() / 2) - 2, -1);

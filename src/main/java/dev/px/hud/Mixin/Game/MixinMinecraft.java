@@ -41,10 +41,22 @@ public abstract class MixinMinecraft {
     @Shadow
     public int displayHeight;
 
+    @Inject(method = "shutdown", at = @At("HEAD"), cancellable = true)
+    public void onShutdown(CallbackInfo ci) {
+        HUDMod.configManager.save();
+    }
+
     @Inject(method = "createDisplay", at = @At("TAIL"), cancellable = true)
     public void setDisplayPost(CallbackInfo ci) {
         Display.setTitle(HUDMod.NAME + " | " + HUDMod.VERSION);
         Display.setResizable(true);
+    }
+
+    @Inject(method = "run", at = @At("HEAD"), cancellable = true)
+    public void injectStuffTest(CallbackInfo ci) { // WHY DOES IT NOT WORK
+        System.setProperty("devauth.enabled", "true");
+        System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth");
+        System.setProperty("devauth.account", "main");
     }
 
     @Inject(method = "Lnet/minecraft/client/Minecraft;getLimitFramerate()I", at = @At("HEAD"), cancellable = true)

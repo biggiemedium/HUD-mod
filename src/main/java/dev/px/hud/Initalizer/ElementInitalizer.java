@@ -57,6 +57,7 @@ public class ElementInitalizer {
         Add(new ESPMod());
         Add(new FakePlayer());
         Add(new FullBright());
+        Add(new HotbarModifications());
         Add(new ItemPhysics());
         Add(new MiddleClickFriend());
         Add(new MotionBlur());

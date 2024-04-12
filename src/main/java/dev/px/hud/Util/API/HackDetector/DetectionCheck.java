@@ -22,7 +22,9 @@ public class DetectionCheck {
                 if(entityPlayer != mc.thePlayer) {
                     for(Detection d : detector.getDetections()) {
                             if(d.runCheck(entityPlayer) && System.currentTimeMillis() > d.getLastViolated() + 500) {
-                                HUDMod.notificationManager.AddPushNotification(new Notification("Hacker", entityPlayer.getName() + " could be hacking!", Notification.NotificationType.WARNING, 4000));
+                                if(HUDMod.preferenceManager.HACKERDETECTOR.getValue()) {
+                                    HUDMod.notificationManager.AddPushNotification(new Notification("Hacker", entityPlayer.getName() + " could be hacking!", Notification.NotificationType.WARNING, 4000));
+                                }
                         //        entityPlayer.VL++;
                                 d.setLastViolated(System.currentTimeMillis());
                             }

@@ -5,7 +5,9 @@ import dev.px.hud.Util.API.Util;
 import dev.px.hud.Util.Event.Bus.Listener.EventHandler;
 import dev.px.hud.Util.Event.Bus.Listener.Listener;
 import dev.px.hud.Util.Settings.Setting;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,9 +19,10 @@ public class CritParticles extends ToggleableElement {
     }
 
     private Setting<Integer> amount = create(new Setting<>("Amount", 5, 1, 10));
-    private Setting<Particle> particleType = create(new Setting<>("Particle", Particle.Magic));
+    private Setting<Particle> particleType = create(new Setting<>("Particle", Particle.Blood));
 
     private enum Particle {
+        Blood,
         Crit,
         Magic,
         Flame
@@ -36,24 +39,20 @@ public class CritParticles extends ToggleableElement {
     @SubscribeEvent
     public void onPlayerHit(dev.px.hud.Util.Event.Entity.AttackEntityEvent event) {
         if(event.entity == null) return;
-        if(mc.thePlayer.getDistance(event.entity.posX, event.entity.posY, event.entity.posZ) > 10) return;
         if(event.entity instanceof EntityLivingBase) {
-            if(((EntityLivingBase) event.entity).hurtTime >= 5) {
+            for (int i = 0; i < amount.getValue(); i++) {
                 switch (particleType.getValue()) {
-                    case Crit:
-                        for (int i = 0; i < amount.getValue(); i++) {
-                            mc.effectRenderer.emitParticleAtEntity(event.entity, EnumParticleTypes.CRIT);
-                        }
-                        break;
-                    case Flame:
-                        for (int i = 0; i < amount.getValue(); i++) {
-                            mc.effectRenderer.emitParticleAtEntity(event.entity, EnumParticleTypes.FLAME);
-                        }
+                    case Blood:
+                        mc.theWorld.spawnParticle(EnumParticleTypes.BLOCK_CRACK, event.entity.posX, event.entity.posY + event.entity.height - 0.75, event.entity.posZ, 0, 0, 0, Block.getStateId(Blocks.redstone_block.getDefaultState()));
                         break;
                     case Magic:
-                        for (int i = 0; i < amount.getValue(); i++) {
-                            mc.effectRenderer.emitParticleAtEntity(event.entity, EnumParticleTypes.CRIT_MAGIC);
-                        }
+                        mc.theWorld.spawnParticle(EnumParticleTypes.CRIT_MAGIC, event.entity.posX, event.entity.posY + event.entity.height - 0.75, event.entity.posZ, 0, 0, 0);
+                    break;
+                    case Crit:
+                        mc.theWorld.spawnParticle(EnumParticleTypes.CRIT, event.entity.posX, event.entity.posY + event.entity.height - 0.75, event.entity.posZ, 0, 0, 0);
+                        break;
+                    case Flame:
+                        mc.theWorld.spawnParticle(EnumParticleTypes.FLAME, event.entity.posX, event.entity.posY + event.entity.height - 0.75, event.entity.posZ, 0, 0, 0);
                         break;
                 }
             }
