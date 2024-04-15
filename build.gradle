@@ -93,7 +93,7 @@ dependencies {
 
 runClient {
     jvmArgs("-Ddevauth.enabled=true")
-    jvmArgs("-Ddevauth.configDir=/Users/jameskemp/Devauth")
+    jvmArgs("-Ddevauth.configDir=/Users/name/Devauth")
     jvmArgs("-Ddevauth.account=main")
 
 }
