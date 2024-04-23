@@ -86,8 +86,8 @@ public class ClientSettings extends Panel {
 
         if(scrollY > 1) {
             scrollY = 1;
-        } else if(scrollY < -offset + 20) {
-            scrollY = (-offset + 20);
+        } else if(scrollY < -offset + 10) {
+            scrollY = (-offset + 10);
         }
 
         // Color picker

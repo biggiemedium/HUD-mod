@@ -55,8 +55,7 @@ public class Tracers extends ToggleableElement {
                     .subtract(new Vec3(
                             ((IMixinRenderManager) mc.getRenderManager()).getRenderPosX(),
                             ((IMixinRenderManager) mc.getRenderManager()).getRenderPosY(),
-                            ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ())
-                    );
+                            ((IMixinRenderManager) mc.getRenderManager()).getRenderPosZ()));
 
             if(vec != null) {
                 boolean bobbing = mc.gameSettings.viewBobbing;

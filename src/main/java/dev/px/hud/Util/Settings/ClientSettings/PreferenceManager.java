@@ -14,6 +14,7 @@ public class PreferenceManager {
     public Setting<Boolean> ESPCluster;
     public Setting<Boolean> FRIENDS;
     public Setting<Boolean> windowModifications;
+  //  public Setting<Boolean> FPSBOOSTER;
     public Setting<Boolean> HACKERDETECTOR;
 
     public PreferenceManager() {
@@ -24,6 +25,7 @@ public class PreferenceManager {
         ESPCluster = Add(new Setting<>("ESP Cluster", true));
         FRIENDS = Add(new Setting("Friends", true));
         windowModifications = Add(new Setting<>("Window Modifications", true));
+        //FPSBOOSTER = Add(new Setting("FPS Booster", true));
         HACKERDETECTOR = Add(new Setting("Hacker Detector", true));
     }
 

@@ -25,7 +25,6 @@ public class DetectionCheck {
                                 if(HUDMod.preferenceManager.HACKERDETECTOR.getValue()) {
                                     HUDMod.notificationManager.AddPushNotification(new Notification("Hacker", entityPlayer.getName() + " could be hacking!", Notification.NotificationType.WARNING, 4000));
                                 }
-                        //        entityPlayer.VL++;
                                 d.setLastViolated(System.currentTimeMillis());
                             }
                     }

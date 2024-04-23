@@ -20,7 +20,7 @@ public class MiddleClickFriend extends ToggleableElement {
 
     @Override
     public void enable() {
-        HUDMod.notificationManager.AddDropdownNotification(new DropdownNotification("Press middle click on a player to add themn to your friends list!", 4));
+        HUDMod.notificationManager.AddDropdownNotification(new DropdownNotification("Press middle click on a player to add them to your friends list!", 4));
     }
 
     @SubscribeEvent

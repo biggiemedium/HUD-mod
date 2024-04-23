@@ -46,10 +46,6 @@ public class ClickGUI extends Panel {
             }
         }
 
-        for(Frame f : this.frames) {
-            f.draw(mouseX, mouseY, partialTicks);
-        }
-
         for(Element e : HUDMod.elementInitalizer.getElements()) {
             if(e instanceof RenderElement) {
                 if(e.isToggled()) {
@@ -60,6 +56,9 @@ public class ClickGUI extends Panel {
             }
         }
 
+        for(Frame f : this.frames) {
+            f.draw(mouseX, mouseY, partialTicks);
+        }
     }
 
     @Override

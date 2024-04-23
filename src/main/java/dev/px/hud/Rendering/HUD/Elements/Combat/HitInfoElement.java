@@ -31,12 +31,16 @@ public class HitInfoElement extends RenderElement {
     public String getEName() {
         if(mc.objectMouseOver.entityHit != null) {
             Entity name = mc.objectMouseOver.entityHit;
+            if(name != null) {
             if(name instanceof EntityPlayer) {
-                if(HUDMod.preferenceManager.NCPCluster.getValue() && Entityutil.isHypixelNPC(name)) { return ""; }
-                String s = ogTheme.getValue() ?
-                        name.getName() + " " + ChatFormatting.GOLD + Entityutil.getHealth((EntityPlayer) name) + ChatFormatting.RESET :
-                        name.getName() + " " + Entityutil.getHealth((EntityPlayer) name);
-                return s;
+                    if (HUDMod.preferenceManager.NCPCluster.getValue() && Entityutil.isHypixelNPC(name)) {
+                        return "";
+                    }
+                    String s = ogTheme.getValue() ?
+                            name.getName() + " " + ChatFormatting.GOLD + Entityutil.getHealth((EntityPlayer) name) + ChatFormatting.RESET :
+                            name.getName() + " " + Entityutil.getHealth((EntityPlayer) name);
+                    return s;
+                }
             }
         }
 
@@ -46,5 +50,4 @@ public class HitInfoElement extends RenderElement {
 
         return "";
     }
-
 }
