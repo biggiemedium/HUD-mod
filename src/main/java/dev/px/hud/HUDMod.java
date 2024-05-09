@@ -7,6 +7,7 @@ import dev.px.hud.Rendering.HUD.Element;
 import dev.px.hud.Rendering.HUD.RenderElement;
 import dev.px.hud.Rendering.Panel.PanelGUIScreen;
 import dev.px.hud.Util.API.Input.BindRegistry;
+import dev.px.hud.Util.API.SpotifyAPIClient;
 import dev.px.hud.Util.Config.ConfigManager;
 import dev.px.hud.Util.Event.Bus.EventBus;
 import dev.px.hud.Util.Event.Bus.EventManager;
@@ -36,6 +37,7 @@ public class HUDMod {
      *  - fix Grid system
      *  - HUD Mod GUI main menu
      *  - Command System
+     *  - new font renderer
      */
     public static final String NAME = "HUD Mod";
     public static final String MODID = "hudmod";
@@ -63,10 +65,12 @@ public class HUDMod {
     private static ExecutorService executorService = Executors.newSingleThreadExecutor();
     private long startTime = -1;
 
+    private SpotifyAPIClient client;
+
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         LOG.info(System.getProperty("devauth.enabled", "true"));
-        LOG.info(System.setProperty("devauth.configDir", "/Users/[REDACTED]/Devauth"));
+        LOG.info(System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth"));
         LOG.info(System.setProperty("devauth.account", "main"));
 
         startTime = System.currentTimeMillis();
@@ -74,6 +78,9 @@ public class HUDMod {
         fontManager = new FontManager();
         timeManager = new TimeManager();
         timeManager.setTotalElapsed(System.currentTimeMillis());
+
+        this.client = new SpotifyAPIClient();
+        this.client.start();
     }
 
     @EventHandler

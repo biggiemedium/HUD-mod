@@ -79,23 +79,23 @@ dependencies {
         exclude module: 'commons-io'
     }
     compile group: 'net.jodah', name: 'typetools', version: '0.5.0' // yuck
+    compile fileTree(dir: "lib", include: "java-spotify-api-1.2.0-all.jar")
+    //implementation 'com.github.LabyStudio:java-spotify-api:1.2.0:all'
 
-  //  implementation ('se.michaelthelin.spotify:spotify-web-api-java:7.3.0') {
+    //  implementation ('se.michaelthelin.spotify:spotify-web-api-java:7.3.0') {
   //      exclude group: "commons-codec", module: "commons-codec"
   //  }
-    implementation 'fr.litarvan:openauth:1.1.2'
-    implementation 'com.google.code.gson:gson:2.10.1'
 
-
+    // using jar file because this doesnt work vvv
     // for dev env
     //implementation ("me.djtheredstoner:DevAuth-forge-legacy:1.2.0")
 }
 
 runClient {
     jvmArgs("-Ddevauth.enabled=true")
-    jvmArgs("-Ddevauth.configDir=/Users/name/Devauth")
+    jvmArgs("-Ddevauth.configDir=/Users/jameskemp/Devauth")
     jvmArgs("-Ddevauth.account=main")
-
+    jvmArgs("-DSPOTIFY_API_DEBUG")
 }
 
 mixin {
@@ -108,6 +108,10 @@ reobf {
         mappingType = 'SEARGE'
         classpath = sourceSets.main.compileClasspath
     }
+}
+
+shadow {
+
 }
 
 processResources {

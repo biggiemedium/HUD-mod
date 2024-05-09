@@ -149,8 +149,9 @@ public class TESTElement extends RenderElement {
 
     @SubscribeEvent
     public void onRenderScoreBoard(EventRenderScoreBoard event) {
-        renderScoreboard(event.getScoreboard(), new ScaledResolution(mc));
         event.setCanceled(true);
+        renderScoreboard(event.getScoreboard(), new ScaledResolution(mc));
+
     }
 
 }

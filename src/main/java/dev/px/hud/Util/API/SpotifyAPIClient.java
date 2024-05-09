@@ -1,33 +1,72 @@
 package dev.px.hud.Util.API;
 
 import com.sun.net.httpserver.HttpServer;
+import de.labystudio.spotifyapi.SpotifyAPI;
+import de.labystudio.spotifyapi.SpotifyAPIFactory;
+import de.labystudio.spotifyapi.SpotifyListener;
+import de.labystudio.spotifyapi.SpotifyListenerAdapter;
+import de.labystudio.spotifyapi.model.Track;
 import dev.px.hud.HUDMod;
-import net.minecraft.util.EnumChatFormatting;
-/*
-import se.michaelthelin.spotify.SpotifyApi;
-import se.michaelthelin.spotify.SpotifyHttpManager;
-import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import se.michaelthelin.spotify.model_objects.miscellaneous.CurrentlyPlayingContext;
-import se.michaelthelin.spotify.model_objects.specification.Track;
-import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
-import se.michaelthelin.spotify.requests.authorization.authorization_code.pkce.AuthorizationCodePKCERequest;
- */
-import java.awt.*;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-interface SpotifyCallbackHandler {
-    void handleCallback(String code);
-}
 
 public class SpotifyAPIClient {
-    /*
+
+    SpotifyAPI api;
+
+    public SpotifyAPIClient() {
+
+        api = SpotifyAPIFactory.createInitialized();
+
+        if(!api.isInitialized()) {
+            api.initializeAsync();
+        }
+   }
+
+   public void start() {
+        if(api.isInitialized()) {
+            api.registerListener(new SpotifyListenerAdapter() {
+                @Override
+                public void onConnect() {
+                    HUDMod.LOG.info("Connected to Spotify!");
+                }
+
+                @Override
+                public void onTrackChanged(Track track) {
+                    HUDMod.LOG.info("Track changed to: " + track);
+                }
+
+                @Override
+                public void onPositionChanged(int position) {
+                    if (!api.hasTrack()) {
+                        return;
+                    }
+
+                    int length = api.getTrack().getLength();
+                    float percentage = 100.0F / length * position;
+
+                    HUDMod.LOG.info("Position changed: %s of %s (%d%%)\n", String.format("%s", position), String.format("%s", (length)), (int) percentage);
+                }
+
+                @Override
+                public void onPlayBackChanged(boolean isPlaying) {
+                    HUDMod.LOG.info(isPlaying ? "Song started playing" : "Song stopped playing");
+                }
+
+                @Override
+                public void onSync() {
+
+                }
+
+                @Override
+                public void onDisconnect(Exception exception) {
+                    HUDMod.LOG.info("Disconnected from spotify");
+                }
+            });
+        }
+   }
+
+}
+
+ /*
     private SpotifyApi api;
     private Thread listeningThread;
 
@@ -249,4 +288,3 @@ public class SpotifyAPIClient {
         return callback;
     }
     */
-}
