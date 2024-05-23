@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(EntityRenderer.class)
-public class MixinEntityRenderer {
+public abstract class MixinEntityRenderer {
 
     @Shadow
     private ShaderGroup theShaderGroup;
@@ -38,16 +38,16 @@ public class MixinEntityRenderer {
     private boolean useShader;
 
 
-    MotionBlurRenderer motion = new MotionBlurRenderer();
-    /*
     @Inject(method = "setupFog", at = @At("HEAD"), cancellable = true)
     public void setupFog(int startCoords, float partialTicks, CallbackInfo ci) {
         if(HUDMod.elementInitalizer.isElementToggled(NoRender.class) && HUDMod.elementInitalizer.getElementByClass(NoRender.class).fog.getValue()) {
-            ci.cancel();
+            if(Minecraft.getMinecraft().theWorld != null && Minecraft.getMinecraft().thePlayer != null) {
+                  ci.cancel();
+            }
         }
     }
 
-     */
+
 
     /*
     // DONT FUCK WITH THIS
@@ -82,13 +82,13 @@ public class MixinEntityRenderer {
     // Taken from soar client
     @Inject(method = "updateCameraAndRender", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/shader" + "/Framebuffer;bindFramebuffer(Z)V", shift = At.Shift.BEFORE))
     public void updateCameraAndRender(float partialTicks, long nanoTime, CallbackInfo ci) {
-        /*
+
         List<ShaderGroup> shaders = new ArrayList<ShaderGroup>();
 
         if (this.theShaderGroup != null && this.useShader) {
             shaders.add(this.theShaderGroup);
         }
-        ShaderGroup motionBlur = motion.getShader();
+        ShaderGroup motionBlur = MotionBlurRenderer.INSTANCE.getShader();
 
         if(HUDMod.elementInitalizer.getElementByClass(MotionBlur.class).isToggled()) {
             if (motionBlur != null){
@@ -103,18 +103,18 @@ public class MixinEntityRenderer {
             }
         }
 
-         */
+
     }
 
     @Inject(method = "updateShaderGroupSize", at = @At("RETURN"))
     public void updateShaderGroupSize(int width, int height, CallbackInfo ci) {
-        /*
-        if(Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) {
+
+        if(Minecraft.getMinecraft().theWorld == null) {
             return;
         }
 
         if (OpenGlHelper.shadersSupported) {
-            ShaderGroup motionBlur = motion.getShader();
+            ShaderGroup motionBlur = MotionBlurRenderer.INSTANCE.getShader();
 
             if (motionBlur != null){
                 motionBlur.createBindFramebuffers(width, height);
@@ -122,6 +122,6 @@ public class MixinEntityRenderer {
         }
 
 
-         */
+
     }
 }

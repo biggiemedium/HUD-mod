@@ -1,6 +1,7 @@
 package dev.px.hud.Util.API;
 
 import com.sun.net.httpserver.HttpServer;
+/*
 import de.labystudio.spotifyapi.SpotifyAPI;
 import de.labystudio.spotifyapi.SpotifyAPIFactory;
 import de.labystudio.spotifyapi.SpotifyListener;
@@ -8,8 +9,10 @@ import de.labystudio.spotifyapi.SpotifyListenerAdapter;
 import de.labystudio.spotifyapi.model.Track;
 import dev.px.hud.HUDMod;
 
-public class SpotifyAPIClient {
+ */
 
+public class SpotifyAPIClient {
+/*
     SpotifyAPI api;
 
     public SpotifyAPIClient() {
@@ -63,6 +66,8 @@ public class SpotifyAPIClient {
             });
         }
    }
+
+ */
 
 }
 

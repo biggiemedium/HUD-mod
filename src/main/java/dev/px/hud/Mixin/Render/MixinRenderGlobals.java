@@ -1,8 +1,10 @@
 package dev.px.hud.Mixin.Render;
 
 import dev.px.hud.HUDMod;
+import dev.px.hud.Rendering.HUD.Elements.TestToggleElement;
 import dev.px.hud.Rendering.HUD.Mods.BlockHighlight;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +20,15 @@ public class MixinRenderGlobals {
         if(HUDMod.elementInitalizer.getElementByClass(BlockHighlight.class) != null) {
             if(HUDMod.elementInitalizer.isElementToggled(BlockHighlight.class)) {
                 info.cancel();
+            }
+        }
+    }
+
+    @Inject(method = "onEntityRemoved", at = @At("HEAD"), cancellable = true)
+    public void onEntityRemoved(Entity entityIn, CallbackInfo ci) {
+        if(HUDMod.elementInitalizer.getElementByClass(TestToggleElement.class) != null) {
+            if (HUDMod.elementInitalizer.getElementByClass(TestToggleElement.class).snap != null) {
+                HUDMod.elementInitalizer.getElementByClass(TestToggleElement.class).snap.remove(entityIn);
             }
         }
     }

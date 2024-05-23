@@ -18,12 +18,14 @@ import java.io.IOException;
 
 public class MotionBlurRenderer {
 
-    private static ResourceLocation location = new ResourceLocation("minecraft", "ModShaders/post/motion_blur.json");
+    private static ResourceLocation location = new ResourceLocation("minecraft:shaders/post/motion_blur.json");
     private static final Logger logger = LogManager.getLogger();
 
     private Minecraft mc = Minecraft.getMinecraft();
     private ShaderGroup shader;
     private float shaderBlur;
+
+    public static MotionBlurRenderer INSTANCE = new MotionBlurRenderer();
 
     public float getBlurFactor() {
         Element e = HUDMod.elementInitalizer.getElementByClass(dev.px.hud.Rendering.HUD.Mods.MotionBlur.class);

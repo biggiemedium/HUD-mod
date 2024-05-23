@@ -69,10 +69,6 @@ public class HUDMod {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        LOG.info(System.getProperty("devauth.enabled", "true"));
-        LOG.info(System.setProperty("devauth.configDir", "/Users/jameskemp/Devauth"));
-        LOG.info(System.setProperty("devauth.account", "main"));
-
         startTime = System.currentTimeMillis();
         BindRegistry.register();
         fontManager = new FontManager();
@@ -80,7 +76,7 @@ public class HUDMod {
         timeManager.setTotalElapsed(System.currentTimeMillis());
 
         this.client = new SpotifyAPIClient();
-        this.client.start();
+        //this.client.start();
     }
 
     @EventHandler

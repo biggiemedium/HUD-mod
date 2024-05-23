@@ -14,4 +14,5 @@ public abstract class MixinShaderGroup implements MotionBlurRenderer.IMixinShade
     @Override
     @Accessor
     public abstract List<Shader> getListShaders();
+
 }
